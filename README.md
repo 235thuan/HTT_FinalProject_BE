@@ -17,7 +17,9 @@
 **Current Project**
 
 
-<a href="https://github.com/235thuan/HTT_FinalProject_BE.git"># Quản lý trường học backend  </a>
+<a href="https://github.com/235thuan/HTT_DOANCUOI.git"># Quản lý trường học báo cáo  </a>
+<a href="https://github.com/235thuan/HTT_FinalProject_FE.git"># Quản lý trường học FE</a>
+<a href="https://github.com/235thuan/HTT_FinalProject_BE.git"># Quản lý trường học BE</a>
 
 **Languages I have used**
 

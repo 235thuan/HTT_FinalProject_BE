@@ -134,4 +134,142 @@ class SinhVienController extends Controller
             return redirect()->back()->with('error', 'Có lỗi xảy ra');
         }
     }
+
+    public function checkEmail(Request $request)
+    {
+        try {
+            $email = $request->get('email');
+            
+            if (!$email) {
+                return response()->json([
+                    'exists' => false,
+                    'message' => 'Vui lòng nhập email'
+                ]);
+            }
+
+            $nguoiDung = DB::table('nguoidung')
+                ->where('email', $email)
+                ->first();
+            
+            if ($nguoiDung) {
+                // Check if user already has any role
+                $hasRole = DB::table('phanquyen')
+                    ->where('id_nguoidung', $nguoiDung->id_nguoidung)
+                    ->exists();
+                
+                if ($hasRole) {
+                    return response()->json([
+                        'exists' => true,
+                        'canUse' => false,
+                        'message' => 'Email đã được sử dụng bởi một tài khoản khác'
+                    ]);
+                }
+                
+                return response()->json([
+                    'exists' => true,
+                    'canUse' => true,
+                    'message' => 'Email đã tồn tại và có thể sử dụng cho sinh viên mới'
+                ]);
+            }
+            
+            return response()->json([
+                'exists' => false,
+                'canUse' => true,
+                'message' => 'Email chưa tồn tại, tài khoản sẽ được tạo tự động'
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Error checking email: ' . $e->getMessage());
+            return response()->json([
+                'error' => true,
+                'message' => 'Có lỗi xảy ra khi kiểm tra email'
+            ], 500);
+        }
+    }
+
+    public function store(Request $request)
+    {
+        try {
+            $request->validate([
+                'ten_sinhvien' => 'required',
+                'email' => 'required|email',
+                'lop' => 'required',
+                'ma_chuyen_nganh' => 'required',
+                'nam_vao_hoc' => 'required|numeric'
+            ]);
+
+            // Start transaction
+            DB::beginTransaction();
+
+            // Generate new student ID
+            $lastId = DB::table('sinhvien')
+                ->orderBy('id_sinhvien', 'desc')
+                ->value('id_sinhvien') ?? 0;
+            
+            $newId = $lastId + 1;
+
+            // Find or create nguoidung based on email
+            $nguoiDung = DB::table('nguoidung')
+                ->where('email', $request->email)
+                ->first();
+
+            if ($nguoiDung) {
+                // Check if user already has any role
+                $hasRole = DB::table('phanquyen')
+                    ->where('id_nguoidung', $nguoiDung->id_nguoidung)
+                    ->exists();
+                
+                if ($hasRole) {
+                    DB::rollBack();
+                    return response()->json([
+                        'errors' => ['email' => ['Email đã được sử dụng bởi một tài khoản khác']]
+                    ], 422);
+                }
+                
+                $id_nguoidung = $nguoiDung->id_nguoidung;
+            } else {
+                // Create new nguoidung
+                $id_nguoidung = DB::table('nguoidung')->insertGetId([
+                    'ten_dang_nhap' => $request->email,
+                    'mat_khau' => bcrypt('123456@a'),
+                    'email' => $request->email,
+                    'trang_thai' => 'hoạt động'
+                ]);
+            }
+
+            // Assign student role (id_vaitro = 3)
+            DB::table('phanquyen')->insert([
+                'id_nguoidung' => $id_nguoidung,
+                'id_vaitro' => 3
+            ]);
+
+            // Create new sinh vien
+            DB::table('sinhvien')->insert([
+                'id_sinhvien' => $newId,
+                'id_nguoidung' => $id_nguoidung,
+                'ten_sinhvien' => $request->ten_sinhvien,
+                'lop' => $request->lop,
+                'ma_chuyen_nganh' => $request->ma_chuyen_nganh,
+                'nam_vao_hoc' => $request->nam_vao_hoc
+            ]);
+
+            DB::commit();
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'id_sinhvien' => $newId,
+                    'ten_sinhvien' => $request->ten_sinhvien,
+                    'email' => $request->email,
+                    'so_dien_thoai' => null,
+                    'nam_vao_hoc' => $request->nam_vao_hoc,
+                    'lop' => $request->lop
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'errors' => ['general' => [$e->getMessage()]]
+            ], 500);
+        }
+    }
 } 

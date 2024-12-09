@@ -59,6 +59,7 @@ Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->group(
         Route::get('/{id}/edit', [SinhVienController::class, 'edit'])->name('edit');
         Route::get('/{id}', [SinhVienController::class, 'show'])->name('show');
         Route::put('/{id}', [SinhVienController::class, 'update'])->name('update');
+        Route::post('/', [SinhVienController::class, 'store'])->name('store');
     });
 
     // Giaovien routes
@@ -76,6 +77,9 @@ Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->group(
         }
         abort(404);
     })->where('file', '.*');
+
+    // Add this before the catch-all routes
+    Route::get('/check-email', [SinhVienController::class, 'checkEmail'])->name('check.email');
 
     // Catch-all routes MUST be last
     Route::get('{first}/{second}/{third}', [RoutingController::class, 'thirdLevel'])->name('third');

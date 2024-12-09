@@ -175,6 +175,41 @@ class LopController extends Controller
             // Get all classes for the edit modal dropdown
             $allLops = DB::table('lop')->get();
 
+            // Get all chuyenNganhs for the create form
+            $chuyenNganhs = DB::table('chuyennganh')
+                ->select(
+                    'id_chuyennganh',
+                    'ten_chuyennganh'
+                )
+                ->get()
+                ->map(function($cn) {
+                    // Create abbreviation from the first letters of each word
+                    $words = explode(' ', $cn->ten_chuyennganh);
+                    $abbreviation = '';
+                    foreach ($words as $word) {
+                        $abbreviation .= mb_substr($word, 0, 1);
+                    }
+                    $cn->abbreviation = $abbreviation;
+                    return $cn;
+                });
+
+            // Get all lops (without joins)
+            $lopsByChuyenNganh = DB::table('lop')
+                ->select('id_lop', 'ten_lop')
+                ->get()
+                ->groupBy(function($lop) use ($chuyenNganhs) {
+                    // Find matching chuyenNganh based on lop prefix
+                    foreach ($chuyenNganhs as $cn) {
+                        if (str_starts_with($lop->ten_lop, $cn->abbreviation)) {
+                            return $cn->id_chuyennganh;
+                        }
+                    }
+                    return null;
+                })
+                ->filter(function($group, $key) {
+                    return $key !== null;
+                });
+
             if ($request->ajax()) {
                 return view('qlnd.partials.student-list', compact('lops', 'allLops'))->render();
             }
@@ -182,6 +217,8 @@ class LopController extends Controller
             return view('qlnd.listSinhvien', [
                 'lops' => $lops,
                 'allLops' => $allLops,
+                'chuyenNganhs' => $chuyenNganhs,
+                'lopsByChuyenNganh' => $lopsByChuyenNganh,
                 'title' => 'Danh sách sinh viên',
                 'findStudent' => $findStudent
             ]);

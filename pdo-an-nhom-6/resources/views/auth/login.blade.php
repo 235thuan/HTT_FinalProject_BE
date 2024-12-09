@@ -22,15 +22,22 @@
 
                         <div class="form-group mb-3">
                             <label for="username" class="form-label">Username</label>
-                            <input class="form-control" type="text" id="username" required="" 
-                                   placeholder="Enter your username" name="email" 
-                                   value="{{ old('email') }}">
+                            <input class="form-control" 
+                                   type="text" 
+                                   id="username" 
+                                   required="" 
+                                   placeholder="Enter your username" 
+                                   name="username" 
+                                   value="{{ old('username', 'user01') }}">
                         </div>
 
                         <div class="form-group mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input class="form-control" type="password" required="" 
-                                   id="password" placeholder="Enter your password" 
+                            <input class="form-control" 
+                                   type="password" 
+                                   required="" 
+                                   id="password" 
+                                   placeholder="Enter your password" 
                                    name="password">
                         </div>
 

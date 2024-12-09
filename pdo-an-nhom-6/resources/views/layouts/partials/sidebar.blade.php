@@ -26,56 +26,47 @@
 
             <ul id="side-menu">
 
-                <li class="menu-title">Menu</li>
+                <li class="menu-title">Danh sách</li>
 
                 <li>
                     <a href="#sidebarDashboards" data-bs-toggle="collapse">
                         <i data-feather="home"></i>
-                        <span> Dashboard </span>
+                        <span> Tổng quan </span>
                         <span class="menu-arrow"></span>
                     </a>
                     <div class="collapse" id="sidebarDashboards">
                         <ul class="nav-second-level">
                             <li>
-                                <a href="{{ route('any', 'index') }}" class="tp-link">Analytical</a>
+                                <a href="{{ route('any', 'index') }}" class="tp-link">Danh mục chức năng</a>
                             </li>
-                            <li>
-                                <a href="{{ route('any', 'ecommerce') }}" class="tp-link">E-commerce</a>
-                            </li>
+                          
                         </ul>
                     </div>
                 </li>
 
-                <li class="menu-title">Pages</li>
+                <li class="menu-title">Trang quản lý</li>
 
                 <li>
-                    <a href="#sidebarAuth" data-bs-toggle="collapse">
+                    <a href="#sidebarAuth" data-bs-toggle="collapse" class="{{ request()->is('qlnd/*') ? 'active' : '' }}">
                         <i data-feather="users"></i>
-                        <span> Authentication </span>
+                        <span> Quản lý người dùng </span>
                         <span class="menu-arrow"></span>
                     </a>
-                    <div class="collapse" id="sidebarAuth">
+                    <div class="collapse {{ request()->is('qlnd/*') ? 'show' : '' }}" id="sidebarAuth">
                         <ul class="nav-second-level">
                             <li>
-                                <a class="tp-link" href="{{ route('second', ['auth', 'login'])}}">Log In</a>
+                                <a href="{{ route('qlnd.listSinhvien') }}" 
+                                   class="nav-link {{ request()->routeIs('qlnd.listSinhvien') ? 'active' : '' }}">
+                                    <i class="mdi mdi-account-multiple"></i>
+                                    <span>Danh sách lớp</span>
+                                </a>
                             </li>
                             <li>
-                                <a class="tp-link" href="{{ route('second', ['auth', 'register'])}}">Register</a>
-                            </li>
-                            <li>
-                                <a class="tp-link" href="{{ route('second', ['auth', 'recoverpw'])}}">Recover Password</a>
-                            </li>
-                            <li>
-                                <a class="tp-link" href="{{ route('second', ['auth', 'lockscreen'])}}">Lock Screen</a>
-                            </li>
-                            <li>
-                                <a class="tp-link" href="{{ route('second', ['auth', 'confirm-mail'])}}">Confirm Mail</a>
-                            </li>
-                            <li>
-                                <a class="tp-link" href="{{ route('second', ['auth', 'email-verification'])}}">Email Verification</a>
-                            </li>
-                            <li>
-                                <a class="tp-link" href="{{ route('second', ['auth', 'logout'])}}">Logout</a>
+                                <a href="{{ route('qlnd.listGiaovien') }}" 
+                                   class="nav-link {{ request()->routeIs('qlnd.listGiaovien') ? 'active' : '' }}">
+                                    <i class="mdi mdi-account-multiple"></i>
+                                    <span>Danh sách giáo viên</span>
+                                </a>
                             </li>
                         </ul>
                     </div>

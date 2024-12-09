@@ -1,0 +1,17 @@
+.nav-second-level .nav-link.active {
+    color: #727cf5 !important;
+    background-color: rgba(114,124,245,.1) !important;
+}
+
+.nav-second-level .nav-link.active i {
+    color: #727cf5 !important;
+}
+
+#sidebar-menu > ul > li > a.active {
+    color: #727cf5;
+    background-color: rgba(114,124,245,.1);
+}
+
+#sidebar-menu > ul > li > a.active i {
+    color: #727cf5;
+} 

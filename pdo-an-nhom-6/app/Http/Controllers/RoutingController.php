@@ -7,6 +7,9 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Http\Controllers\LopController;
+use App\Http\Controllers\SinhVienController;
+use App\Http\Controllers\GiaoVienController;
 
 class RoutingController extends BaseController
 {
@@ -38,7 +41,7 @@ class RoutingController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function root(Request $request, $first)
+    public function root($first)
     {
         return view($first);
     }
@@ -46,16 +49,52 @@ class RoutingController extends BaseController
     /**
      * second level route
      */
-    public function secondLevel(Request $request, $first, $second)
+    public function secondLevel($first, $second)
     {
-        return view($first . '.' . $second);
+        \Log::info('RoutingController@secondLevel', [
+            'first' => $first,
+            'second' => $second,
+            'url' => request()->url(),
+            'route' => request()->route()->getName()
+        ]);
+
+        // Skip handling QLND routes - let the explicit routes handle them
+        if ($first === 'qlnd' && ($second === 'listSinhvien' || $second === 'listGiaovien')) {
+            \Log::info('Skipping QLND route in RoutingController');
+            return null;
+        }
+
+        // If not a special route, try to load the view
+        try {
+            return view($first.'.'.$second);
+        } catch (\Exception $e) {
+            \Log::error('View not found: '.$first.'.'.$second);
+            abort(404);
+        }
     }
 
     /**
      * third level route
      */
-    public function thirdLevel(Request $request, $first, $second, $third)
+    public function thirdLevel($first, $second, $third)
     {
-        return view($first . '.' . $second . '.' . $third);
+        // If this is an asset request, return a 404
+        if ($first === 'assets') {
+            abort(404);
+        }
+
+        return view($first.'.'.$second.'.'.$third);
+    }
+
+    public function detail(Request $request)
+    {
+        $type = $request->query('type', 'sinhvien');
+        $id = $request->query('id');
+
+        if ($type === 'giaovien') {
+            return app(GiaoVienController::class)->detail($id);
+        } else {
+            return app(SinhVienController::class)->detail($id);
+        }
     }
 }

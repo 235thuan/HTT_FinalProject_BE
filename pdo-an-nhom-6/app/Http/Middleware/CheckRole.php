@@ -4,29 +4,19 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CheckRole
 {
-    public function handle(Request $request, Closure $next, ...$roles)
+    public function handle(Request $request, Closure $next, $role)
     {
-        if (!$request->user()) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Unauthorized'
-            ], 401);
+        if (!auth()->check() || !auth()->user()->hasRole($role)) {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            return redirect('/login')->with('error', 'Access denied');
         }
 
-        $userRoles = $request->user()->vaiTro->pluck('ten_vaitro')->toArray();
-        
-        foreach ($roles as $role) {
-            if (in_array($role, $userRoles)) {
-                return $next($request);
-            }
-        }
-
-        return response()->json([
-            'status' => false,
-            'message' => 'Access denied'
-        ], 403);
+        return $next($request);
     }
 } 

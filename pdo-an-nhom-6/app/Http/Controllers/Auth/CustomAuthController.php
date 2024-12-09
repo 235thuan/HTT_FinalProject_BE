@@ -7,67 +7,63 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class CustomAuthController extends Controller
 {
     public function showLoginForm()
     {
+        if (Auth::check()) {
+            return redirect()->intended('/');
+        }
         return view('auth.login');
     }
 
     public function login(Request $request)
     {
-        // Validate request
         $credentials = $request->validate([
-            'email' => ['required'],
-            'password' => ['required'],
+            'username' => 'required',
+            'password' => 'required'
         ]);
 
-        // Direct database query matching your structure
-        $user = DB::table('nguoidung')
-            ->where(function($query) use ($credentials) {
-                $query->where('ten_dang_nhap', $credentials['email'])
-                      ->orWhere('email', $credentials['email']);
-            })
-            ->where('trang_thai', 'hoạt động')
-            ->first();
-
-        if ($user && Hash::check($credentials['password'], $user->mat_khau)) {
-            // Manual authentication
-            session([
-                'user_id' => $user->id_nguoidung,
-                'username' => $user->ten_dang_nhap,
-                'email' => $user->email
-            ]);
+        if (Auth::attempt([
+            'ten_dang_nhap' => $credentials['username'],
+            'password' => $credentials['password'],
+            'trang_thai' => 'hoạt động'
+        ])) {
+            $request->session()->regenerate();
             
-            // Log successful login
-            DB::table('login_logs')->insert([
-                'user_id' => $user->id_nguoidung,
-                'login_time' => now(),
-                'ip_address' => $request->ip()
-            ]);
-
-            return redirect()->intended('dashboard');
+            if (Auth::user()->hasRole('Admin')) {
+                return redirect('/index');
+            }
+            
+            return redirect()->intended('home');
         }
 
         return back()->withErrors([
-            'email' => 'Thông tin đăng nhập không chính xác.',
-        ])->onlyInput('email');
+            'username' => 'The provided credentials do not match our records.',
+        ])->withInput();
     }
 
     public function logout(Request $request)
     {
-        if (session()->has('user_id')) {
-            // Log logout
-            DB::table('login_logs')->insert([
-                'user_id' => session('user_id'),
-                'logout_time' => now(),
-                'ip_address' => $request->ip()
-            ]);
-            
-            session()->flush();
-        }
+        \Log::info('Logout route hit');
         
-        return redirect('/');
+        // Clear all sessions first
+        DB::table('sessions')->truncate();
+        
+        // Clear auth
+        Auth::logout();
+        
+        // Clear session
+        $request->session()->flush();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        
+        // Clear remember me cookie
+        $cookie = cookie()->forget('remember_web_');
+        
+        // Redirect with cookie clearing
+        return redirect('/login')->withCookie($cookie);
     }
 } 

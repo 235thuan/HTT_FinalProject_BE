@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 02, 2024 at 06:26 PM
+-- Generation Time: Dec 09, 2024 at 09:24 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -31,6 +31,30 @@ CREATE TABLE `admin` (
   `id_admin` int(11) NOT NULL,
   `id_nguoidung` int(11) NOT NULL,
   `ten_admin` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cache`
+--
+
+CREATE TABLE `cache` (
+  `key` varchar(255) NOT NULL,
+  `value` mediumtext NOT NULL,
+  `expiration` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cache_locks`
+--
+
+CREATE TABLE `cache_locks` (
+  `key` varchar(255) NOT NULL,
+  `owner` varchar(255) NOT NULL,
+  `expiration` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -531,6 +555,22 @@ CREATE TABLE `diemdanh` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `failed_jobs`
+--
+
+CREATE TABLE `failed_jobs` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `uuid` varchar(255) NOT NULL,
+  `connection` text NOT NULL,
+  `queue` text NOT NULL,
+  `payload` longtext NOT NULL,
+  `exception` longtext NOT NULL,
+  `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `file_nguoidung`
 --
 
@@ -543,6 +583,13 @@ CREATE TABLE `file_nguoidung` (
   `ngay_upload` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `file_nguoidung`
+--
+
+INSERT INTO `file_nguoidung` (`id_file`, `id_nguoidung`, `ten_file`, `loai_file`, `duong_dan`, `ngay_upload`) VALUES
+(1, 1, 'admin_avatar.png', 'avatar', 'storage/avatars/admin_avatar.png', '2023-12-21 10:30:56');
+
 -- --------------------------------------------------------
 
 --
@@ -552,6 +599,7 @@ CREATE TABLE `file_nguoidung` (
 CREATE TABLE `giaovien` (
   `id_giaovien` int(11) NOT NULL,
   `id_nguoidung` int(11) NOT NULL,
+  `ma_khoa` int(11) NOT NULL,
   `ten_giaovien` varchar(255) NOT NULL,
   `email` varchar(255) DEFAULT NULL,
   `so_dien_thoai` varchar(15) DEFAULT NULL
@@ -561,56 +609,56 @@ CREATE TABLE `giaovien` (
 -- Dumping data for table `giaovien`
 --
 
-INSERT INTO `giaovien` (`id_giaovien`, `id_nguoidung`, `ten_giaovien`, `email`, `so_dien_thoai`) VALUES
-(1, 12, 'Giáo viên 1', 'giaovien1@example.com', '0123456789'),
-(2, 13, 'Giáo viên 2', 'giaovien2@example.com', '0123456790'),
-(3, 14, 'Giáo viên 3', 'giaovien3@example.com', '0123456791'),
-(4, 15, 'Giáo viên 4', 'giaovien4@example.com', '0123456792'),
-(5, 16, 'Giáo viên 5', 'giaovien5@example.com', '0123456793'),
-(6, 17, 'Giáo viên 6', 'giaovien6@example.com', '0123456794'),
-(7, 18, 'Giáo viên 7', 'giaovien7@example.com', '0123456795'),
-(8, 19, 'Giáo viên 8', 'giaovien8@example.com', '0123456796'),
-(9, 20, 'Giáo viên 9', 'giaovien9@example.com', '0123456797'),
-(10, 21, 'Giáo viên 10', 'giaovien10@example.com', '0123456798'),
-(11, 22, 'Giáo viên 11', 'giaovien11@example.com', '0123456799'),
-(12, 23, 'Giáo viên 12', 'giaovien12@example.com', '0123456800'),
-(13, 24, 'Giáo viên 13', 'giaovien13@example.com', '0123456801'),
-(14, 25, 'Giáo viên 14', 'giaovien14@example.com', '0123456802'),
-(15, 26, 'Giáo viên 15', 'giaovien15@example.com', '0123456803'),
-(16, 27, 'Giáo viên 16', 'giaovien16@example.com', '0123456804'),
-(17, 28, 'Giáo viên 17', 'giaovien17@example.com', '0123456805'),
-(18, 29, 'Giáo viên 18', 'giaovien18@example.com', '0123456806'),
-(19, 30, 'Giáo viên 19', 'giaovien19@example.com', '0123456807'),
-(20, 31, 'Giáo viên 20', 'giaovien20@example.com', '0123456808'),
-(21, 32, 'Giáo viên 21', 'giaovien21@example.com', '0123456809'),
-(22, 33, 'Giáo viên 22', 'giaovien22@example.com', '0123456810'),
-(23, 34, 'Giáo viên 23', 'giaovien23@example.com', '0123456811'),
-(24, 35, 'Giáo viên 24', 'giaovien24@example.com', '0123456812'),
-(25, 36, 'Giáo viên 25', 'giaovien25@example.com', '0123456813'),
-(26, 37, 'Giáo viên 26', 'giaovien26@example.com', '0123456814'),
-(27, 38, 'Giáo viên 27', 'giaovien27@example.com', '0123456815'),
-(28, 39, 'Giáo viên 28', 'giaovien28@example.com', '0123456816'),
-(29, 40, 'Giáo viên 29', 'giaovien29@example.com', '0123456817'),
-(30, 41, 'Giáo viên 30', 'giaovien30@example.com', '0123456818'),
-(31, 42, 'Giáo viên 31', 'giaovien31@example.com', '0123456819'),
-(32, 43, 'Giáo viên 32', 'giaovien32@example.com', '0123456820'),
-(33, 44, 'Giáo viên 33', 'giaovien33@example.com', '0123456821'),
-(34, 45, 'Giáo viên 34', 'giaovien34@example.com', '0123456822'),
-(35, 46, 'Giáo viên 35', 'giaovien35@example.com', '0123456823'),
-(36, 47, 'Giáo viên 36', 'giaovien36@example.com', '0123456824'),
-(37, 48, 'Giáo viên 37', 'giaovien37@example.com', '0123456825'),
-(38, 49, 'Giáo viên 38', 'giaovien38@example.com', '0123456826'),
-(39, 50, 'Giáo viên 39', 'giaovien39@example.com', '0123456827'),
-(40, 51, 'Giáo viên 40', 'giaovien40@example.com', '0123456828'),
-(41, 52, 'Giáo viên 41', 'giaovien41@example.com', '0123456829'),
-(42, 53, 'Giáo viên 42', 'giaovien42@example.com', '0123456830'),
-(43, 54, 'Giáo viên 43', 'giaovien43@example.com', '0123456831'),
-(44, 55, 'Giáo viên 44', 'giaovien44@example.com', '0123456832'),
-(45, 56, 'Giáo viên 45', 'giaovien45@example.com', '0123456833'),
-(46, 57, 'Giáo viên 46', 'giaovien46@example.com', '0123456834'),
-(47, 58, 'Giáo viên 47', 'giaovien47@example.com', '0123456835'),
-(48, 59, 'Giáo viên 48', 'giaovien48@example.com', '0123456836'),
-(49, 60, 'Giáo viên 49', 'giaovien49@example.com', '0123456837');
+INSERT INTO `giaovien` (`id_giaovien`, `id_nguoidung`, `ma_khoa`, `ten_giaovien`, `email`, `so_dien_thoai`) VALUES
+(1, 12, 2, 'Tống Văn Tình', 'giaovien1@example.com', '0123456789'),
+(2, 13, 2, 'Giáo viên 2', 'giaovien2@example.com', '0123456790'),
+(3, 14, 2, 'Giáo viên 3', 'giaovien3@example.com', '0123456791'),
+(4, 15, 1, 'Mai Siêu Phong', 'giaovien4@example.com', '0123456792'),
+(5, 16, 3, 'Đặng Văn Tùng Dương', 'giaovien5@example.com', '0123456793'),
+(6, 17, 2, 'Giáo viên 6', 'giaovien6@example.com', '0123456794'),
+(7, 18, 4, 'Giáo viên 7', 'giaovien7@example.com', '0123456795'),
+(8, 19, 3, 'Giáo viên 8', 'giaovien8@example.com', '0123456796'),
+(9, 20, 4, 'Giáo viên 9', 'giaovien9@example.com', '0123456797'),
+(10, 21, 4, 'Giáo viên 10', 'giaovien10@example.com', '0123456798'),
+(11, 22, 1, 'Đoàn Chính Thuần', 'giaovien11@example.com', '0123456799'),
+(12, 23, 5, 'Hoàng Lão Tà', 'giaovien12@example.com', '0123456800'),
+(13, 24, 2, 'Giáo viên 13', 'giaovien13@example.com', '0123456801'),
+(14, 25, 1, 'Chu Bá Thông', 'giaovien14@example.com', '0123456802'),
+(15, 26, 5, 'Giáo viên 15', 'giaovien15@example.com', '0123456803'),
+(16, 27, 4, 'Giáo viên 16', 'giaovien16@example.com', '0123456804'),
+(17, 28, 3, 'Giáo viên 17', 'giaovien17@example.com', '0123456805'),
+(18, 29, 5, 'Giáo viên 18', 'giaovien18@example.com', '0123456806'),
+(19, 30, 3, 'Giáo viên 19', 'giaovien19@example.com', '0123456807'),
+(20, 31, 1, 'Hoàng Dung', 'giaovien20@example.com', '0123456808'),
+(21, 32, 2, 'Giáo viên 21', 'giaovien21@example.com', '0123456809'),
+(22, 33, 4, 'Giáo viên 22', 'giaovien22@example.com', '0123456810'),
+(23, 34, 3, 'Giáo viên 23', 'giaovien23@example.com', '0123456811'),
+(24, 35, 3, 'Giáo viên 24', 'giaovien24@example.com', '0123456812'),
+(25, 36, 2, 'Giáo viên 25', 'giaovien25@example.com', '0123456813'),
+(26, 37, 2, 'Giáo viên 26', 'giaovien26@example.com', '0123456814'),
+(27, 38, 5, 'Giáo viên 27', 'giaovien27@example.com', '0123456815'),
+(28, 39, 1, 'Giáo viên 28', 'giaovien28@example.com', '0123456816'),
+(29, 40, 4, 'Giáo viên 29', 'giaovien29@example.com', '0123456817'),
+(30, 41, 1, 'Giáo viên 30', 'giaovien30@example.com', '0123456818'),
+(31, 42, 2, 'Giáo viên 31', 'giaovien31@example.com', '0123456819'),
+(32, 43, 2, 'Giáo viên 32', 'giaovien32@example.com', '0123456820'),
+(33, 44, 5, 'Giáo viên 33', 'giaovien33@example.com', '0123456821'),
+(34, 45, 1, 'Giáo viên 34', 'giaovien34@example.com', '0123456822'),
+(35, 46, 2, 'Giáo viên 35', 'giaovien35@example.com', '0123456823'),
+(36, 47, 1, 'Giáo viên 36', 'giaovien36@example.com', '0123456824'),
+(37, 48, 3, 'Giáo viên 37', 'giaovien37@example.com', '0123456825'),
+(38, 49, 2, 'Giáo viên 38', 'giaovien38@example.com', '0123456826'),
+(39, 50, 4, 'Giáo viên 39', 'giaovien39@example.com', '0123456827'),
+(40, 51, 1, 'Giáo viên 40', 'giaovien40@example.com', '0123456828'),
+(41, 52, 2, 'Giáo viên 41', 'giaovien41@example.com', '0123456829'),
+(42, 53, 3, 'Giáo viên 42', 'giaovien42@example.com', '0123456830'),
+(43, 54, 1, 'Giáo viên 43', 'giaovien43@example.com', '0123456831'),
+(44, 55, 5, 'Giáo viên 44', 'giaovien44@example.com', '0123456832'),
+(45, 56, 1, 'Giáo viên 45', 'giaovien45@example.com', '0123456833'),
+(46, 57, 5, 'Giáo viên 46', 'giaovien46@example.com', '0123456834'),
+(47, 58, 3, 'Giáo viên 47', 'giaovien47@example.com', '0123456835'),
+(48, 59, 4, 'Giáo viên 48', 'giaovien48@example.com', '0123456836'),
+(49, 60, 4, 'Giáo viên 49', 'giaovien49@example.com', '0123456837');
 
 -- --------------------------------------------------------
 
@@ -635,6 +683,41 @@ CREATE TABLE `hocphi` (
   `id_sinhvien` int(11) NOT NULL,
   `so_tien` decimal(10,2) NOT NULL,
   `trang_thai` enum('Chưa thanh toán','Đang xử lý','Đã thanh toán') DEFAULT 'Chưa thanh toán'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `jobs`
+--
+
+CREATE TABLE `jobs` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `queue` varchar(255) NOT NULL,
+  `payload` longtext NOT NULL,
+  `attempts` tinyint(3) UNSIGNED NOT NULL,
+  `reserved_at` int(10) UNSIGNED DEFAULT NULL,
+  `available_at` int(10) UNSIGNED NOT NULL,
+  `created_at` int(10) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `job_batches`
+--
+
+CREATE TABLE `job_batches` (
+  `id` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `total_jobs` int(11) NOT NULL,
+  `pending_jobs` int(11) NOT NULL,
+  `failed_jobs` int(11) NOT NULL,
+  `failed_job_ids` longtext NOT NULL,
+  `options` mediumtext DEFAULT NULL,
+  `cancelled_at` int(11) DEFAULT NULL,
+  `created_at` int(11) NOT NULL,
+  `finished_at` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -679,6 +762,22 @@ INSERT INTO `khoa` (`id_khoa`, `ten_khoa`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `login_logs`
+--
+
+CREATE TABLE `login_logs` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `login_time` timestamp NULL DEFAULT NULL,
+  `logout_time` timestamp NULL DEFAULT NULL,
+  `ip_address` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `lop`
 --
 
@@ -716,6 +815,28 @@ INSERT INTO `lop` (`id_lop`, `ten_lop`, `ma_phong_hoc`) VALUES
 (21, 'TCNH01', 56),
 (22, 'TCNH02', 57),
 (23, 'TCNH03', 58);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `migrations`
+--
+
+CREATE TABLE `migrations` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `migration` varchar(255) NOT NULL,
+  `batch` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `migrations`
+--
+
+INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
+(1, '0001_01_01_000000_create_users_table', 1),
+(2, '0001_01_01_000001_create_cache_table', 1),
+(3, '0001_01_01_000002_create_jobs_table', 1),
+(4, '2024_03_15_create_login_logs_table', 1);
 
 -- --------------------------------------------------------
 
@@ -842,7 +963,7 @@ CREATE TABLE `nguoidung` (
 --
 
 INSERT INTO `nguoidung` (`id_nguoidung`, `ten_dang_nhap`, `mat_khau`, `email`, `so_dien_thoai`, `trang_thai`) VALUES
-(1, 'user01', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user01@example.com', '0901234567', 'hoạt động'),
+(1, 'user01', '$2y$12$3m67OSSCeJvZP6PTxm569OLJrSK7i8y5Ik0zso5m7b96AYPhl8StW', 'user01@example.com', '0901234567', 'hoạt động'),
 (2, 'user02', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user02@example.com', '0901234568', 'hoạt động'),
 (3, 'user03', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user03@example.com', '0901234569', 'hoạt động'),
 (4, 'user04', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user04@example.com', '0901234570', 'hoạt động'),
@@ -941,7 +1062,17 @@ INSERT INTO `nguoidung` (`id_nguoidung`, `ten_dang_nhap`, `mat_khau`, `email`, `
 (97, 'user97', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user97@example.com', '0901234663', 'hoạt động'),
 (98, 'user98', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user98@example.com', '0901234664', 'hoạt động'),
 (99, 'user99', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user99@example.com', '0901234665', 'hoạt động'),
-(100, 'user100', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user100@example.com', '0901234666', 'hoạt động');
+(100, 'user100', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user100@example.com', '0901234666', 'hoạt động'),
+(101, 'user150@example.com', '$2y$12$O0y5xl5SWkw8x3B7deTDD.p8R3xEUEsp8HsRHckB8ydwFzwwIETFi', 'user150@example.com', NULL, 'hoạt động'),
+(102, 'user151@example.com', '$2y$12$Yrn2/n9V3Cxi1Cf.ulz6COnnFQeCZt3e8hrlNAVwYs7AEHH0cOcWq', 'user151@example.com', NULL, 'hoạt động'),
+(103, 'user152@example.com', '$2y$12$gVPG7qIhLXwDRLCica7TbOlJeJK77kEnqMqb61BS0sgoauD2KECci', 'user152@example.com', NULL, 'hoạt động'),
+(104, 'user153@example.com', '$2y$12$gy6T3uvsyin/AJ60GhzLUeqXSMY8sGO2kpD5C1gVIbtb3jJf837t.', 'user153@example.com', NULL, 'hoạt động'),
+(105, 'user154@example.com', '$2y$12$4.Sy20IdcyYYZbP1C5R4beqogzFbCBjye5ITL1dfLEVpy0u9HEZFW', 'user154@example.com', NULL, 'hoạt động'),
+(106, 'user155@example.com', '$2y$12$4cL4y1nqqmWMWsl5AuDEDO56NMYYdbV0/n0Pu2BqOVviI3ZR7f7s6', 'user155@example.com', NULL, 'hoạt động'),
+(107, 'user156@example.com', '$2y$12$MywTjZ6U4InvHxaeJbG4MOidT7pmmVOI..ZGR4OE21uuTmwDZEI8O', 'user156@example.com', NULL, 'hoạt động'),
+(108, 'user157@example.com', '$2y$12$d4wPZWTGn7TxAhWb1WEmc.7D1ttPDtaiqO2AGLFAOWpHfHNI6W.3G', 'user157@example.com', NULL, 'hoạt động'),
+(109, 'user158@example.com', '$2y$12$ydBLfvojlGfUU7W6gW2UeOPVs4wM2.tyWfZ1o9WgshvGfPQxaNHO2', 'user158@example.com', NULL, 'hoạt động'),
+(110, 'user159@example.com', '$2y$12$lQ7xoawS1zpznNrwEQ2lzO/G87dkaBkAKTWPMi/gcCnp04uWwE/Jy', 'user159@example.com', NULL, 'hoạt động');
 
 -- --------------------------------------------------------
 
@@ -957,6 +1088,18 @@ CREATE TABLE `noidungmonhoc` (
   `duong_dan` varchar(500) NOT NULL,
   `nguoi_upload` int(11) NOT NULL,
   `ngay_upload` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `password_reset_tokens`
+--
+
+CREATE TABLE `password_reset_tokens` (
+  `email` varchar(255) NOT NULL,
+  `token` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -1075,7 +1218,17 @@ INSERT INTO `phanquyen` (`id_phanquyen`, `id_nguoidung`, `id_vaitro`) VALUES
 (97, 97, 3),
 (98, 98, 3),
 (99, 99, 3),
-(100, 100, 3);
+(100, 100, 3),
+(101, 101, 3),
+(102, 102, 3),
+(103, 103, 3),
+(104, 104, 3),
+(105, 105, 3),
+(106, 106, 3),
+(107, 107, 3),
+(108, 108, 3),
+(109, 109, 3),
+(110, 110, 3);
 
 -- --------------------------------------------------------
 
@@ -1315,6 +1468,29 @@ INSERT INTO `phonghoc` (`id_phonghoc`, `ten_phonghoc`, `so_cho_ngoi`, `co_may_ch
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `sessions`
+--
+
+CREATE TABLE `sessions` (
+  `id` varchar(255) NOT NULL,
+  `user_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `ip_address` varchar(45) DEFAULT NULL,
+  `user_agent` text DEFAULT NULL,
+  `payload` longtext NOT NULL,
+  `last_activity` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `sessions`
+--
+
+INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
+('evTIuKRFrUBrzD2RLNHIWNLR1Wg7OnKbFNpuDa4g', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0', 'YTo2OntzOjY6Il90b2tlbiI7czo0MDoiQkVtaUp0U1BmSnQwc0wwZGZMQld6YVpyUXhoUnZzdFBSOEF1RVM0TCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6ODA6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9xbG5kL2xpc3RTaW5odmllbj9maW5kX2xvcD1LVFBNMDEmZmluZF9zdHVkZW50PTY3JnBhZ2VfMT0yIjt9czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTtzOjExOiJyZXR1cm5fcGFnZSI7aToxO3M6MTA6InJldHVybl9sb3AiO047fQ==', 1733771170),
+('jpOTacXOOHyIHjbFRQdS9urGKDF6E7hW17L6IXJu', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiR25VSDgwRm1KZDRFYTZuZFdNbmZQMkxMTlExSkg3eUtOOVk5NFhRMiI7czozOiJ1cmwiO2E6MTp7czo4OiJpbnRlbmRlZCI7czoyMToiaHR0cDovL2xvY2FsaG9zdDo4MDAwIjt9czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NTQ6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9hc3NldHMvbGlicy90b2FzdHIvdG9hc3RyLm1pbi5qcyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7fQ==', 1733775827);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `sinhvien`
 --
 
@@ -1326,6 +1502,61 @@ CREATE TABLE `sinhvien` (
   `ma_chuyen_nganh` int(11) DEFAULT NULL,
   `nam_vao_hoc` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `sinhvien`
+--
+
+INSERT INTO `sinhvien` (`id_sinhvien`, `id_nguoidung`, `ten_sinhvien`, `lop`, `ma_chuyen_nganh`, `nam_vao_hoc`) VALUES
+(62, 62, 'Đoàn Nguyên Đức', 'KTPM01', 1, 2023),
+(63, 63, 'Đoàn Dự', 'KTPM01', 1, 2023),
+(64, 64, 'Sinh viên user64', 'KTPM01', 1, 2023),
+(65, 65, 'Sinh viên user65', 'KTPM01', 1, 2023),
+(66, 66, 'Sinh viên user66', 'KTPM01', 1, 2023),
+(67, 67, 'Sinh viên user67', 'KTPM01', 1, 2023),
+(68, 68, 'Sinh viên user68', 'KTPM01', 1, 2023),
+(69, 69, 'Sinh viên user69', 'KTPM01', 1, 2023),
+(70, 70, 'Sinh viên user70', 'KTPM01', 1, 2023),
+(71, 71, 'Sinh viên user71', 'KTPM01', 1, 2023),
+(72, 72, 'Sinh viên user72', 'KTPM02', 1, 2023),
+(73, 73, 'Sinh viên user73', 'KTPM02', 1, 2023),
+(74, 74, 'Sinh viên user74', 'KTPM02', 1, 2023),
+(75, 75, 'Sinh viên user75', 'KTPM02', 1, 2023),
+(76, 76, 'Sinh viên user76', 'KTPM02', 1, 2023),
+(77, 77, 'Sinh viên user77', 'KTPM02', 1, 2023),
+(78, 78, 'Sinh viên user78', 'KTPM02', 1, 2023),
+(79, 79, 'Sinh viên user79', 'KTPM02', 1, 2023),
+(80, 80, 'Sinh viên user80', 'KTPM02', 1, 2023),
+(81, 81, 'Sinh viên user81', 'KTPM02', 1, 2023),
+(82, 82, 'Sinh viên user82', 'KTPM03', 1, 2023),
+(83, 83, 'Sinh viên user83', 'KTPM03', 1, 2023),
+(84, 84, 'Sinh viên user84', 'KTPM03', 1, 2023),
+(85, 85, 'Sinh viên user85', 'KTPM03', 1, 2023),
+(86, 86, 'Sinh viên user86', 'KTPM03', 1, 2023),
+(87, 87, 'Sinh viên user87', 'KTPM03', 1, 2023),
+(88, 88, 'Sinh viên user88', 'KTPM03', 1, 2023),
+(89, 89, 'Sinh viên user89', 'KTPM03', 1, 2023),
+(90, 90, 'Sinh viên user90', 'KTPM03', 1, 2023),
+(91, 91, 'Sinh viên user91', 'KTPM03', 1, 2023),
+(92, 92, 'Sinh viên user92', 'MMT01', 2, 2023),
+(93, 93, 'Sinh viên user93', 'MMT01', 2, 2023),
+(94, 94, 'Sinh viên user94', 'MMT01', 2, 2023),
+(95, 95, 'Sinh viên user95', 'MMT01', 2, 2023),
+(96, 96, 'Sinh viên user96', 'MMT01', 2, 2023),
+(97, 97, 'Sinh viên user97', 'MMT02', 2, 2023),
+(98, 98, 'Sinh viên user98', 'MMT02', 2, 2023),
+(99, 99, 'Sinh viên user99', 'MMT02', 2, 2023),
+(100, 100, 'Sinh viên user100', 'MMT02', 2, 2023),
+(101, 101, 'Đoàn Văn Vương', 'ATTT01', 4, 2023),
+(102, 102, 'Lâm Chấn Đông', 'ATTT02', 4, 2023),
+(103, 103, 'Tấm', 'ATTT03', 4, 2023),
+(104, 104, 'Hoàng Mạnh Hà', 'HTTT01', 5, 2023),
+(105, 105, 'Nguyễn Đức', 'ATTT01', 4, 2023),
+(106, 106, 'Chẩu Mạnh Hà', 'ATTT01', 4, 2023),
+(107, 107, 'Trần Đức Bình', 'ATTT01', 4, 2023),
+(108, 108, 'Hoàng Việt', 'ATTT01', 4, 2023),
+(109, 109, 'Văn Bằng', 'ATTT01', 4, 2023),
+(110, 110, 'Khổng Tử', 'ATTT01', 4, 2023);
 
 -- --------------------------------------------------------
 
@@ -1455,6 +1686,33 @@ INSERT INTO `thoikhoabieu` (`id_thoikhoabieu`, `id_monhoc`, `id_giaovien`, `id_l
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `thong_bao`
+--
+
+CREATE TABLE `thong_bao` (
+  `id_thongbao` int(11) NOT NULL,
+  `id_nguoidung` int(11) NOT NULL,
+  `tieu_de` varchar(255) NOT NULL,
+  `noi_dung` text NOT NULL,
+  `loai_thongbao` varchar(50) DEFAULT NULL,
+  `da_doc` tinyint(1) DEFAULT 0,
+  `thoi_gian` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `thong_bao`
+--
+
+INSERT INTO `thong_bao` (`id_thongbao`, `id_nguoidung`, `tieu_de`, `noi_dung`, `loai_thongbao`, `da_doc`, `thoi_gian`) VALUES
+(1, 1, 'Chào mừng đến với hệ thống', 'Chào mừng user01 đến với hệ thống quản lý.', 'system', 1, '2024-12-09 14:13:53'),
+(2, 1, 'Cập nhật thông tin', 'Vui lòng cập nhật thông tin cá nhân của bạn.', 'info', 1, '2024-12-09 13:13:53'),
+(3, 1, 'Nhiệm vụ mới', 'Bạn có một nhiệm vụ mới cần xử lý.', 'task', 1, '2024-12-09 12:13:53'),
+(4, 1, 'Bảo mật tài khoản', 'Vui lòng thay đổi mật khẩu định kỳ để bảo vệ tài khoản.', 'security', 1, '2024-12-08 14:13:53'),
+(5, 1, 'Thông báo bảo trì', 'Hệ thống sẽ bảo trì vào ngày mai.', 'maintenance', 1, '2024-12-07 14:13:53');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `thuoctinhchung`
 --
 
@@ -1463,6 +1721,23 @@ CREATE TABLE `thuoctinhchung` (
   `ten_thuoctinh` varchar(255) NOT NULL,
   `gia_tri` text NOT NULL,
   `mo_ta` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `email_verified_at` timestamp NULL DEFAULT NULL,
+  `password` varchar(255) NOT NULL,
+  `remember_token` varchar(100) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -1499,6 +1774,18 @@ INSERT INTO `vaitro` (`id_vaitro`, `ten_vaitro`, `mo_ta_vaitro`) VALUES
 ALTER TABLE `admin`
   ADD PRIMARY KEY (`id_admin`),
   ADD KEY `id_nguoidung` (`id_nguoidung`);
+
+--
+-- Indexes for table `cache`
+--
+ALTER TABLE `cache`
+  ADD PRIMARY KEY (`key`);
+
+--
+-- Indexes for table `cache_locks`
+--
+ALTER TABLE `cache_locks`
+  ADD PRIMARY KEY (`key`);
 
 --
 -- Indexes for table `chitietchuyennganh`
@@ -1555,6 +1842,13 @@ ALTER TABLE `diemdanh`
   ADD KEY `id_thoikhoabieu` (`id_thoikhoabieu`);
 
 --
+-- Indexes for table `failed_jobs`
+--
+ALTER TABLE `failed_jobs`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`);
+
+--
 -- Indexes for table `file_nguoidung`
 --
 ALTER TABLE `file_nguoidung`
@@ -1566,7 +1860,8 @@ ALTER TABLE `file_nguoidung`
 --
 ALTER TABLE `giaovien`
   ADD PRIMARY KEY (`id_giaovien`),
-  ADD KEY `id_nguoidung` (`id_nguoidung`);
+  ADD KEY `id_nguoidung` (`id_nguoidung`),
+  ADD KEY `ma_khoa` (`ma_khoa`);
 
 --
 -- Indexes for table `hieutruong`
@@ -1583,6 +1878,19 @@ ALTER TABLE `hocphi`
   ADD KEY `id_sinhvien` (`id_sinhvien`);
 
 --
+-- Indexes for table `jobs`
+--
+ALTER TABLE `jobs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `jobs_queue_index` (`queue`);
+
+--
+-- Indexes for table `job_batches`
+--
+ALTER TABLE `job_batches`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `ketoan`
 --
 ALTER TABLE `ketoan`
@@ -1596,11 +1904,24 @@ ALTER TABLE `khoa`
   ADD PRIMARY KEY (`id_khoa`);
 
 --
+-- Indexes for table `login_logs`
+--
+ALTER TABLE `login_logs`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `login_logs_user_id_foreign` (`user_id`);
+
+--
 -- Indexes for table `lop`
 --
 ALTER TABLE `lop`
   ADD PRIMARY KEY (`id_lop`),
   ADD KEY `ma_phong_hoc` (`ma_phong_hoc`);
+
+--
+-- Indexes for table `migrations`
+--
+ALTER TABLE `migrations`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `monhoc`
@@ -1624,6 +1945,12 @@ ALTER TABLE `noidungmonhoc`
   ADD KEY `nguoi_upload` (`nguoi_upload`);
 
 --
+-- Indexes for table `password_reset_tokens`
+--
+ALTER TABLE `password_reset_tokens`
+  ADD PRIMARY KEY (`email`);
+
+--
 -- Indexes for table `phanquyen`
 --
 ALTER TABLE `phanquyen`
@@ -1636,6 +1963,14 @@ ALTER TABLE `phanquyen`
 --
 ALTER TABLE `phonghoc`
   ADD PRIMARY KEY (`id_phonghoc`);
+
+--
+-- Indexes for table `sessions`
+--
+ALTER TABLE `sessions`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `sessions_user_id_index` (`user_id`),
+  ADD KEY `sessions_last_activity_index` (`last_activity`);
 
 --
 -- Indexes for table `sinhvien`
@@ -1670,10 +2005,24 @@ ALTER TABLE `thoikhoabieu`
   ADD KEY `id_phonghoc` (`id_phonghoc`);
 
 --
+-- Indexes for table `thong_bao`
+--
+ALTER TABLE `thong_bao`
+  ADD PRIMARY KEY (`id_thongbao`),
+  ADD KEY `fk_thongbao_nguoidung` (`id_nguoidung`);
+
+--
 -- Indexes for table `thuoctinhchung`
 --
 ALTER TABLE `thuoctinhchung`
   ADD PRIMARY KEY (`id_thuoctinh`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `users_email_unique` (`email`);
 
 --
 -- Indexes for table `vaitro`
@@ -1734,10 +2083,16 @@ ALTER TABLE `diemdanh`
   MODIFY `id_diemdanh` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `failed_jobs`
+--
+ALTER TABLE `failed_jobs`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `file_nguoidung`
 --
 ALTER TABLE `file_nguoidung`
-  MODIFY `id_file` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_file` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `giaovien`
@@ -1758,6 +2113,12 @@ ALTER TABLE `hocphi`
   MODIFY `id_hocphi` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `jobs`
+--
+ALTER TABLE `jobs`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `ketoan`
 --
 ALTER TABLE `ketoan`
@@ -1770,10 +2131,22 @@ ALTER TABLE `khoa`
   MODIFY `id_khoa` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
+-- AUTO_INCREMENT for table `login_logs`
+--
+ALTER TABLE `login_logs`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `lop`
 --
 ALTER TABLE `lop`
   MODIFY `id_lop` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+
+--
+-- AUTO_INCREMENT for table `migrations`
+--
+ALTER TABLE `migrations`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `monhoc`
@@ -1785,7 +2158,7 @@ ALTER TABLE `monhoc`
 -- AUTO_INCREMENT for table `nguoidung`
 --
 ALTER TABLE `nguoidung`
-  MODIFY `id_nguoidung` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
+  MODIFY `id_nguoidung` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
 
 --
 -- AUTO_INCREMENT for table `noidungmonhoc`
@@ -1797,7 +2170,7 @@ ALTER TABLE `noidungmonhoc`
 -- AUTO_INCREMENT for table `phanquyen`
 --
 ALTER TABLE `phanquyen`
-  MODIFY `id_phanquyen` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
+  MODIFY `id_phanquyen` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
 
 --
 -- AUTO_INCREMENT for table `phonghoc`
@@ -1809,7 +2182,7 @@ ALTER TABLE `phonghoc`
 -- AUTO_INCREMENT for table `sinhvien`
 --
 ALTER TABLE `sinhvien`
-  MODIFY `id_sinhvien` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_sinhvien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
 
 --
 -- AUTO_INCREMENT for table `thanhtich`
@@ -1830,10 +2203,22 @@ ALTER TABLE `thoikhoabieu`
   MODIFY `id_thoikhoabieu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=353;
 
 --
+-- AUTO_INCREMENT for table `thong_bao`
+--
+ALTER TABLE `thong_bao`
+  MODIFY `id_thongbao` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT for table `thuoctinhchung`
 --
 ALTER TABLE `thuoctinhchung`
   MODIFY `id_thuoctinh` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `vaitro`
@@ -1908,7 +2293,8 @@ ALTER TABLE `file_nguoidung`
 -- Constraints for table `giaovien`
 --
 ALTER TABLE `giaovien`
-  ADD CONSTRAINT `giaovien_ibfk_1` FOREIGN KEY (`id_nguoidung`) REFERENCES `nguoidung` (`id_nguoidung`) ON DELETE CASCADE;
+  ADD CONSTRAINT `giaovien_ibfk_1` FOREIGN KEY (`id_nguoidung`) REFERENCES `nguoidung` (`id_nguoidung`) ON DELETE CASCADE,
+  ADD CONSTRAINT `giaovien_ibfk_2` FOREIGN KEY (`ma_khoa`) REFERENCES `khoa` (`id_khoa`);
 
 --
 -- Constraints for table `hieutruong`
@@ -1927,6 +2313,12 @@ ALTER TABLE `hocphi`
 --
 ALTER TABLE `ketoan`
   ADD CONSTRAINT `ketoan_ibfk_1` FOREIGN KEY (`id_nguoidung`) REFERENCES `nguoidung` (`id_nguoidung`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `login_logs`
+--
+ALTER TABLE `login_logs`
+  ADD CONSTRAINT `login_logs_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `nguoidung` (`id_nguoidung`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `lop`
@@ -1981,6 +2373,12 @@ ALTER TABLE `thoikhoabieu`
   ADD CONSTRAINT `thoikhoabieu_ibfk_2` FOREIGN KEY (`id_giaovien`) REFERENCES `giaovien` (`id_giaovien`) ON DELETE CASCADE,
   ADD CONSTRAINT `thoikhoabieu_ibfk_3` FOREIGN KEY (`id_lop`) REFERENCES `lop` (`id_lop`) ON DELETE CASCADE,
   ADD CONSTRAINT `thoikhoabieu_ibfk_4` FOREIGN KEY (`id_phonghoc`) REFERENCES `phonghoc` (`id_phonghoc`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `thong_bao`
+--
+ALTER TABLE `thong_bao`
+  ADD CONSTRAINT `fk_thongbao_nguoidung` FOREIGN KEY (`id_nguoidung`) REFERENCES `nguoidung` (`id_nguoidung`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

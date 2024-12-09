@@ -1,3 +1,24 @@
+<style>
+.sortable {
+    cursor: pointer;
+    user-select: none;
+}
+.sortable i {
+    font-size: 14px;
+    margin-left: 5px;
+    opacity: 0.5;
+    transition: all 0.2s;
+}
+.sortable:hover i {
+    opacity: 1;
+}
+.sortable i.mdi-sort-ascending,
+.sortable i.mdi-sort-descending {
+    opacity: 1;
+    color: #727cf5;
+}
+</style>
+
 @foreach($lops as $lop)
 <div class="row mb-4">
     <div class="col-12">
@@ -13,23 +34,34 @@
                     </div>
                 </h5>
             </div>
-            <div class="card-body" id="student-list-{{ $lop->id_lop }}">
+            <div class="card-body" id="student-list-{{ $lop->id_lop }}" 
+                 data-all-students='@json($lop->all_students)'>
                 @if($lop->sinhviens->count() > 0)
                     <div class="table-responsive">
                         <table class="table table-centered table-nowrap mb-0">
                             <thead class="table-light">
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Họ và tên</th>
-                                    <th>Email</th>
-                                    <th>Số điện thoại</th>
-                                    <th>Năm vào học</th>
+                                    <th class="sortable" data-sort="id_sinhvien">
+                                        ID <i class="mdi mdi-sort"></i>
+                                    </th>
+                                    <th class="sortable" data-sort="ten_sinhvien">
+                                        Họ và tên <i class="mdi mdi-sort"></i>
+                                    </th>
+                                    <th class="sortable" data-sort="email">
+                                        Email <i class="mdi mdi-sort"></i>
+                                    </th>
+                                    <th class="sortable" data-sort="so_dien_thoai">
+                                        Số điện thoại <i class="mdi mdi-sort"></i>
+                                    </th>
+                                    <th class="sortable" data-sort="nam_vao_hoc">
+                                        Năm vào học <i class="mdi mdi-sort"></i>
+                                    </th>
                                     <th style="width: 125px;">Thao tác</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($lop->sinhviens as $sv)
-                                <tr>
+                                <tr data-student-id="{{ $sv->id_sinhvien }}">
                                     <td>{{ $sv->id_sinhvien }}</td>
                                     <td>{{ $sv->ten_sinhvien }}</td>
                                     <td>{{ $sv->email }}</td>
@@ -63,7 +95,7 @@
                         </table>
 
                         <div class="mt-3" id="pagination-{{ $lop->id_lop }}">
-                            {{ $lop->sinhviens->appends(['lop_id' => $lop->id_lop])->onEachSide(1)->links('vendor.pagination.bootstrap-5') }}
+                            {{ $lop->sinhviens->links('vendor.pagination.bootstrap-5', ['pageName' => 'page_'.$lop->id_lop]) }}
                         </div>
                     </div>
                 @else
@@ -143,28 +175,68 @@
 @push('scripts')
 <script>
 $(document).ready(function() {
+    // Add search functionality
+    var searchTimeout;
+    $('#student-search').on('keyup', function() {
+        clearTimeout(searchTimeout);
+        var searchTerm = $(this).val();
+        
+        // Add a small delay to prevent too many requests
+        searchTimeout = setTimeout(function() {
+            $.ajax({
+                url: '{{ route("qlnd.listSinhvien") }}',
+                data: { 
+                    search: searchTerm
+                },
+                success: function(response) {
+                    // Update the content while maintaining scroll position
+                    var scrollPosition = $(window).scrollTop();
+                    $('#student-lists').html(response);
+                    $(window).scrollTop(scrollPosition);
+                }
+            });
+        }, 300);
+    });
+
     // Handle pagination for each class
     @foreach($lops as $lop)
     $('#pagination-{{ $lop->id_lop }}').on('click', '.pagination a', function(e) {
         e.preventDefault();
         
-        // Get current element position
-        var currentElement = $(this).closest('.card');
-        var currentOffset = currentElement.offset().top;
+        // Get the clicked pagination element
+        var paginationElement = $(this);
+        var card = paginationElement.closest('.card');
+        
+        // Store the current viewport offset of the card
+        var cardOffset = card.offset().top - $(window).scrollTop();
         
         var url = $(this).attr('href');
         
+        // Extract current page from URL
+        var currentPage = url.match(/page_{{ $lop->id_lop }}=(\d+)/);
+        currentPage = currentPage ? currentPage[1] : 1;
+        
         $.ajax({
             url: url,
+            data: {
+                'page_{{ $lop->id_lop }}': currentPage,
+                'search_lop': '{{ request()->get("search_lop") }}'
+            },
             success: function(response) {
                 // Only update the specific class's content
                 var newContent = $(response).find('#student-list-{{ $lop->id_lop }}').html();
                 $('#student-list-{{ $lop->id_lop }}').html(newContent);
                 
-                // Scroll to the same position
-                $('html, body').animate({
-                    scrollTop: currentOffset
-                }, 0);
+                // Wait for content to be rendered
+                setTimeout(function() {
+                    // Get the updated card position and maintain viewport offset
+                    var newPosition = card.offset().top - cardOffset;
+                    
+                    // Smooth scroll to the position
+                    $('html, body').animate({
+                        scrollTop: newPosition
+                    }, 0);
+                }, 100);
                 
                 // Update URL without page reload
                 window.history.pushState({}, '', url);
@@ -255,6 +327,141 @@ $(document).ready(function() {
                 alert(errorMessage);
             }
         });
+    });
+
+    // Handle column sorting
+    $('.sortable').click(function() {
+        var column = $(this);
+        var sort = column.data('sort');
+        var card = column.closest('.card');
+        var cardBody = card.find('.card-body');
+        var lopId = cardBody.attr('id').replace('student-list-', '');
+        var icon = column.find('i');
+        
+        // Get all students for this class
+        var allStudents = JSON.parse(cardBody.attr('data-all-students'));
+        
+        // Toggle sort direction
+        var isAsc = icon.hasClass('mdi-sort') || icon.hasClass('mdi-sort-descending');
+        
+        // Reset all icons in this table
+        column.closest('table').find('.sortable i')
+            .removeClass('mdi-sort-ascending mdi-sort-descending')
+            .addClass('mdi-sort');
+        
+        // Update clicked column icon
+        icon.removeClass('mdi-sort')
+            .addClass(isAsc ? 'mdi-sort-ascending' : 'mdi-sort-descending');
+        
+        // Sort all students
+        allStudents.sort(function(a, b) {
+            var aValue = a[sort];
+            var bValue = b[sort];
+            
+            // Handle numeric sorting
+            if (sort === 'id_sinhvien' || sort === 'nam_vao_hoc') {
+                aValue = parseInt(aValue) || 0;
+                bValue = parseInt(bValue) || 0;
+            }
+            
+            if (isAsc) {
+                return aValue > bValue ? 1 : aValue < bValue ? -1 : 0;
+            } else {
+                return aValue < bValue ? 1 : aValue > bValue ? -1 : 0;
+            }
+        });
+        
+        // Get current page
+        var currentPage = parseInt(new URLSearchParams(window.location.search)
+            .get('page_' + lopId)) || 1;
+        
+        // Calculate pagination
+        var perPage = 5;
+        var start = (currentPage - 1) * perPage;
+        var pageStudents = allStudents.slice(start, start + perPage);
+        
+        // Update table body
+        var tbody = card.find('tbody');
+        tbody.empty();
+        
+        pageStudents.forEach(function(student) {
+            tbody.append(`
+                <tr data-student-id="${student.id_sinhvien}">
+                    <td>${student.id_sinhvien}</td>
+                    <td>${student.ten_sinhvien}</td>
+                    <td>${student.email}</td>
+                    <td>${student.so_dien_thoai}</td>
+                    <td>${student.nam_vao_hoc}</td>
+                    <td>
+                        <div class="btn-group">
+                            <a href="/qlnd/sinhvien/${student.id_sinhvien}" 
+                               class="btn btn-soft-primary btn-sm" 
+                               title="Xem chi tiết">
+                                <i class="mdi mdi-eye"></i>
+                            </a>
+                            <button type="button" 
+                                    class="btn btn-soft-info btn-sm edit-btn" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#editSinhVienModal"
+                                    data-id="${student.id_sinhvien}"
+                                    data-name="${student.ten_sinhvien}"
+                                    data-email="${student.email}"
+                                    data-phone="${student.so_dien_thoai}"
+                                    data-lop="${student.lop}"
+                                    data-nam="${student.nam_vao_hoc}"
+                                    title="Chỉnh sửa">
+                                <i class="mdi mdi-pencil"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `);
+        });
+    });
+
+    function scrollToStudent(id, lop, page) {
+        var lopCard = $(`.card-title:contains("${lop}")`).closest('.card');
+        var lopId = lopCard.find('.card-body').attr('id').replace('student-list-', '');
+        
+        // Load the correct page first
+        var url = new URL(window.location.href);
+        url.searchParams.set(`page_${lopId}`, page);
+        
+        $.ajax({
+            url: url.toString(),
+            success: function(response) {
+                // Update content
+                $('#student-lists').html(response);
+                
+                // Update URL
+                window.history.pushState({}, '', url.toString());
+                
+                // Find and scroll to student
+                var studentRow = $(`tr[data-student-id="${id}"]`);
+                if (studentRow.length) {
+                    $('html, body').animate({
+                        scrollTop: studentRow.offset().top - 100
+                    }, 500);
+                    studentRow.addClass('highlight-row');
+                    setTimeout(() => studentRow.removeClass('highlight-row'), 3000);
+                }
+            }
+        });
+    }
+
+    // Update suggestion click handler
+    $(document).on('click', '.suggestion-item', function() {
+        var type = $(this).data('type');
+        if (type === 'student') {
+            var id = $(this).data('id');
+            var lop = $(this).data('lop');
+            var page = $(this).data('page');
+            scrollToStudent(id, lop, page);
+        } else {
+            var lop = $(this).data('lop');
+            scrollToClass(lop);
+        }
+        $('#student-search-suggestions').hide();
     });
 });
 </script>

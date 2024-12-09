@@ -42,6 +42,9 @@ Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->group(
     
     // QLND routes - MUST be before catch-all routes
     Route::prefix('qlnd')->name('qlnd.')->group(function () {
+        // Search route should come before detail routes to avoid conflicts
+        Route::get('/sinhvien/search', [LopController::class, 'searchSinhvien'])->name('searchSinhvien');
+        
         // List routes
         Route::get('/listSinhvien', [LopController::class, 'listAll'])->name('listSinhvien');
         Route::get('/listGiaovien', [GiaoVienController::class, 'listAll'])->name('listGiaovien');

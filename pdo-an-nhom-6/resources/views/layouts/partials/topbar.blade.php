@@ -9,11 +9,23 @@
                     </button>
                 </li>
                 <li class="d-none d-lg-block">
-                    <div class="position-relative topbar-search">
-                        <input type="text" class="form-control bg-light bg-opacity-75 border-light ps-4"
-                               placeholder="Tìm kiếm...">
-                        <i class="mdi mdi-magnify fs-16 position-absolute text-muted top-50 translate-middle-y ms-2"></i>
-                    </div>
+                    @if(request()->routeIs('qlnd.listSinhvien'))
+                        <div class="position-relative topbar-search">
+                            <input type="text" 
+                                   id="student-search" 
+                                   class="form-control bg-light bg-opacity-75 border-light ps-4"
+                                   placeholder="Tìm kiếm sinh viên...">
+                            <i class="mdi mdi-magnify fs-16 position-absolute text-muted top-50 translate-middle-y ms-2 search-icon"></i>
+                            
+                            <!-- Suggestions dropdown -->
+                            <div id="student-search-suggestions" class="suggestions-dropdown" style="display: none;">
+                                <div class="suggestions-list"></div>
+                                <div class="no-results" style="display: none;">
+                                    <p class="text-muted p-2 mb-0">Không tìm thấy kết quả</p>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 </li>
             </ul>
             <ul class="list-unstyled topnav-menu mb-0 d-flex align-items-center">
@@ -253,4 +265,259 @@ function markAllAsRead() {
         console.error('Error:', error);
     });
 }
+
+// Add search functionality when on student list page
+@if(request()->routeIs('qlnd.listSinhvien'))
+$(document).ready(function() {
+    var searchTimeout;
+    var currentSearchTerm = '';
+    
+    $('#student-search').on('keyup', function(e) {
+        var searchBox = $(this);
+        var suggestionsBox = $('#student-search-suggestions');
+        var searchTerm = searchBox.val().trim();
+        currentSearchTerm = searchTerm;
+        
+        clearTimeout(searchTimeout);
+        
+        if (searchTerm.length < 2) {
+            suggestionsBox.hide();
+            return;
+        }
+        
+        // Handle enter key
+        if (e.key === 'Enter') {
+            performSearch(searchTerm);
+            return;
+        }
+        
+        // Get suggestions
+        searchTimeout = setTimeout(function() {
+            $.ajax({
+                url: '{{ route("qlnd.searchSinhvien") }}',
+                data: { 
+                    search: searchTerm,
+                    suggest: true
+                },
+                success: function(response) {
+                    if (searchTerm !== currentSearchTerm) return;
+                    
+                    var suggestionsList = suggestionsBox.find('.suggestions-list');
+                    suggestionsList.empty();
+                    
+                    if (response.suggestions && response.suggestions.length > 0) {
+                        // Add category headers
+                        var classHeader = false;
+                        var studentHeader = false;
+                        
+                        response.suggestions.forEach(function(item) {
+                            if (item.type === 'class' && !classHeader) {
+                                suggestionsList.append('<div class="suggestion-header">Lớp/Khoa/Chuyên ngành</div>');
+                                classHeader = true;
+                            } else if (item.type === 'student' && !studentHeader) {
+                                suggestionsList.append('<div class="suggestion-header">Sinh viên</div>');
+                                studentHeader = true;
+                            }
+                            
+                            var html = '';
+                            if (item.type === 'class') {
+                                html = `
+                                    <div class="suggestion-item" 
+                                         data-type="class" 
+                                         data-lop="${item.ten_lop}">
+                                        <div class="d-flex justify-content-between">
+                                            <span>${highlightMatch(item.ten_lop, searchTerm)}</span>
+                                            <small class="text-muted">${item.student_count} sinh viên</small>
+                                        </div>
+                                        <small class="text-muted">
+                                            ${highlightMatch(item.ten_chuyennganh, searchTerm)} - 
+                                            ${highlightMatch(item.ten_khoa, searchTerm)}
+                                        </small>
+                                    </div>
+                                `;
+                            } else {
+                                html = `
+                                    <div class="suggestion-item" 
+                                         data-type="student"
+                                         data-id="${item.id_sinhvien}"
+                                         data-lop="${item.lop}">
+                                        <div class="d-flex justify-content-between">
+                                            <span>${highlightMatch(item.ten_sinhvien, searchTerm)}</span>
+                                            <small class="text-muted">${item.lop}</small>
+                                        </div>
+                                        <small class="text-muted">${item.email}</small>
+                                    </div>
+                                `;
+                            }
+                            suggestionsList.append(html);
+                        });
+                        
+                        suggestionsBox.find('.suggestions-list').show();
+                        suggestionsBox.find('.no-results').hide();
+                    } else {
+                        suggestionsBox.find('.suggestions-list').hide();
+                        suggestionsBox.find('.no-results').show();
+                    }
+                    
+                    suggestionsBox.show();
+                }
+            });
+        }, 300);
+    });
+    
+    // Handle suggestion click
+    $(document).on('click', '.suggestion-item', function() {
+        var type = $(this).data('type');
+        if (type === 'student') {
+            var id = $(this).data('id');
+            var lop = $(this).data('lop');
+            scrollToStudent(id, lop);
+        } else {
+            var lop = $(this).data('lop');
+            scrollToClass(lop);
+        }
+        $('#student-search-suggestions').hide();
+    });
+    
+    // Handle search icon click
+    $(document).on('click', '.search-icon', function() {
+        var searchTerm = $('#student-search').val().trim();
+        if (searchTerm.length >= 2) {
+            performSearch(searchTerm);
+        }
+    });
+    
+    // Close suggestions on click outside
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('.topbar-search').length) {
+            $('.suggestions-dropdown').hide();
+        }
+    });
+    
+    function performSearch(term) {
+        $.ajax({
+            url: '{{ route("qlnd.searchSinhvien") }}',
+            data: { search: term },
+            success: function(response) {
+                if (response.found) {
+                    if (response.type === 'class') {
+                        scrollToClass(response.class.ten_lop);
+                    } else if (response.type === 'student') {
+                        scrollToStudent(response.student.id_sinhvien, response.student.lop);
+                    }
+                } else {
+                    // Show not found message
+                    toastr.info('Không tìm thấy kết quả phù hợp');
+                }
+            }
+        });
+    }
+    
+    function scrollToStudent(id, lop) {
+        var studentRow = $(`tr[data-student-id="${id}"]`);
+        if (studentRow.length) {
+            // Student is visible on current page
+            $('html, body').animate({
+                scrollTop: studentRow.offset().top - 100
+            }, 500);
+            studentRow.addClass('highlight-row');
+            setTimeout(() => studentRow.removeClass('highlight-row'), 3000);
+        } else {
+            // Student might be on another page, reload with search parameters
+            var currentUrl = new URL(window.location.href);
+            var params = new URLSearchParams(currentUrl.search);
+            
+            // Keep existing pagination parameters
+            var paginationParams = {};
+            for (var pair of params.entries()) {
+                if (pair[0].startsWith('page_')) {
+                    paginationParams[pair[0]] = pair[1];
+                }
+            }
+            
+            // Build new URL with both find parameters and pagination
+            var newUrl = window.location.pathname + '?find_student=' + id + 
+                '&find_lop=' + encodeURIComponent(lop);
+            
+            // Add pagination parameters
+            for (var key in paginationParams) {
+                newUrl += '&' + key + '=' + paginationParams[key];
+            }
+            
+            window.location.href = newUrl;
+        }
+    }
+    
+    function scrollToClass(lop) {
+        // Find the card with the class name in its header
+        var classCard = $(`h5:contains("${lop}")`).closest('.card');
+        if (classCard.length) {
+            // Class is visible
+            $('html, body').animate({
+                scrollTop: classCard.offset().top - 100
+            }, 500);
+            classCard.addClass('highlight-card');
+            setTimeout(() => classCard.removeClass('highlight-card'), 3000);
+        } else {
+            // Class might be on another page or needs to be loaded
+            window.location.href = window.location.pathname + 
+                '?search_lop=' + encodeURIComponent(lop);
+        }
+    }
+    
+    function highlightMatch(text, term) {
+        if (!term) return text;
+        var regex = new RegExp(`(${term})`, 'gi');
+        return text.replace(regex, '<span class="highlight">$1</span>');
+    }
+});
+@endif
 </script>
+
+<style>
+/* Add search-related styles */
+.suggestions-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 1000;
+    max-height: 300px;
+    overflow-y: auto;
+}
+.suggestion-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+.suggestion-item:hover {
+    background: #f8f9fa;
+}
+.suggestion-item .highlight {
+    background: yellow;
+    font-weight: bold;
+}
+
+/* Add to existing search-related styles */
+.suggestion-header {
+    padding: 4px 12px;
+    background: #f8f9fa;
+    font-size: 12px;
+    color: #6c757d;
+    font-weight: 600;
+    border-bottom: 1px solid #eee;
+}
+
+.highlight-card {
+    animation: highlightCard 3s;
+}
+
+@keyframes highlightCard {
+    0% { box-shadow: 0 0 0 3px #ffc107; }
+    100% { box-shadow: none; }
+}
+</style>

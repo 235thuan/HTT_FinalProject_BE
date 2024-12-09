@@ -2,6 +2,26 @@
 
 @section('content')
 <div class="container-fluid" id="teacher-lists">
+<div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <h4 class="page-title">Danh sách giáo viên</h4>
+            </div>
+        </div>
+    </div>
+
+    @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
     @include('qlnd.partials.teacher-list')
 </div>
 @endsection

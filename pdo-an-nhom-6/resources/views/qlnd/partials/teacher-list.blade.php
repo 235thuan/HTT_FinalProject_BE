@@ -135,9 +135,12 @@ $(document).ready(function() {
     $('#pagination-{{ $khoa->id_khoa }}').on('click', '.pagination a', function(e) {
         e.preventDefault();
         
-        // Get current element position
-        var currentElement = $(this).closest('.card');
-        var currentOffset = currentElement.offset().top;
+        // Get the clicked pagination element
+        var paginationElement = $(this);
+        var card = paginationElement.closest('.card');
+        
+        // Store the current viewport offset of the card
+        var cardOffset = card.offset().top - $(window).scrollTop();
         
         var url = $(this).attr('href');
         
@@ -148,10 +151,16 @@ $(document).ready(function() {
                 var newContent = $(response).find('#teacher-list-{{ $khoa->id_khoa }}').html();
                 $('#teacher-list-{{ $khoa->id_khoa }}').html(newContent);
                 
-                // Scroll to the same position
-                $('html, body').animate({
-                    scrollTop: currentOffset
-                }, 0);
+                // Wait for content to be rendered
+                setTimeout(function() {
+                    // Get the updated card position and maintain viewport offset
+                    var newPosition = card.offset().top - cardOffset;
+                    
+                    // Smooth scroll to the position
+                    $('html, body').animate({
+                        scrollTop: newPosition
+                    }, 0);
+                }, 100);
                 
                 // Update URL without page reload
                 window.history.pushState({}, '', url);

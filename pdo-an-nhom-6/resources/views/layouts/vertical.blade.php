@@ -7,6 +7,7 @@
     
     <!-- jQuery must be loaded first -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="{{ asset('assets/libs/toastr/toastr.min.css') }}" rel="stylesheet" type="text/css" />
 </head>
 
 <body data-menu-color="light" data-sidebar="default" @yield('body')>
@@ -39,5 +40,6 @@
 
     <!-- Custom scripts -->
     @stack('scripts')
+    <script src="{{ asset('assets/libs/toastr/toastr.min.js') }}"></script>
 </body>
 </html>

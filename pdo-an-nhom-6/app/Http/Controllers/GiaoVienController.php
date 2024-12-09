@@ -12,21 +12,26 @@ class GiaoVienController extends Controller
     \Log::info('GiaoVienController@listAll: Starting method');
     
     try {
-        // Get only khoas that have teachers
+        // Get requested khoa_id and page from query parameters
+        $currentKhoaId = request('khoa_id');
+        $currentPage = request('page', 1);
+
+        // Get only khoas that have teachers, with distinct values
         $khoas = DB::table('khoa')
             ->join('giaovien', 'khoa.id_khoa', '=', 'giaovien.ma_khoa')
             ->select('khoa.*')
-            ->groupBy('khoa.id_khoa', 'khoa.ten_khoa')  // Add all non-aggregated columns
+            ->distinct()
             ->orderBy('khoa.ten_khoa')
             ->get();
 
-        \Log::info('GiaoVienController@listAll: Khoas fetched', [
-            'count' => $khoas->count(),
-            'first_khoa' => $khoas->first()
-        ]);
-
         // For each khoa, get its teachers with pagination
         foreach ($khoas as $khoa) {
+            // Only use the requested page for the specific khoa
+            $page = ($currentKhoaId == $khoa->id_khoa) ? $currentPage : 1;
+            
+            // Set the current page for this khoa's pagination
+            request()->merge(['page' => $page]);
+
             $khoa->giaoviens = DB::table('giaovien')
                 ->join('nguoidung', 'giaovien.id_nguoidung', '=', 'nguoidung.id_nguoidung')
                 ->where('giaovien.ma_khoa', '=', $khoa->id_khoa)
@@ -35,16 +40,19 @@ class GiaoVienController extends Controller
                     'giaovien.ten_giaovien',
                     'giaovien.ma_khoa',
                     'nguoidung.email',
-                    'nguoidung.so_dien_thoai',
-                    DB::raw("'{$khoa->ten_khoa}' as ten_khoa")  // Include khoa name
+                    'nguoidung.so_dien_thoai'
                 )
-                ->paginate(5);
+                ->paginate(5)
+                ->appends(['khoa_id' => $khoa->id_khoa]); // Add khoa_id to pagination URLs
+
+            // Store total count
+            $khoa->total_teachers = DB::table('giaovien')
+                ->where('ma_khoa', '=', $khoa->id_khoa)
+                ->count();
         }
 
         if (request()->ajax()) {
-            return response()->json([
-                'html' => view('qlnd.partials.teacher-list', compact('khoas'))->render(),
-            ]);
+            return view('qlnd.partials.teacher-list', compact('khoas'))->render();
         }
 
         return view('qlnd.listGiaovien', compact('khoas'));
@@ -53,6 +61,11 @@ class GiaoVienController extends Controller
             'error' => $e->getMessage(),
             'trace' => $e->getTraceAsString()
         ]);
+        
+        if (request()->ajax()) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+        
         return redirect()->back()->with('error', 'Có lỗi xảy ra');
     }
 }

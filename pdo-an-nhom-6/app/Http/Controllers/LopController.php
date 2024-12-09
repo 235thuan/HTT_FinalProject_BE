@@ -91,13 +91,9 @@ class LopController extends Controller
         \Log::info('LopController@listAll: Starting method');
         
         try {
-            // Debug log
-            \Log::info('Request info:', [
-                'url' => request()->url(),
-                'method' => request()->method(),
-                'path' => request()->path(),
-                'route' => request()->route()->getName()
-            ]);
+            // Get requested lop_id and page from query parameters
+            $currentLopId = request('lop_id');
+            $currentPage = request('page', 1);
 
             // Get all classes first
             $lops = DB::table('lop')
@@ -105,10 +101,14 @@ class LopController extends Controller
                 ->orderBy('lop.ten_lop')
                 ->get();
 
-            \Log::info('Classes fetched:', ['count' => $lops->count()]);
-
-            // For each class, get its students and other info
+            // For each class, get its students with pagination
             foreach ($lops as $lop) {
+                // Only use the requested page for the specific lop
+                $page = ($currentLopId == $lop->id_lop) ? $currentPage : 1;
+                
+                // Set the current page for this lop's pagination
+                request()->merge(['page' => $page]);
+
                 // Get first student's major and faculty info
                 $majorInfo = DB::table('sinhvien')
                     ->join('chuyennganh', 'sinhvien.ma_chuyen_nganh', '=', 'chuyennganh.id_chuyennganh')
@@ -124,7 +124,6 @@ class LopController extends Controller
                 $lop->ten_chuyennganh = $majorInfo ? $majorInfo->ten_chuyennganh : 'N/A';
                 $lop->ten_khoa = $majorInfo ? $majorInfo->ten_khoa : 'N/A';
 
-                // Get students with pagination
                 $lop->sinhviens = DB::table('sinhvien')
                     ->join('nguoidung', 'sinhvien.id_nguoidung', '=', 'nguoidung.id_nguoidung')
                     ->where('sinhvien.lop', '=', $lop->ten_lop)
@@ -136,9 +135,10 @@ class LopController extends Controller
                         'nguoidung.email',
                         'nguoidung.so_dien_thoai'
                     )
-                    ->paginate(5);
+                    ->paginate(5)
+                    ->appends(['lop_id' => $lop->id_lop]); // Add lop_id to pagination URLs
 
-                // Store total count separately
+                // Store total count
                 $lop->total_students = DB::table('sinhvien')
                     ->where('lop', '=', $lop->ten_lop)
                     ->count();
@@ -147,7 +147,9 @@ class LopController extends Controller
             // Get all classes for the edit modal dropdown
             $allLops = DB::table('lop')->get();
 
-            \Log::info('Rendering view with data');
+            if (request()->ajax()) {
+                return view('qlnd.partials.student-list', compact('lops', 'allLops'))->render();
+            }
 
             return view('qlnd.listSinhvien', [
                 'lops' => $lops,
@@ -160,6 +162,10 @@ class LopController extends Controller
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
+            
+            if (request()->ajax()) {
+                return response()->json(['error' => $e->getMessage()], 500);
+            }
             
             return redirect()->back()->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());
         }

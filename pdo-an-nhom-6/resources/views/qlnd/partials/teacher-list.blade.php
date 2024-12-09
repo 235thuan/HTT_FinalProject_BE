@@ -10,7 +10,7 @@
                     </span>
                 </h5>
             </div>
-            <div class="card-body">
+            <div class="card-body" id="teacher-list-{{ $khoa->id_khoa }}">
                 @if($khoa->giaoviens->count() > 0)
                     <div class="table-responsive">
                         <table class="table table-centered table-nowrap mb-0">
@@ -57,8 +57,8 @@
                             </tbody>
                         </table>
 
-                        <div class="mt-3">
-                            {{ $khoa->giaoviens->links('vendor.pagination.bootstrap-5') }}
+                        <div class="mt-3" id="pagination-{{ $khoa->id_khoa }}">
+                            {{ $khoa->giaoviens->appends(['khoa_id' => $khoa->id_khoa])->onEachSide(1)->links('vendor.pagination.bootstrap-5') }}
                         </div>
                     </div>
                 @else
@@ -130,6 +130,36 @@
 @push('scripts')
 <script>
 $(document).ready(function() {
+    // Handle pagination for each khoa
+    @foreach($khoas as $khoa)
+    $('#pagination-{{ $khoa->id_khoa }}').on('click', '.pagination a', function(e) {
+        e.preventDefault();
+        
+        // Get current element position
+        var currentElement = $(this).closest('.card');
+        var currentOffset = currentElement.offset().top;
+        
+        var url = $(this).attr('href');
+        
+        $.ajax({
+            url: url,
+            success: function(response) {
+                // Only update the specific khoa's content
+                var newContent = $(response).find('#teacher-list-{{ $khoa->id_khoa }}').html();
+                $('#teacher-list-{{ $khoa->id_khoa }}').html(newContent);
+                
+                // Scroll to the same position
+                $('html, body').animate({
+                    scrollTop: currentOffset
+                }, 0);
+                
+                // Update URL without page reload
+                window.history.pushState({}, '', url);
+            }
+        });
+    });
+    @endforeach
+
     // Handle modal show event
     $('#editGiaoVienModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
@@ -203,6 +233,7 @@ $(document).ready(function() {
 
                     // Close modal using Bootstrap's modal method
                     var modal = bootstrap.Modal.getInstance(document.getElementById('editGiaoVienModal'));
+                    $('.modal-backdrop').remove();
                     modal.hide();
 
                     

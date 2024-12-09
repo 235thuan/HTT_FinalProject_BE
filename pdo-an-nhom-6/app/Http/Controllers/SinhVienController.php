@@ -59,20 +59,51 @@ class SinhVienController extends Controller
             $validated = $request->validate([
                 'ten_sinhvien' => 'required',
                 'lop' => 'required|exists:lop,ten_lop',
-                'nam_vao_hoc' => 'required|numeric'
+                'nam_vao_hoc' => 'required|numeric',
+                'email' => 'required|email',
+                'so_dien_thoai' => 'required'
             ]);
 
+            // Update sinhvien
             DB::table('sinhvien')
                 ->where('id_sinhvien', $id)
-                ->update($validated);
+                ->update([
+                    'ten_sinhvien' => $validated['ten_sinhvien'],
+                    'lop' => $validated['lop'],
+                    'nam_vao_hoc' => $validated['nam_vao_hoc']
+                ]);
 
-            return redirect()->route('qlnd.listSinhvien', [
-                'page' => session('return_page', 1),
-                'lop' => session('return_lop')
-            ])->with('success', 'Cập nhật thông tin sinh viên thành công');
+            // Get sinhvien record
+            $sinhvien = DB::table('sinhvien')
+                ->where('id_sinhvien', $id)
+                ->first();
+
+            // Update nguoidung
+            DB::table('nguoidung')
+                ->where('id_nguoidung', $sinhvien->id_nguoidung)
+                ->update([
+                    'email' => $validated['email'],
+                    'so_dien_thoai' => $validated['so_dien_thoai']
+                ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Cập nhật thành công',
+                'data' => [
+                    'id' => $id,
+                    'ten_sinhvien' => $validated['ten_sinhvien'],
+                    'lop' => $validated['lop'],
+                    'nam_vao_hoc' => $validated['nam_vao_hoc'],
+                    'email' => $validated['email'],
+                    'so_dien_thoai' => $validated['so_dien_thoai']
+                ]
+            ]);
         } catch (\Exception $e) {
             \Log::error('Error in SinhVienController@update: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Có lỗi xảy ra');
+            return response()->json([
+                'success' => false,
+                'error' => 'Có lỗi xảy ra: ' . $e->getMessage()
+            ], 500);
         }
     }
 

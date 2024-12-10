@@ -29,7 +29,7 @@
                 <li class="menu-title">Danh sách</li>
 
                 <li>
-                    <a href="#sidebarDashboards" data-bs-toggle="collapse">
+                    <a href="#sidebarDashboards" data-bs-toggle="collapse" style="text-decoration: none;">
                         <i data-feather="home"></i>
                         <span> Tổng quan </span>
                         <span class="menu-arrow"></span>
@@ -48,7 +48,7 @@
 
                 <li>
                     <a href="#sidebarAuth" data-bs-toggle="collapse" class="{{ request()->is('qlnd/*') ? 'active' : '' }}">
-                        <i data-feather="users"></i>
+                        <i data-feather="users" style="color: #000;"></i>
                         <span> Quản lý người dùng </span>
                         <span class="menu-arrow"></span>
                     </a>
@@ -64,7 +64,7 @@
                             <li>
                                 <a href="{{ route('qlnd.listGiaovien') }}" 
                                    class="nav-link {{ request()->routeIs('qlnd.listGiaovien') ? 'active' : '' }}">
-                                    <i class="mdi mdi-account-multiple"></i>
+                                    <i class="mdi mdi-account-multiple" style="color: #000;"></i>
                                     <span>Danh sách giáo viên</span>
                                 </a>
                             </li>

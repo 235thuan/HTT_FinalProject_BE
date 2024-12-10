@@ -1,0 +1,4 @@
+root: D:\Learn\HTT\DoAnCuoiKy\ProjectGitFolder\HTT_FinalProject_BE\pdo-an-nhom-6 
+path: C:\Program Files\nodejs 
+arch: 64 
+proxy: none

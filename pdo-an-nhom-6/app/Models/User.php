@@ -59,31 +59,30 @@ class User extends Authenticatable
 
     public function getAvatarUrlAttribute()
     {
-        // First try to get from file_nguoidung table
-        $avatar = DB::table('file_nguoidung')
-            ->where('id_nguoidung', $this->id_nguoidung)
-            ->where('loai_file', 'avatar')
-            ->orderBy('ngay_upload', 'desc')
-            ->first();
+        try {
+            // First try to get from file_nguoidung table
+            $avatar = DB::table('file_nguoidung')
+                ->where('id_nguoidung', $this->id_nguoidung)
+                ->where('loai_file', 'avatar')
+                ->orderBy('ngay_upload', 'desc')
+                ->first();
 
-        \Log::info('Avatar lookup', [
-            'user_id' => $this->id_nguoidung,
-            'username' => $this->ten_dang_nhap,
-            'avatar_data' => $avatar
-        ]);
+            if ($avatar && file_exists(public_path($avatar->duong_dan))) {
+                return asset($avatar->duong_dan);
+            }
 
-        if ($avatar) {
-            return asset($avatar->duong_dan);
+            // If no record in file_nguoidung, use default naming convention
+            $defaultPath = 'storage/avatars/' . $this->ten_dang_nhap . '_avatar.png';
+            if (file_exists(public_path($defaultPath))) {
+                return asset($defaultPath);
+            }
+
+            // Fallback to default image - make sure this file exists!
+            return asset('assets/images/default-avatar.png');
+        } catch (\Exception $e) {
+            \Log::error('Avatar URL error: ' . $e->getMessage());
+            return asset('assets/images/default-avatar.png');
         }
-
-        // If no record in file_nguoidung, use default naming convention
-        $defaultPath = 'storage/avatars/' . $this->ten_dang_nhap . '_avatar.png';
-        if (file_exists(public_path($defaultPath))) {
-            return asset($defaultPath);
-        }
-
-        // Fallback to default image
-        return asset('images/users/default.jpg');
     }
 
     public function saveAvatar($file)

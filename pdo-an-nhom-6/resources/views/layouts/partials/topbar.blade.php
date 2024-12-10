@@ -36,160 +36,136 @@
                     </button>
                 </li>
 
-                <li class="dropdown notification-list topbar-dropdown">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button">
-                        <i data-feather="bell" class="noti-icon"></i>
-                        @if($unreadCount = auth()->user()->unreadNotifications->count())
-                            <span class="badge bg-danger rounded-circle noti-icon-badge">{{ $unreadCount }}</span>
-                        @endif
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-end dropdown-lg">
-                        <div class="dropdown-item noti-title">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="m-0">Thông báo</h5>
-                                <div>
-                                    <a href="javascript:void(0);" onclick="markAllAsRead()" class="text-dark me-2">
-                                        <small>Đánh dấu đã đọc</small>
-                                    </a>
-                                    <a href="javascript:void(0);" onclick="toggleNotifications()" class="text-primary">
-                                        <small id="toggle-text">Xem tất cả</small>
-                                    </a>
+                <li class="dropdown notification-list">
+                    <div class="dropdown">
+                        <button class="btn nav-link dropdown-toggle" type="button">
+                            <i data-feather="bell" class="noti-icon"></i>
+                            @if($unreadCount = auth()->user()->unreadNotifications->count())
+                                <span class="badge bg-danger rounded-circle noti-icon-badge">{{ $unreadCount }}</span>
+                            @endif
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end dropdown-lg">
+                            <div class="dropdown-item noti-title">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="m-0">Thông báo</h5>
+                                    <div>
+                                        <a href="javascript:void(0);" onclick="markAllAsRead()" class="text-dark">
+                                            <small>Đánh dấu đã đọc</small>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="noti-scroll" data-simplebar>
-                            <div id="unread-notifications">
-                                @forelse(auth()->user()->recentNotifications()->where('da_doc', 0)->get() as $notification)
-                                    <a href="javascript:void(0);" 
-                                       class="dropdown-item notify-item" 
-                                       onclick="markAsRead({{ $notification->id_thongbao }})">
-                                        <div class="notify-icon">
-                                            <img src="{{ $notification->nguoiDung->avatar_url }}" 
-                                                 class="img-fluid rounded-circle" 
-                                                 alt="" />
-                                        </div>
-                                        <div class="notify-content">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <p class="notify-details">
-                                                    {{ $notification->tieu_de }}
-                                                    @if(!$notification->da_doc)
-                                                        <span class="badge bg-danger ms-1">Mới</span>
-                                                    @endif
-                                                </p>
-                                                <small class="text-muted">{{ $notification->thoi_gian->diffForHumans() }}</small>
+                            <div class="noti-scroll" data-simplebar>
+                                <div id="unread-notifications">
+                                    @forelse(auth()->user()->recentNotifications()->where('da_doc', 0)->get() as $notification)
+                                        <a href="javascript:void(0);" 
+                                           class="dropdown-item notify-item" 
+                                           onclick="markAsRead({{ $notification->id_thongbao }})">
+                                            <div class="notify-icon">
+                                                @if($notification->nguoiDung && $notification->nguoiDung->avatar_url)
+                                                    <img src="{{ $notification->nguoiDung->avatar_url }}" 
+                                                         class="img-fluid rounded-circle" 
+                                                         alt="" />
+                                                @else
+                                                    <i class="mdi mdi-bell-outline"></i>
+                                                @endif
                                             </div>
-                                            <p class="text-muted mb-0">{{ Str::limit($notification->noi_dung, 50) }}</p>
-                                        </div>
-                                    </a>
-                                @empty
-                                    <div class="text-center p-2">
-                                        <p class="text-muted">Không có thông báo mới</p>
-                                    </div>
-                                @endforelse
-                            </div>
-                            
-                            <div id="all-notifications" style="display: none;">
-                                @forelse(auth()->user()->recentNotifications()->get() as $notification)
-                                    <a href="javascript:void(0);" 
-                                       class="dropdown-item notify-item {{ $notification->da_doc ? '' : 'bg-light' }}" 
-                                       onclick="markAsRead({{ $notification->id_thongbao }})">
-                                        <div class="notify-icon">
-                                            <img src="{{ $notification->nguoiDung->avatar_url }}" 
-                                                 class="img-fluid rounded-circle" 
-                                                 alt="" />
-                                        </div>
-                                        <div class="notify-content">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <p class="notify-details">
-                                                    {{ $notification->tieu_de }}
-                                                    @if(!$notification->da_doc)
+                                            <div class="notify-content">
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <p class="notify-details mb-0">
+                                                        {{ $notification->tieu_de }}
                                                         <span class="badge bg-danger ms-1">Mới</span>
-                                                    @endif
-                                                </p>
-                                                <small class="text-muted">{{ $notification->thoi_gian->diffForHumans() }}</small>
+                                                    </p>
+                                                    <small class="text-muted">{{ $notification->thoi_gian->diffForHumans() }}</small>
+                                                </div>
+                                                <p class="text-muted mb-0 mt-1">{{ Str::limit($notification->noi_dung, 50) }}</p>
                                             </div>
-                                            <p class="text-muted mb-0">{{ Str::limit($notification->noi_dung, 50) }}</p>
+                                        </a>
+                                    @empty
+                                        <div class="text-center p-2">
+                                            <p class="text-muted">Không có thông báo mới</p>
                                         </div>
-                                    </a>
-                                @empty
-                                    <div class="text-center p-2">
-                                        <p class="text-muted">Không có thông báo</p>
-                                    </div>
-                                @endforelse
+                                    @endforelse
+                                </div>
+                                
+                                <div id="all-notifications" style="display: none;">
+                                    @forelse(auth()->user()->recentNotifications()->get() as $notification)
+                                        <a href="javascript:void(0);" 
+                                           class="dropdown-item notify-item {{ $notification->da_doc ? '' : 'bg-light' }}" 
+                                           onclick="markAsRead({{ $notification->id_thongbao }})">
+                                            <div class="notify-icon">
+                                                <img src="{{ $notification->nguoiDung->avatar_url }}" 
+                                                     class="img-fluid rounded-circle" 
+                                                     alt="" />
+                                            </div>
+                                            <div class="notify-content">
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <p class="notify-details">
+                                                        {{ $notification->tieu_de }}
+                                                        @if(!$notification->da_doc)
+                                                            <span class="badge bg-danger ms-1">Mới</span>
+                                                        @endif
+                                                    </p>
+                                                    <small class="text-muted">{{ $notification->thoi_gian->diffForHumans() }}</small>
+                                                </div>
+                                                <p class="text-muted mb-0">{{ Str::limit($notification->noi_dung, 50) }}</p>
+                                            </div>
+                                        </a>
+                                    @empty
+                                        <div class="text-center p-2">
+                                            <p class="text-muted">Không có thông báo</p>
+                                        </div>
+                                    @endforelse
+                                </div>
                             </div>
 
-                            <div id="read-notifications" style="display: none;">
-                                @forelse(auth()->user()->recentNotifications()->where('da_doc', 1)->get() as $notification)
-                                    <a href="javascript:void(0);" 
-                                       class="dropdown-item notify-item" 
-                                       onclick="markAsRead({{ $notification->id_thongbao }})">
-                                        <div class="notify-icon">
-                                            <img src="{{ $notification->nguoiDung->avatar_url }}" 
-                                                 class="img-fluid rounded-circle" 
-                                                 alt="" />
-                                        </div>
-                                        <div class="notify-content">
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <p class="notify-details">
-                                                    {{ $notification->tieu_de }}
-                                                    @if(!$notification->da_doc)
-                                                        <span class="badge bg-danger ms-1">Mới</span>
-                                                    @endif
-                                                </p>
-                                                <small class="text-muted">{{ $notification->thoi_gian->diffForHumans() }}</small>
-                                            </div>
-                                            <p class="text-muted mb-0">{{ Str::limit($notification->noi_dung, 50) }}</p>
-                                        </div>
-                                    </a>
-                                @empty
-                                    <div class="text-center p-2">
-                                        <p class="text-muted">Không có thông báo đã đọc</p>
-                                    </div>
-                                @endforelse
+                            <div class="dropdown-item text-center border-top py-2">
+                                <a href="javascript:void(0);" onclick="toggleNotifications()" class="text-primary text-decoration-none">
+                                    <small id="toggle-text">Xem tất cả</small>
+                                </a>
                             </div>
                         </div>
-
                     </div>
                 </li>
 
-                <li class="dropdown notification-list topbar-dropdown">
-                    <a class="nav-link dropdown-toggle nav-user me-0" data-bs-toggle="dropdown" href="#" role="button"
-                       aria-haspopup="false" aria-expanded="false">
-                        <img src="{{ auth()->user()->avatar_url }}" alt="avt" class="rounded-circle">
-                        <span class="pro-user-name ms-1">
-                            {{ auth()->user()->ten_dang_nhap }} <i class="mdi mdi-chevron-down"></i>
-                        </span>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-end profile-dropdown ">
-                        <!-- item-->
-                        <div class="dropdown-header noti-title">
-                            <h6 class="text-overflow m-0">Xin chào!</h6>
+                <li class="dropdown notification-list">
+                    <div class="dropdown">
+                        <button class="btn nav-link dropdown-toggle" type="button">
+                            <img src="{{ auth()->user()->avatar_url }}" alt="user-image" class="rounded-circle">
+                            <span class="pro-user-name ms-1">
+                                {{ auth()->user()->ten_dang_nhap }} <i class="mdi mdi-chevron-down"></i>
+                            </span>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end profile-dropdown">
+                            <!-- item-->
+                            <div class="dropdown-header noti-title">
+                                <h6 class="text-overflow m-0">Xin chào!</h6>
+                            </div>
+
+                            <!-- item-->
+                            <a href="{{ route('second', ['utility', 'profile']) }}" class="dropdown-item notify-item">
+                                <i class="mdi mdi-account-circle-outline fs-16 align-middle"></i>
+                                <span>Tài khoản của tôi</span>
+                            </a>
+
+                            <!-- item-->
+                            <a href="{{ route('second', ['auth', 'lockscreen']) }}" class="dropdown-item notify-item">
+                                <i class="mdi mdi-lock-outline fs-16 align-middle"></i>
+                                <span>Khóa màn hình</span>
+                            </a>
+
+                            <div class="dropdown-divider"></div>
+
+                            <!-- item-->
+                            <form method="POST" action="{{ route('logout') }}" style="display: inline;">
+                                @csrf
+                                <button type="submit" class="dropdown-item">
+                                    <i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i>
+                                    <span class="align-middle">Đăng xuất</span>
+                                </button>
+                            </form>
                         </div>
-
-                        <!-- item-->
-                        <a href="{{ route('second', ['utility', 'profile']) }}" class="dropdown-item notify-item">
-                            <i class="mdi mdi-account-circle-outline fs-16 align-middle"></i>
-                            <span>Tài khoản của tôi</span>
-                        </a>
-
-                        <!-- item-->
-                        <a href="{{ route('second', ['auth', 'lockscreen']) }}" class="dropdown-item notify-item">
-                            <i class="mdi mdi-lock-outline fs-16 align-middle"></i>
-                            <span>Khóa màn hình</span>
-                        </a>
-
-                        <div class="dropdown-divider"></div>
-
-                        <!-- item-->
-                        <form method="POST" action="{{ route('logout') }}" style="display: inline;">
-                            @csrf
-                            <button type="submit" class="dropdown-item">
-                                <i class="mdi mdi-logout text-muted fs-16 align-middle me-1"></i>
-                                <span class="align-middle">Đăng xuất</span>
-                            </button>
-                        </form>
-
                     </div>
                 </li>
 
@@ -205,30 +181,25 @@
 let viewState = 'unread'; // 'unread', 'all', 'read'
 
 function toggleNotifications() {
-    // Cycle through states
+    const unreadSection = document.getElementById('unread-notifications');
+    const allSection = document.getElementById('all-notifications');
+    const toggleText = document.getElementById('toggle-text');
+    
+    if (!unreadSection || !allSection || !toggleText) {
+        console.error('Required elements not found');
+        return;
+    }
+
     if (viewState === 'unread') {
         viewState = 'all';
-    } else if (viewState === 'all') {
-        viewState = 'read';
+        unreadSection.style.display = 'none';
+        allSection.style.display = 'block';
+        toggleText.textContent = 'Thu gọn';
     } else {
         viewState = 'unread';
-    }
-    
-    // Hide all first
-    document.getElementById('unread-notifications').style.display = 'none';
-    document.getElementById('all-notifications').style.display = 'none';
-    document.getElementById('read-notifications').style.display = 'none';
-    
-    // Show the selected view
-    if (viewState === 'unread') {
-        document.getElementById('unread-notifications').style.display = 'block';
-        document.getElementById('toggle-text').textContent = 'Xem tất cả';
-    } else if (viewState === 'all') {
-        document.getElementById('all-notifications').style.display = 'block';
-        document.getElementById('toggle-text').textContent = 'Chỉ đã đọc';
-    } else {
-        document.getElementById('read-notifications').style.display = 'block';
-        document.getElementById('toggle-text').textContent = 'Chỉ chưa đọc';
+        unreadSection.style.display = 'block';
+        allSection.style.display = 'none';
+        toggleText.textContent = 'Xem tất cả';
     }
 }
 
@@ -237,15 +208,22 @@ function markAllAsRead() {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
             'Accept': 'application/json'
         }
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            // Remove all notifications from view
-            document.querySelectorAll('.notify-item').forEach(el => el.remove());
+            // Remove all notifications from unread view
+            const unreadSection = document.getElementById('unread-notifications');
+            if (unreadSection) {
+                unreadSection.innerHTML = `
+                    <div class="text-center p-2">
+                        <p class="text-muted">Không có thông báo mới</p>
+                    </div>
+                `;
+            }
             
             // Hide the notification badge
             const badge = document.querySelector('.noti-icon-badge');
@@ -298,6 +276,13 @@ $(document).ready(function() {
                 data: { 
                     search: searchTerm,
                     suggest: true
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                error: function(xhr, status, error) {
+                    console.error('Search error:', error);
+                    toastr.error('Có lỗi xảy ra khi tìm kiếm');
                 },
                 success: function(response) {
                     if (searchTerm !== currentSearchTerm) return;
@@ -519,5 +504,32 @@ $(document).ready(function() {
 @keyframes highlightCard {
     0% { box-shadow: 0 0 0 3px #ffc107; }
     100% { box-shadow: none; }
+}
+
+/* Add to your existing styles */
+.dropdown-menu.dropdown-lg {
+    padding: 0;
+}
+
+.noti-scroll {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.dropdown-item.text-center {
+    background: #f8f9fa;
+    margin-top: auto;
+}
+
+.dropdown-item.text-center:hover {
+    background: #e9ecef;
+}
+
+.noti-title {
+    background: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    border-bottom: 1px solid #eee;
 }
 </style>

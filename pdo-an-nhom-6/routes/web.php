@@ -55,8 +55,7 @@ Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->group(
         Route::get('/giaovien/{id}', [GiaoVienController::class, 'detail'])->name('giaovien.detail');
         Route::post('/giaovien/store', [GiaoVienController::class, 'store'])->name('giaovien.store');
         Route::get('/check-email-giaovien', [GiaoVienController::class, 'checkEmail'])->name('checkEmailGiaovien');
-        Route::get('/get-chuyennganh', [GiaoVienController::class, 'getChuyenNganh'])->name('getChuyenNganh');
-        Route::get('/getMonHoc', [GiaoVienController::class, 'getMonHoc'])->name('getMonHoc');
+        Route::get('/giaovien/get-monhoc', [GiaoVienController::class, 'getMonHoc'])->name('getMonHoc');
     });
 
     // Sinhvien routes

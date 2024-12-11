@@ -320,10 +320,11 @@ public function store(Request $request)
             'updated_at' => now()
         ]);
 
-        // Create giaovien
+        // Create giaovien with ma_khoa
         $idGiaovien = DB::table('giaovien')->insertGetId([
             'ten_giaovien' => $validated['ten_giaovien'],
             'id_nguoidung' => $idNguoiDung,
+            'ma_khoa' => $validated['ma_khoa'],
             'created_at' => now(),
             'updated_at' => now()
         ]);
@@ -342,7 +343,7 @@ public function store(Request $request)
 
         return response()->json([
             'success' => true,
-            'message' => 'Thêm gi��o viên thành công'
+            'message' => 'Thêm giáo viên thành công'
         ]);
     } catch (\Exception $e) {
         DB::rollBack();
@@ -360,25 +361,6 @@ public function checkEmail(Request $request)
     return response()->json(['exists' => $exists]);
 }
 
-public function getChuyenNganh(Request $request)
-{
-    try {
-        $khoaId = $request->khoa_id;
-        \Log::info('Getting chuyennganh for khoa_id: ' . $khoaId);
-        
-        $chuyenNganh = DB::table('chuyennganh')
-            ->where('ma_khoa', $khoaId)
-            ->select('id_chuyennganh', 'ten_chuyennganh')
-            ->get();
-            
-        \Log::info('Found chuyennganh:', $chuyenNganh->toArray());
-        return response()->json($chuyenNganh);
-    } catch (\Exception $e) {
-        \Log::error('Error in getChuyenNganh: ' . $e->getMessage());
-        return response()->json(['error' => 'Có lỗi xảy ra'], 500);
-    }
-}
-
 public function getMonHoc(Request $request)
 {
     try {
@@ -386,57 +368,40 @@ public function getMonHoc(Request $request)
         \Log::info('Getting monhoc for khoa_id: ' . $khoaId);
         
         // Verify khoa exists
-        $khoa = DB::table('khoa')->where('id_khoa', $khoaId)->first();
+        $khoa = DB::table('khoa')->find($khoaId);
         if (!$khoa) {
             \Log::warning('Khoa not found:', ['khoa_id' => $khoaId]);
-            return response()->json([]);
-        }
-        \Log::info('Found khoa:', (array)$khoa);
-        
-        // First get all chuyennganh for this khoa
-        $chuyenNganhs = DB::table('chuyennganh')
-            ->where('ma_khoa', $khoaId)
-            ->select('id_chuyennganh', 'ten_chuyennganh')
-            ->get();
-            
-        \Log::info('Found chuyennganh count: ' . $chuyenNganhs->count());
-        \Log::info('Chuyennganh data:', $chuyenNganhs->toArray());
-        
-        if ($chuyenNganhs->isEmpty()) {
-            \Log::warning('No chuyennganh found for khoa_id: ' . $khoaId);
-            return response()->json([]);
+            return response()->json(['error' => 'Khoa không tồn tại'], 404);
         }
         
-        // Get all chuyennganh IDs
-        $chuyenNganhIds = $chuyenNganhs->pluck('id_chuyennganh')->toArray();
-        \Log::info('ChuyenNganh IDs:', $chuyenNganhIds);
-        
-        // Get all monhoc for these chuyennganh
+        // Get all monhoc for this khoa through the relationships
         $query = DB::table('monhoc')
             ->join('chuyennganh', 'monhoc.ma_chuyen_nganh', '=', 'chuyennganh.id_chuyennganh')
-            ->whereIn('monhoc.ma_chuyen_nganh', $chuyenNganhIds)
+            ->join('khoa', 'chuyennganh.ma_khoa', '=', 'khoa.id_khoa')
+            ->where('khoa.id_khoa', $khoaId)
             ->select(
                 'monhoc.id_monhoc',
-                'monhoc.ten_monhoc',
+                'monhoc.ten_monhoc', 
                 'monhoc.so_tin_chi',
                 'chuyennganh.ten_chuyennganh'
             )
             ->orderBy('chuyennganh.ten_chuyennganh')
             ->orderBy('monhoc.ten_monhoc');
             
-        \Log::info('SQL Query: ' . $query->toSql());
-        \Log::info('Query Bindings:', $query->getBindings());
+        // Log the query for debugging
+        \Log::info('SQL Query:', [
+            'sql' => $query->toSql(),
+            'bindings' => $query->getBindings()
+        ]);
         
-        $monHoc = $query->get();
-            
-        \Log::info('Found monhoc count: ' . $monHoc->count());
-        \Log::info('Monhoc data:', $monHoc->toArray());
-        
+        $monHoc = $query->get(); // Thực thi truy vấn và lưu kết quả vào biến $monHoc
+
         if ($monHoc->isEmpty()) {
-            \Log::warning('No monhoc found for chuyennganh_ids:', $chuyenNganhIds);
+            \Log::warning('No monhoc found for khoa_id: ' . $khoaId);
             return response()->json([]);
         }
-        
+
+        // Group by chuyennganh for the dropdown
         $result = $monHoc->groupBy('ten_chuyennganh')->map(function($items) {
             return $items->map(function($item) {
                 return [
@@ -446,12 +411,10 @@ public function getMonHoc(Request $request)
                 ];
             });
         });
-        
-        \Log::info('Final result:', $result->toArray());
+
         return response()->json($result);
     } catch (\Exception $e) {
         \Log::error('Error in getMonHoc: ' . $e->getMessage());
-        \Log::error('Stack trace: ' . $e->getTraceAsString());
         return response()->json(['error' => 'Có lỗi xảy ra'], 500);
     }
 }

@@ -66,7 +66,7 @@
         <button type="button" 
                 class="btn btn-primary float-end" 
                 data-bs-toggle="modal" 
-                data-bs-target="#addGiaoVienModal"
+                data-bs-target="#addTeacherModal"
                 data-khoa="{{ $khoas->first()->id_khoa }}"
                 data-khoa-name="{{ $khoas->first()->ten_khoa }}">
             <i class="mdi mdi-plus"></i> Thêm giáo viên
@@ -94,50 +94,50 @@
 </div>
 
 <!-- Add Teacher Modal -->
-<div class="modal fade" id="addGiaoVienModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+<div class="modal fade" id="addTeacherModal">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Thêm giáo viên mới</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title">Thêm Giáo Viên</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
-            <form id="addGiaoVienForm">
-                @csrf
-                <input type="hidden" name="ma_khoa" id="add_ma_khoa">
-                <div class="modal-body">
-                    <div class="row mb-3">
+            <div class="modal-body">
+                <form id="addTeacherForm">
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="form-label">Họ và tên</label>
+                                <label class="form-label">Tên giáo viên</label>
                                 <input type="text" class="form-control" name="ten_giaovien" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="form-label">Email</label>
-                                <input type="email" class="form-control" name="email" id="email" required>
-                                <div class="invalid-feedback">Email đã được đăng ký</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="form-label">Số điện thoại</label>
-                                <input type="text" class="form-control" name="so_dien_thoai" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="form-label">Chuyên ngành</label>
-                                <select class="form-select" name="ma_chuyennganh" id="add_ma_chuyennganh" required>
-                                    <option value="">Chọn chuyên ngành</option>
+                                <label class="form-label">Khoa</label>
+                                <select class="form-select" name="ma_khoa" id="add_ma_khoa" required>
+                                    <option value="">Chọn khoa</option>
+                                    @foreach($khoas as $khoa)
+                                        <option value="{{ $khoa->id_khoa }}">{{ $khoa->ten_khoa }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" name="email" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Số điện thoại</label>
+                                <input type="text" class="form-control" name="so_dien_thoai" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
                             <div class="form-group">
                                 <label class="form-label">Môn học phụ trách</label>
                                 <select class="form-select" 
@@ -148,16 +148,16 @@
                                         disabled>
                                     <option value="">Chọn môn học</option>
                                 </select>
-                                <small class="text-muted">Vui lòng chọn chuyên ngành trước</small>
+                                <small class="text-muted">Vui lòng chọn khoa trước</small>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button type="submit" class="btn btn-primary">Thêm mới</button>
-                </div>
-            </form>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" id="saveTeacher">Lưu</button>
+            </div>
         </div>
     </div>
 </div>
@@ -183,238 +183,88 @@ $.ajaxSetup({
 });
 
 $(document).ready(function() {
-    // Email validation
-    let emailTimeout;
-    $('#email').on('keyup', function() {
-        clearTimeout(emailTimeout);
-        let email = $(this).val();
-        let emailInput = $(this);
+    // When khoa is selected, enable and populate monhoc select
+    $('#add_ma_khoa').on('change', function() {
+        const khoaId = $(this).val();
+        const monhocSelect = $('#add_ma_monhoc');
         
-        emailTimeout = setTimeout(function() {
-            $.ajax({
-                url: '{{ route("qlnd.checkEmailGiaovien") }}',
-                data: { email: email },
-                success: function(response) {
-                    if (response.exists) {
-                        emailInput.addClass('is-invalid');
-                        emailInput.removeClass('is-valid');
-                    } else {
-                        emailInput.removeClass('is-invalid');
-                        emailInput.addClass('is-valid');
-                    }
-                }
-            });
-        }, 500);
-    });
-
-    // Initialize Select2 for monhoc select
-    $('#add_ma_monhoc').select2({
-        theme: 'bootstrap-5',
-        width: '100%',
-        dropdownParent: $('#addGiaoVienModal'),
-        placeholder: "Chọn môn học phụ trách"
-    });
-
-    // Load chuyennganh when modal opens
-    $('#addGiaoVienModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget);
-        var khoaId = button.data('khoa');
-        $('#add_ma_khoa').val(khoaId);
+        console.log('Selected khoa_id:', khoaId); // Debug log
         
-        // Reset form
-        $('#addGiaoVienForm')[0].reset();
-        $('#add_ma_monhoc').prop('disabled', true).empty().trigger('change');
-        
-        // Load chuyennganh
-        $.ajax({
-            url: '{{ route("qlnd.getChuyenNganh") }}',
-            method: 'GET',
-            data: { khoa_id: khoaId },
-            success: function(response) {
-                var select = $('#add_ma_chuyennganh');
-                select.empty();
-                select.append('<option value="">Chọn chuyên ngành</option>');
-                response.forEach(function(item) {
-                    select.append(`<option value="${item.id_chuyennganh}">${item.ten_chuyennganh}</option>`);
-                });
-            },
-            error: function(xhr) {
-                console.error('Error loading chuyennganh:', xhr);
-                toastr.error('Không thể tải danh sách chuyên ngành');
-            }
-        });
-    });
-
-    // Load monhoc when chuyennganh changes
-    $('#add_ma_chuyennganh').on('change', function() {
-        var chuyenNganhId = $(this).val();
-        var monhocSelect = $('#add_ma_monhoc');
-        
-        if (!chuyenNganhId) {
-            monhocSelect.prop('disabled', true)
-                       .empty()
-                       .trigger('change');
+        if (!khoaId) {
+            monhocSelect.prop('disabled', true);
+            monhocSelect.html('<option value="">Chọn môn học</option>');
             return;
         }
         
-        monhocSelect.prop('disabled', false);
-        
+        // Get monhoc for selected khoa
         $.ajax({
-            url: '{{ route("qlnd.getMonHoc") }}',
+            url: '/qlnd/giaovien/get-monhoc', // Update URL to match route
             method: 'GET',
-            data: { chuyennganh_id: chuyenNganhId },
-            success: function(response) {
-                monhocSelect.empty();
-                response.forEach(function(item) {
-                    monhocSelect.append(`<option value="${item.id_monhoc}">${item.ten_monhoc}</option>`);
-                });
-                monhocSelect.trigger('change');
+            data: { khoa_id: khoaId },
+            beforeSend: function() {
+                console.log('Sending request for khoa_id:', khoaId);
             },
-            error: function(xhr) {
-                console.error('Error loading monhoc:', xhr);
-                toastr.error('Không thể tải danh sách môn học');
+            success: function(data) {
+                console.log('Received data:', data); // Debug log
+                
+                monhocSelect.prop('disabled', false);
+                let options = '<option value="">Chọn môn học</option>';
+                
+                // Check if data is empty
+                if (Object.keys(data).length === 0) {
+                    monhocSelect.html(options);
+                    alert('Không tìm thấy môn học cho khoa này');
+                    return;
+                }
+                
+                // Group subjects by chuyennganh
+                Object.entries(data).forEach(([chuyennganh, monhocs]) => {
+                    options += `<optgroup label="${chuyennganh}">`;
+                    monhocs.forEach(monhoc => {
+                        options += `<option value="${monhoc.id_monhoc}">${monhoc.ten_monhoc} (${monhoc.so_tin_chi} tín chỉ)</option>`;
+                    });
+                    options += '</optgroup>';
+                });
+                
+                monhocSelect.html(options);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error details:', {
+                    status: status,
+                    error: error,
+                    response: xhr.responseText
+                });
                 monhocSelect.prop('disabled', true);
+                alert('Có lỗi khi tải danh sách môn học: ' + error);
             }
         });
     });
 
-    // Handle form submit
-    $('#addGiaoVienForm').on('submit', function(e) {
-        e.preventDefault();
-        var formData = new FormData(this);
+    // Save teacher
+    $('#saveTeacher').click(function() {
+        const form = $('#addTeacherForm');
+        const formData = new FormData(form[0]);
 
         $.ajax({
-            url: '{{ route("qlnd.giaovien.store") }}',
-            method: 'POST',
+            url: '/giaovien/store',
+            type: 'POST',
             data: formData,
             processData: false,
             contentType: false,
             success: function(response) {
                 if (response.success) {
-                    toastr.success('Thêm giáo viên thành công');
+                    alert('Thêm giáo viên thành công');
+                    $('#addTeacherModal').modal('hide');
                     location.reload();
+                } else {
+                    alert(response.error || 'Có lỗi xảy ra');
                 }
             },
             error: function(xhr) {
-                var errors = xhr.responseJSON.errors;
-                if (errors) {
-                    Object.keys(errors).forEach(function(key) {
-                        toastr.error(errors[key][0]);
-                    });
-                } else {
-                    toastr.error('Có lỗi xảy ra khi thêm giáo viên');
-                }
+                alert('Có lỗi xảy ra: ' + xhr.responseJSON?.error || 'Unknown error');
             }
         });
     });
-
-    // Add search functionality
-    var searchTimeout;
-    var currentSearchTerm = '';
-    
-    $('#teacher-search').on('keyup', function(e) {
-        var searchBox = $(this);
-        var suggestionsBox = $('#teacher-search-suggestions');
-        var searchTerm = searchBox.val().trim();
-        currentSearchTerm = searchTerm;
-        
-        clearTimeout(searchTimeout);
-        
-        if (searchTerm.length < 2) {
-            suggestionsBox.hide();
-            return;
-        }
-        
-        // Handle enter key
-        if (e.key === 'Enter') {
-            performTeacherSearch(searchTerm);
-            return;
-        }
-        
-        // Get suggestions
-        searchTimeout = setTimeout(function() {
-            $.ajax({
-                url: '{{ route("qlnd.searchGiaovien") }}',
-                data: { 
-                    search: searchTerm,
-                    suggest: true
-                },
-                success: function(response) {
-                    var suggestionsList = suggestionsBox.find('.suggestions-list');
-                    suggestionsList.empty();
-                    
-                    if (response.suggestions && response.suggestions.length > 0) {
-                        response.suggestions.forEach(function(item) {
-                            var html = '';
-                            if (item.type === 'department') {
-                                html = `
-                                    <div class="suggestion-item" data-type="department" data-khoa="${item.ma_khoa}">
-                                        <div class="d-flex justify-content-between">
-                                            <span>${highlightMatch(item.ten_khoa, searchTerm)}</span>
-                                            <small class="text-muted">${item.teacher_count} giáo viên</small>
-                                        </div>
-                                    </div>
-                                `;
-                            } else {
-                                html = `
-                                    <div class="suggestion-item" data-type="teacher" data-id="${item.id_giaovien}">
-                                        <div class="d-flex justify-content-between">
-                                            <span>${highlightMatch(item.ten_giaovien, searchTerm)}</span>
-                                            <small class="text-muted">${item.ten_khoa}</small>
-                                        </div>
-                                        <small class="text-muted">${item.email}</small>
-                                    </div>
-                                `;
-                            }
-                            suggestionsList.append(html);
-                        });
-                        
-                        suggestionsBox.find('.suggestions-list').show();
-                        suggestionsBox.find('.no-results').hide();
-                    } else {
-                        suggestionsBox.find('.suggestions-list').hide();
-                        suggestionsBox.find('.no-results').show();
-                    }
-                    
-                    suggestionsBox.show();
-                }
-            });
-        }, 300);
-    });
-
-    // Handle suggestion click
-    $(document).on('click', '.suggestion-item', function() {
-        var type = $(this).data('type');
-        if (type === 'teacher') {
-            var id = $(this).data('id');
-            scrollToTeacher(id);
-        } else {
-            var khoa = $(this).data('khoa');
-            filterByDepartment(khoa);
-        }
-        $('#teacher-search-suggestions').hide();
-    });
-
-    function scrollToTeacher(id) {
-        var teacherRow = $(`tr[data-id="${id}"]`);
-        if (teacherRow.length) {
-            $('html, body').animate({
-                scrollTop: teacherRow.offset().top - 100
-            }, 500);
-            teacherRow.addClass('highlight-row');
-            setTimeout(() => teacherRow.removeClass('highlight-row'), 3000);
-        }
-    }
-
-    function filterByDepartment(khoaId) {
-        window.location.href = window.location.pathname + '?khoa=' + khoaId;
-    }
-
-    function highlightMatch(text, term) {
-        if (!term) return text;
-        var regex = new RegExp(`(${term})`, 'gi');
-        return text.replace(regex, '<span class="highlight">$1</span>');
-    }
 });
 </script>
 @endpush

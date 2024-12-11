@@ -194,7 +194,7 @@
 
 </div>
 <!-- end Topbar -->
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 let viewState = 'unread'; // 'unread', 'all', 'read'
 
@@ -541,6 +541,10 @@ $(document).ready(function() {
                                             <span>${highlightMatch(item.ten_khoa, searchTerm)}</span>
                                             <small class="text-muted">${item.teacher_count} giáo viên</small>
                                         </div>
+                                         <small class="text-muted">
+                                            ${highlightMatch(item.ten_chuyennganh, searchTerm)} - 
+                                            ${highlightMatch(item.ten_khoa, searchTerm)}
+                                        </small>
                                     </div>
                                 `;
                             } else {
@@ -618,6 +622,11 @@ $(document).ready(function() {
     
     function filterByDepartment(khoaId) {
         window.location.href = window.location.pathname + '?khoa=' + khoaId;
+    }
+    function highlightMatch(text, term) {
+        if (!term) return text;
+        var regex = new RegExp(`(${term})`, 'gi');
+        return text.replace(regex, '<span class="highlight">$1</span>');
     }
 });
 @endif

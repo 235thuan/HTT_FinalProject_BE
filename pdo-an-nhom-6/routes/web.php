@@ -54,8 +54,10 @@ Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->group(
         Route::get('/sinhvien/{id}', [SinhVienController::class, 'detail'])->name('sinhvien.detail');
         Route::get('/giaovien/{id}', [GiaoVienController::class, 'detail'])->name('giaovien.detail');
         Route::post('/giaovien/store', [GiaoVienController::class, 'store'])->name('giaovien.store');
-        Route::get('/check-email-giaovien', [GiaoVienController::class, 'checkEmail'])->name('checkEmailGiaovien');
+        Route::get('/check-email-giaovien', [GiaoVienController::class, 'checkEmailExists'])->name('checkEmailGiaovien');
         Route::get('/giaovien/get-monhoc', [GiaoVienController::class, 'getMonHoc'])->name('getMonHoc');
+        Route::get('monhoc-by-khoa/{khoa_id}', [GiaoVienController::class, 'getMonHocByKhoa'])
+            ->name('monhoc.byKhoa');
     });
 
     // Sinhvien routes
@@ -89,6 +91,8 @@ Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->group(
     Route::get('{first}/{second}/{third}', [RoutingController::class, 'thirdLevel'])->name('third');
     Route::get('{first}/{second}', [RoutingController::class, 'secondLevel'])->name('second');
     Route::get('{any}', [RoutingController::class, 'root'])->name('any');
+
+   
 });
 
 

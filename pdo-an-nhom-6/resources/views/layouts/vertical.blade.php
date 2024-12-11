@@ -10,6 +10,8 @@
     <!-- Then other CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" type="text/css" />
     
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    
     <style>
     /* Ensure dropdowns work properly */
     .dropdown-menu {

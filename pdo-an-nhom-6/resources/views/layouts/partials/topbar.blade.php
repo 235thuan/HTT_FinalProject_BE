@@ -541,10 +541,7 @@ $(document).ready(function() {
                                             <span>${highlightMatch(item.ten_khoa, searchTerm)}</span>
                                             <small class="text-muted">${item.teacher_count} giáo viên</small>
                                         </div>
-                                         <small class="text-muted">
-                                            ${highlightMatch(item.ten_chuyennganh, searchTerm)} - 
-                                            ${highlightMatch(item.ten_khoa, searchTerm)}
-                                        </small>
+                                    
                                     </div>
                                 `;
                             } else {
@@ -619,6 +616,7 @@ $(document).ready(function() {
             window.location.href = window.location.pathname + '?find_teacher=' + id;
         }
     }
+  
     
     function filterByDepartment(khoaId) {
         window.location.href = window.location.pathname + '?khoa=' + khoaId;

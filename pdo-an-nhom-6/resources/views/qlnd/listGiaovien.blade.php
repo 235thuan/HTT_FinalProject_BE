@@ -20,36 +20,14 @@
     background-color: #fff;
 }
 
-.select2-container {
-    width: 100% !important;
-}
 
-.select2-container--bootstrap-5 .select2-selection {
-    min-height: 38px;
-    border: 1px solid #dee2e6;
-}
-
-.select2-container--bootstrap-5 .select2-selection--multiple {
-    padding: 0.375rem 0.75rem;
-}
 
 /* Add these styles for better form layout */
 .modal-body .form-group {
     margin-bottom: 1rem;
 }
 
-.select2-container {
-    width: 100% !important;
-}
 
-.select2-container--bootstrap-5 .select2-selection {
-    min-height: 38px;
-    border: 1px solid #dee2e6;
-}
-
-.select2-container--bootstrap-5 .select2-selection--multiple {
-    padding: 0.375rem 0.75rem;
-}
 
 .form-select:disabled {
     background-color: #e9ecef;
@@ -79,7 +57,10 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="header-title">{{ $khoa->ten_khoa }}</h4>
+                    <h4 class="header-title">{{ $khoa->ten_khoa }}  <span class="badge bg-primary ms-2">
+                        {{ $khoa->total_teachers }} giáo viên
+                    </span></h4>
+                   
                 </div>
 
                 <div class="card-body" id="teacher-list-{{ $khoa->id_khoa }}">
@@ -99,7 +80,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Thêm Giáo Viên</h5>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="addTeacherForm">
@@ -136,26 +117,17 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="form-label">Môn học phụ trách</label>
-                                <select class="form-select" 
-                                        name="ma_monhoc[]" 
-                                        id="add_ma_monhoc" 
-                                        multiple 
-                                        required
-                                        disabled>
-                                    <option value="">Chọn môn học</option>
-                                </select>
-                                <small class="text-muted">Vui lòng chọn khoa trước</small>
-                            </div>
-                        </div>
+                    <div class="mb-3">
+                        <label class="form-label">Môn học phụ trách</label>
+                        <select class="form-select" name="ma_monhoc[]" id="add_ma_monhoc" multiple required>
+                            <option value="">Chọn môn học</option>
+                        </select>
+                        <small class="text-muted">Vui lòng chọn khoa trước</small>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
                 <button type="button" class="btn btn-primary" id="saveTeacher">Lưu</button>
             </div>
         </div>
@@ -165,14 +137,12 @@
 @endsection
 
 @push('css')
-<link href="/css/vendor/select2.min.css" rel="stylesheet" type="text/css" />
+
 @endpush
 
 @push('scripts')
-<script src="/js/vendor/select2.min.js"></script>
 <script>
 console.log('Script loaded');
-
 $.ajaxSetup({
     beforeSend: function(xhr) {
         console.log('Making AJAX request to:', this.url);
@@ -183,87 +153,169 @@ $.ajaxSetup({
 });
 
 $(document).ready(function() {
-    // When khoa is selected, enable and populate monhoc select
+    let emailTimeout;
+    
+    // Function to check email
+    function checkEmail(email) {
+        console.log('Checking email:', email); // Debug log
+        
+        $.ajax({
+            url: '/qlnd/check-email-giaovien',
+            method: 'GET',
+            data: { email: email },
+            success: function(response) {
+                console.log('Response:', response); // Debug log
+                
+                if (response.exists) {
+                    $('#email-error').text('Email đã tồn tại trong hệ thống').show();
+                    $('#add_email').addClass('is-invalid');
+                } else {
+                    $('#email-error').text('Email chưa được đăng ký trong hệ thống').show();
+                    $('#add_email').addClass('is-invalid');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error); // Debug log
+                $('#email-error').text('Có lỗi xảy ra khi kiểm tra email').show();
+                $('#add_email').addClass('is-invalid');
+            }
+        });
+    }
+
+    // Check on input with debounce
+    $('#add_email').on('input', function() {
+        clearTimeout(emailTimeout);
+        const email = $(this).val().trim();
+        
+        if (email) {
+            emailTimeout = setTimeout(function() {
+                checkEmail(email);
+            }, 500); // Wait 500ms after user stops typing
+        } else {
+            $('#email-error').hide();
+            $('#add_email').removeClass('is-invalid');
+        }
+    });
+
+    // Also check on blur
+    $('#add_email').on('blur', function() {
+        const email = $(this).val().trim();
+        if (email) {
+            checkEmail(email);
+        }
+    });
+
+    // Handle khoa change in modal
+   
     $('#add_ma_khoa').on('change', function() {
         const khoaId = $(this).val();
         const monhocSelect = $('#add_ma_monhoc');
         
-        console.log('Selected khoa_id:', khoaId); // Debug log
+        console.log('Selected khoa:', khoaId);
         
         if (!khoaId) {
-            monhocSelect.prop('disabled', true);
-            monhocSelect.html('<option value="">Chọn môn học</option>');
+            monhocSelect.prop('disabled', true)
+                .html('<option value="">Vui lòng chọn khoa trước</option>');
             return;
         }
         
-        // Get monhoc for selected khoa
+        // Show loading state
+        monhocSelect.prop('disabled', true)
+            .html('<option value="">Đang tải...</option>');
+        
+        // Fetch monhoc for selected khoa
         $.ajax({
-            url: '/qlnd/giaovien/get-monhoc', // Update URL to match route
+            url: `/qlnd/monhoc-by-khoa/${khoaId}`,
             method: 'GET',
-            data: { khoa_id: khoaId },
-            beforeSend: function() {
-                console.log('Sending request for khoa_id:', khoaId);
-            },
-            success: function(data) {
-                console.log('Received data:', data); // Debug log
+            success: function(response) {
+                console.log('Monhoc response:', response);
                 
-                monhocSelect.prop('disabled', false);
-                let options = '<option value="">Chọn môn học</option>';
-                
-                // Check if data is empty
-                if (Object.keys(data).length === 0) {
-                    monhocSelect.html(options);
-                    alert('Không tìm thấy môn học cho khoa này');
-                    return;
-                }
-                
-                // Group subjects by chuyennganh
-                Object.entries(data).forEach(([chuyennganh, monhocs]) => {
-                    options += `<optgroup label="${chuyennganh}">`;
-                    monhocs.forEach(monhoc => {
-                        options += `<option value="${monhoc.id_monhoc}">${monhoc.ten_monhoc} (${monhoc.so_tin_chi} tín chỉ)</option>`;
+                if (response.success && response.data && response.data.length > 0) {
+                    let options = '<option value="">Chọn môn học</option>';
+                    response.data.forEach(function(monhoc) {
+                        options += `<option value="${monhoc.id}">${monhoc.text}</option>`;
                     });
-                    options += '</optgroup>';
-                });
-                
-                monhocSelect.html(options);
+                    monhocSelect.html(options).prop('disabled', false);
+                } else {
+                    monhocSelect.html('<option value="">Không có môn học cho khoa này</option>')
+                        .prop('disabled', true);
+                }
             },
             error: function(xhr, status, error) {
-                console.error('Error details:', {
-                    status: status,
-                    error: error,
-                    response: xhr.responseText
+                console.error('Error loading monhoc:', {
+                    status: xhr.status,
+                    statusText: xhr.statusText,
+                    responseText: xhr.responseText,
+                    error: error
                 });
-                monhocSelect.prop('disabled', true);
-                alert('Có lỗi khi tải danh sách môn học: ' + error);
+                monhocSelect.html('<option value="">Lỗi tải danh sách môn học</option>')
+                    .prop('disabled', true);
             }
         });
     });
 
-    // Save teacher
-    $('#saveTeacher').click(function() {
-        const form = $('#addTeacherForm');
-        const formData = new FormData(form[0]);
-
+    // Handle form submission
+    $('#addTeacherForm').on('submit', function(e) {
+        e.preventDefault();
+        console.log('Form submitted'); // Debug log
+        
+        const formData = new FormData(this);
+        
+        // Debug: Log form data
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
+        }
+        
         $.ajax({
-            url: '/giaovien/store',
-            type: 'POST',
+            url: '/qlnd/giaovien/store',
+            method: 'POST',
             data: formData,
             processData: false,
             contentType: false,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            beforeSend: function() {
+                console.log('Sending request...'); // Debug log
+            },
             success: function(response) {
+               
                 if (response.success) {
-                    alert('Thêm giáo viên thành công');
+                 
+                    // Close modal
                     $('#addTeacherModal').modal('hide');
+                    // Reset form
+                    $('#addTeacherForm')[0].reset();
+                    // Reload page
                     location.reload();
                 } else {
-                    alert(response.error || 'Có lỗi xảy ra');
+                    alert(response.message || 'Có lỗi xảy ra');
                 }
             },
-            error: function(xhr) {
-                alert('Có lỗi xảy ra: ' + xhr.responseJSON?.error || 'Unknown error');
+            error: function(xhr, status, error) {
+                console.error('Error details:', {
+                    status: xhr.status,
+                    statusText: xhr.statusText,
+                    responseText: xhr.responseText,
+                    error: error
+                });
+                alert('Có lỗi xảy ra khi lưu giáo viên: ' + (xhr.responseJSON?.message || error));
             }
         });
+    });
+
+    // Add click handler for submit button
+    $('#saveTeacher').on('click', function() {
+        console.log('Save button clicked'); // Debug log
+        $('#addTeacherForm').submit();
+    });
+
+    // Reset form when modal is closed
+    $('#addTeacherModal').on('hidden.bs.modal', function () {
+        console.log('Modal closed - resetting form');
+        $('#addTeacherForm')[0].reset();
+        $('#add_ma_monhoc').prop('disabled', true)
+            .html('<option value="">Vui lòng chọn khoa trước</option>');
     });
 });
 </script>

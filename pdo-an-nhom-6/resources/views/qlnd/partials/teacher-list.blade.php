@@ -17,7 +17,7 @@
             </thead>
             <tbody>
                 @foreach($teachers as $teacher)
-                    <tr>
+                    <tr data-id="{{ $teacher->id_giaovien }}">
                         <td>{{ $teacher->id_giaovien }}</td>
                         <td>{{ $teacher->ten_giaovien }}</td>
                         <td>{{ $teacher->ten_khoa }}</td>

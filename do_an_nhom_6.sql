@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 11, 2024 at 04:37 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Generation Time: Dec 11, 2024 at 05:35 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -658,7 +658,9 @@ INSERT INTO `giaovien` (`id_giaovien`, `id_nguoidung`, `ma_khoa`, `ten_giaovien`
 (46, 57, 5, 'Giáo viên 46', 'giaovien46@example.com', '0123456834'),
 (47, 58, 3, 'Giáo viên 47', 'giaovien47@example.com', '0123456835'),
 (48, 59, 4, 'Giáo viên 48', 'giaovien48@example.com', '0123456836'),
-(49, 60, 4, 'Giáo viên 49', 'giaovien49@example.com', '0123456837');
+(49, 60, 4, 'Giáo viên 49', 'giaovien49@example.com', '0123456837'),
+(50, 114, 1, 'abcd', NULL, NULL),
+(51, 115, 1, 'abcdefgh', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -673,6 +675,16 @@ CREATE TABLE `giaovien_monhoc` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `giaovien_monhoc`
+--
+
+INSERT INTO `giaovien_monhoc` (`id`, `ma_giaovien`, `ma_monhoc`, `created_at`, `updated_at`) VALUES
+(1, 50, 6, '2024-12-11 09:20:58', '2024-12-11 09:20:58'),
+(2, 51, 6, '2024-12-11 09:24:06', '2024-12-11 09:24:06'),
+(3, 51, 49, '2024-12-11 09:24:06', '2024-12-11 09:24:06'),
+(4, 51, 45, '2024-12-11 09:24:06', '2024-12-11 09:24:06');
 
 -- --------------------------------------------------------
 
@@ -766,12 +778,7 @@ INSERT INTO `khoa` (`id_khoa`, `ten_khoa`) VALUES
 (2, 'Khoa Kinh Tế'),
 (3, 'Khoa Y Dược'),
 (4, 'Khoa Xây Dựng'),
-(5, 'Khoa Điện Tử Viễn Thông'),
-(6, 'Khoa Công Nghệ Thông Tin'),
-(7, 'Khoa Kinh Tế'),
-(8, 'Khoa Y Dược'),
-(9, 'Khoa Xây Dựng'),
-(10, 'Khoa Điện Tử Viễn Thông');
+(5, 'Khoa Điện Tử Viễn Thông');
 
 -- --------------------------------------------------------
 
@@ -1124,7 +1131,9 @@ INSERT INTO `nguoidung` (`id_nguoidung`, `ten_dang_nhap`, `mat_khau`, `email`, `
 (108, 'user157@example.com', '$2y$12$d4wPZWTGn7TxAhWb1WEmc.7D1ttPDtaiqO2AGLFAOWpHfHNI6W.3G', 'user157@example.com', '0901234582', 'hoạt động'),
 (109, 'user158@example.com', '$2y$12$ydBLfvojlGfUU7W6gW2UeOPVs4wM2.tyWfZ1o9WgshvGfPQxaNHO2', 'user158@example.com', NULL, 'hoạt động'),
 (110, 'user159@example.com', '$2y$12$lQ7xoawS1zpznNrwEQ2lzO/G87dkaBkAKTWPMi/gcCnp04uWwE/Jy', 'user159@example.com', NULL, 'hoạt động'),
-(111, 'user200@example.com', '$2y$12$HmZl30BApA44CQ.KUh44HucIzpkS2MPCwINj/C./04fxyeK03ysAi', 'user200@example.com', NULL, 'hoạt động');
+(111, 'user200@example.com', '$2y$12$HmZl30BApA44CQ.KUh44HucIzpkS2MPCwINj/C./04fxyeK03ysAi', 'user200@example.com', NULL, 'hoạt động'),
+(114, 'abcd598', '$2y$12$hptNtTQYuU4PGtA3RvvUbuOCn8FESlk8Bd7And9ocHa8xESUxUrie', 'abc@example.com', '0901234628', 'hoạt động'),
+(115, 'abcdefgh275', '$2y$12$YB3LDWZoaJUvFSBNcpjvtOYkfwSbAWW763o3sRggvICC5tvyicWga', 'abcdefgh@example.com', '0901234628', 'hoạt động');
 
 -- --------------------------------------------------------
 
@@ -1281,7 +1290,9 @@ INSERT INTO `phanquyen` (`id_phanquyen`, `id_nguoidung`, `id_vaitro`) VALUES
 (108, 108, 3),
 (109, 109, 3),
 (110, 110, 3),
-(111, 111, 3);
+(111, 111, 3),
+(114, 114, 4),
+(115, 115, 4);
 
 -- --------------------------------------------------------
 
@@ -1538,7 +1549,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('5FFYoBjeYsQfBagFBChNd3k4hhOdiEkpqbH8JzIa', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiR1FuSU11VVdJSmZORnVzUW1Yd2VIQkw2Mk5hblBWaE4zUWJpTjUwdSI7czozOiJ1cmwiO2E6MTp7czo4OiJpbnRlbmRlZCI7czoyMToiaHR0cDovLzEyNy4wLjAuMTo4MDAwIjt9czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDY6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9qcy92ZW5kb3Ivc2VsZWN0Mi5taW4uanMiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO30=', 1733888080);
+('zUHcyEZdtw5YfR0mpmyZfEx8V1LABhLAQs6SXaj7', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiTkdiTmhkQlJsTVdiR2ZCNjVxQ29nZXh4NkZmaDI5VVY2WDVjYzFpMCI7czozOiJ1cmwiO2E6MTp7czo4OiJpbnRlbmRlZCI7czoyMToiaHR0cDovL2xvY2FsaG9zdDo4MDAwIjt9czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjQ6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9xbG5kL2xpc3RHaWFvdmllbj9maW5kX3RlYWNoZXI9NTAmcGFnZV8xPTMiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO30=', 1733934890);
 
 -- --------------------------------------------------------
 
@@ -2159,13 +2170,13 @@ ALTER TABLE `file_nguoidung`
 -- AUTO_INCREMENT for table `giaovien`
 --
 ALTER TABLE `giaovien`
-  MODIFY `id_giaovien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `id_giaovien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT for table `giaovien_monhoc`
 --
 ALTER TABLE `giaovien_monhoc`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `hieutruong`
@@ -2225,7 +2236,7 @@ ALTER TABLE `monhoc`
 -- AUTO_INCREMENT for table `nguoidung`
 --
 ALTER TABLE `nguoidung`
-  MODIFY `id_nguoidung` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
+  MODIFY `id_nguoidung` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=116;
 
 --
 -- AUTO_INCREMENT for table `noidungmonhoc`
@@ -2237,7 +2248,7 @@ ALTER TABLE `noidungmonhoc`
 -- AUTO_INCREMENT for table `phanquyen`
 --
 ALTER TABLE `phanquyen`
-  MODIFY `id_phanquyen` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
+  MODIFY `id_phanquyen` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=116;
 
 --
 -- AUTO_INCREMENT for table `phonghoc`

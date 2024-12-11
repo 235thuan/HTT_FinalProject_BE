@@ -26,6 +26,24 @@
                             </div>
                         </div>
                     @endif
+                    @if(request()->routeIs('qlnd.listGiaovien'))
+                        <div class="position-relative topbar-search">
+                            <input type="text" 
+                                   id="teacher-search" 
+                                   class="form-control bg-light bg-opacity-75 border-light ps-4"
+                                   placeholder="Tìm kiếm giáo viên..." 
+                                   value="{{ request('search') }}">
+                            <i class="mdi mdi-magnify fs-16 position-absolute text-muted top-50 translate-middle-y ms-2 search-icon"></i>
+                            
+                            <!-- Suggestions dropdown -->
+                            <div id="teacher-search-suggestions" class="suggestions-dropdown" style="display: none;">
+                                <div class="suggestions-list"></div>
+                                <div class="no-results" style="display: none;">
+                                    <p class="text-muted p-2 mb-0">Không tìm thấy kết quả</p>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 </li>
             </ul>
             <ul class="list-unstyled topnav-menu mb-0 d-flex align-items-center">
@@ -457,6 +475,152 @@ $(document).ready(function() {
     }
 });
 @endif
+
+@if(request()->routeIs('qlnd.listGiaovien'))
+$(document).ready(function() {
+    var searchTimeout;
+    var currentSearchTerm = '';
+    
+    $('#teacher-search').on('keyup', function(e) {
+        var searchBox = $(this);
+        var suggestionsBox = $('#teacher-search-suggestions');
+        var searchTerm = searchBox.val().trim();
+        currentSearchTerm = searchTerm;
+        
+        clearTimeout(searchTimeout);
+        
+        if (searchTerm.length < 2) {
+            suggestionsBox.hide();
+            return;
+        }
+        
+        // Handle enter key
+        if (e.key === 'Enter') {
+            performTeacherSearch(searchTerm);
+            return;
+        }
+        
+        // Get suggestions
+        searchTimeout = setTimeout(function() {
+            $.ajax({
+                url: '{{ route("qlnd.searchGiaovien") }}',
+                data: { 
+                    search: searchTerm,
+                    suggest: true
+                },
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    if (searchTerm !== currentSearchTerm) return;
+                    
+                    var suggestionsList = suggestionsBox.find('.suggestions-list');
+                    suggestionsList.empty();
+                    
+                    if (response.suggestions && response.suggestions.length > 0) {
+                        // Add category headers
+                        var departmentHeader = false;
+                        var teacherHeader = false;
+                        
+                        response.suggestions.forEach(function(item) {
+                            if (item.type === 'department' && !departmentHeader) {
+                                suggestionsList.append('<div class="suggestion-header">Khoa</div>');
+                                departmentHeader = true;
+                            } else if (item.type === 'teacher' && !teacherHeader) {
+                                suggestionsList.append('<div class="suggestion-header">Giáo viên</div>');
+                                teacherHeader = true;
+                            }
+                            
+                            var html = '';
+                            if (item.type === 'department') {
+                                html = `
+                                    <div class="suggestion-item" 
+                                         data-type="department" 
+                                         data-khoa="${item.ma_khoa}">
+                                        <div class="d-flex justify-content-between">
+                                            <span>${highlightMatch(item.ten_khoa, searchTerm)}</span>
+                                            <small class="text-muted">${item.teacher_count} giáo viên</small>
+                                        </div>
+                                    </div>
+                                `;
+                            } else {
+                                html = `
+                                    <div class="suggestion-item" 
+                                         data-type="teacher"
+                                         data-id="${item.id_giaovien}">
+                                        <div class="d-flex justify-content-between">
+                                            <span>${highlightMatch(item.ten_giaovien, searchTerm)}</span>
+                                            <small class="text-muted">${item.ten_khoa}</small>
+                                        </div>
+                                        <small class="text-muted">${item.email}</small>
+                                    </div>
+                                `;
+                            }
+                            suggestionsList.append(html);
+                        });
+                        
+                        suggestionsBox.find('.suggestions-list').show();
+                        suggestionsBox.find('.no-results').hide();
+                    } else {
+                        suggestionsBox.find('.suggestions-list').hide();
+                        suggestionsBox.find('.no-results').show();
+                    }
+                    
+                    suggestionsBox.show();
+                }
+            });
+        }, 300);
+    });
+    
+    // Handle suggestion click
+    $(document).on('click', '.suggestion-item', function() {
+        var type = $(this).data('type');
+        if (type === 'teacher') {
+            var id = $(this).data('id');
+            scrollToTeacher(id);
+        } else {
+            var khoa = $(this).data('khoa');
+            filterByDepartment(khoa);
+        }
+        $('#teacher-search-suggestions').hide();
+    });
+    
+    function performTeacherSearch(term) {
+        $.ajax({
+            url: '{{ route("qlnd.searchGiaovien") }}',
+            data: { search: term },
+            success: function(response) {
+                if (response.found) {
+                    if (response.type === 'teacher') {
+                        scrollToTeacher(response.teacher.id_giaovien);
+                    }
+                } else {
+                    toastr.info('Không tìm thấy kết quả phù hợp');
+                }
+            }
+        });
+    }
+    
+    function scrollToTeacher(id) {
+        var teacherRow = $(`tr[data-id="${id}"]`);
+        if (teacherRow.length) {
+            // Teacher is visible on current page
+            $('html, body').animate({
+                scrollTop: teacherRow.offset().top - 100
+            }, 500);
+            teacherRow.addClass('highlight-row');
+            setTimeout(() => teacherRow.removeClass('highlight-row'), 3000);
+        } else {
+            // Teacher might be on another page, reload with search parameters
+            window.location.href = window.location.pathname + '?find_teacher=' + id;
+        }
+    }
+    
+    function filterByDepartment(khoaId) {
+        window.location.href = window.location.pathname + '?khoa=' + khoaId;
+    }
+});
+@endif
 </script>
 
 <style>
@@ -531,5 +695,14 @@ $(document).ready(function() {
     top: 0;
     z-index: 1;
     border-bottom: 1px solid #eee;
+}
+
+.highlight-row {
+    animation: highlightRow 3s;
+}
+
+@keyframes highlightRow {
+    0% { background-color: #fff3cd; }
+    100% { background-color: transparent; }
 }
 </style>

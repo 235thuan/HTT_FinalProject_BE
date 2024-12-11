@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 09, 2024 at 09:24 PM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Generation Time: Dec 11, 2024 at 04:37 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -663,6 +663,20 @@ INSERT INTO `giaovien` (`id_giaovien`, `id_nguoidung`, `ma_khoa`, `ten_giaovien`
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `giaovien_monhoc`
+--
+
+CREATE TABLE `giaovien_monhoc` (
+  `id` int(11) NOT NULL,
+  `ma_giaovien` int(11) NOT NULL,
+  `ma_monhoc` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `hieutruong`
 --
 
@@ -774,6 +788,43 @@ CREATE TABLE `login_logs` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `login_logs`
+--
+
+INSERT INTO `login_logs` (`id`, `user_id`, `login_time`, `logout_time`, `ip_address`, `created_at`, `updated_at`) VALUES
+(1, 1, '2024-12-09 18:50:14', NULL, '127.0.0.1', NULL, NULL),
+(2, 1, '2024-12-09 18:50:20', NULL, '127.0.0.1', NULL, NULL),
+(3, 1, '2024-12-09 18:51:04', NULL, '127.0.0.1', NULL, NULL),
+(4, 1, '2024-12-09 18:51:17', NULL, '127.0.0.1', NULL, NULL),
+(5, 1, '2024-12-09 18:51:21', NULL, '127.0.0.1', NULL, NULL),
+(6, 1, '2024-12-09 18:53:48', NULL, '127.0.0.1', NULL, NULL),
+(7, 1, '2024-12-09 18:54:07', NULL, '127.0.0.1', NULL, NULL),
+(8, 1, '2024-12-09 18:54:10', NULL, '127.0.0.1', NULL, NULL),
+(9, 1, '2024-12-09 18:54:10', NULL, '127.0.0.1', NULL, NULL),
+(10, 1, '2024-12-09 18:54:11', NULL, '127.0.0.1', NULL, NULL),
+(11, 1, '2024-12-09 18:54:11', NULL, '127.0.0.1', NULL, NULL),
+(12, 1, '2024-12-09 18:54:14', NULL, '127.0.0.1', NULL, NULL),
+(13, 1, '2024-12-09 18:54:14', NULL, '127.0.0.1', NULL, NULL),
+(14, 1, '2024-12-09 18:54:15', NULL, '127.0.0.1', NULL, NULL),
+(15, 1, '2024-12-09 18:54:15', NULL, '127.0.0.1', NULL, NULL),
+(16, 1, '2024-12-09 18:54:16', NULL, '127.0.0.1', NULL, NULL),
+(17, 1, '2024-12-09 18:54:21', NULL, '127.0.0.1', NULL, NULL),
+(18, 1, '2024-12-09 18:58:39', NULL, '127.0.0.1', NULL, NULL),
+(19, 1, '2024-12-09 18:58:48', NULL, '127.0.0.1', NULL, NULL),
+(20, 1, '2024-12-09 19:07:51', NULL, '127.0.0.1', NULL, NULL),
+(21, 1, '2024-12-09 19:08:12', NULL, '127.0.0.1', NULL, NULL),
+(22, 1, '2024-12-09 19:08:26', NULL, '127.0.0.1', NULL, NULL),
+(23, 1, '2024-12-09 19:08:45', NULL, '127.0.0.1', NULL, NULL),
+(24, 1, '2024-12-09 19:09:32', NULL, '127.0.0.1', NULL, NULL),
+(25, 1, '2024-12-09 19:10:01', NULL, '127.0.0.1', NULL, NULL),
+(26, 1, '2024-12-09 19:10:03', NULL, '127.0.0.1', NULL, NULL),
+(27, 1, '2024-12-09 19:10:46', NULL, '127.0.0.1', NULL, NULL),
+(28, 1, '2024-12-09 19:10:48', NULL, '127.0.0.1', NULL, NULL),
+(29, 1, '2024-12-09 19:11:01', NULL, '127.0.0.1', NULL, NULL),
+(30, 1, '2024-12-09 19:11:06', NULL, '127.0.0.1', NULL, NULL),
+(31, 1, '2024-12-09 19:11:18', NULL, '127.0.0.1', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1070,9 +1121,10 @@ INSERT INTO `nguoidung` (`id_nguoidung`, `ten_dang_nhap`, `mat_khau`, `email`, `
 (105, 'user154@example.com', '$2y$12$4.Sy20IdcyYYZbP1C5R4beqogzFbCBjye5ITL1dfLEVpy0u9HEZFW', 'user154@example.com', NULL, 'hoạt động'),
 (106, 'user155@example.com', '$2y$12$4cL4y1nqqmWMWsl5AuDEDO56NMYYdbV0/n0Pu2BqOVviI3ZR7f7s6', 'user155@example.com', NULL, 'hoạt động'),
 (107, 'user156@example.com', '$2y$12$MywTjZ6U4InvHxaeJbG4MOidT7pmmVOI..ZGR4OE21uuTmwDZEI8O', 'user156@example.com', NULL, 'hoạt động'),
-(108, 'user157@example.com', '$2y$12$d4wPZWTGn7TxAhWb1WEmc.7D1ttPDtaiqO2AGLFAOWpHfHNI6W.3G', 'user157@example.com', NULL, 'hoạt động'),
+(108, 'user157@example.com', '$2y$12$d4wPZWTGn7TxAhWb1WEmc.7D1ttPDtaiqO2AGLFAOWpHfHNI6W.3G', 'user157@example.com', '0901234582', 'hoạt động'),
 (109, 'user158@example.com', '$2y$12$ydBLfvojlGfUU7W6gW2UeOPVs4wM2.tyWfZ1o9WgshvGfPQxaNHO2', 'user158@example.com', NULL, 'hoạt động'),
-(110, 'user159@example.com', '$2y$12$lQ7xoawS1zpznNrwEQ2lzO/G87dkaBkAKTWPMi/gcCnp04uWwE/Jy', 'user159@example.com', NULL, 'hoạt động');
+(110, 'user159@example.com', '$2y$12$lQ7xoawS1zpznNrwEQ2lzO/G87dkaBkAKTWPMi/gcCnp04uWwE/Jy', 'user159@example.com', NULL, 'hoạt động'),
+(111, 'user200@example.com', '$2y$12$HmZl30BApA44CQ.KUh44HucIzpkS2MPCwINj/C./04fxyeK03ysAi', 'user200@example.com', NULL, 'hoạt động');
 
 -- --------------------------------------------------------
 
@@ -1228,7 +1280,8 @@ INSERT INTO `phanquyen` (`id_phanquyen`, `id_nguoidung`, `id_vaitro`) VALUES
 (107, 107, 3),
 (108, 108, 3),
 (109, 109, 3),
-(110, 110, 3);
+(110, 110, 3),
+(111, 111, 3);
 
 -- --------------------------------------------------------
 
@@ -1485,8 +1538,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('evTIuKRFrUBrzD2RLNHIWNLR1Wg7OnKbFNpuDa4g', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0', 'YTo2OntzOjY6Il90b2tlbiI7czo0MDoiQkVtaUp0U1BmSnQwc0wwZGZMQld6YVpyUXhoUnZzdFBSOEF1RVM0TCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6ODA6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9xbG5kL2xpc3RTaW5odmllbj9maW5kX2xvcD1LVFBNMDEmZmluZF9zdHVkZW50PTY3JnBhZ2VfMT0yIjt9czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MTtzOjExOiJyZXR1cm5fcGFnZSI7aToxO3M6MTA6InJldHVybl9sb3AiO047fQ==', 1733771170),
-('jpOTacXOOHyIHjbFRQdS9urGKDF6E7hW17L6IXJu', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiR25VSDgwRm1KZDRFYTZuZFdNbmZQMkxMTlExSkg3eUtOOVk5NFhRMiI7czozOiJ1cmwiO2E6MTp7czo4OiJpbnRlbmRlZCI7czoyMToiaHR0cDovL2xvY2FsaG9zdDo4MDAwIjt9czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NTQ6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9hc3NldHMvbGlicy90b2FzdHIvdG9hc3RyLm1pbi5qcyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7fQ==', 1733775827);
+('5FFYoBjeYsQfBagFBChNd3k4hhOdiEkpqbH8JzIa', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiR1FuSU11VVdJSmZORnVzUW1Yd2VIQkw2Mk5hblBWaE4zUWJpTjUwdSI7czozOiJ1cmwiO2E6MTp7czo4OiJpbnRlbmRlZCI7czoyMToiaHR0cDovLzEyNy4wLjAuMTo4MDAwIjt9czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDY6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9qcy92ZW5kb3Ivc2VsZWN0Mi5taW4uanMiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO30=', 1733888080);
 
 -- --------------------------------------------------------
 
@@ -1554,9 +1606,10 @@ INSERT INTO `sinhvien` (`id_sinhvien`, `id_nguoidung`, `ten_sinhvien`, `lop`, `m
 (105, 105, 'Nguyễn Đức', 'ATTT01', 4, 2023),
 (106, 106, 'Chẩu Mạnh Hà', 'ATTT01', 4, 2023),
 (107, 107, 'Trần Đức Bình', 'ATTT01', 4, 2023),
-(108, 108, 'Hoàng Việt', 'ATTT01', 4, 2023),
+(108, 108, 'Hoàng Việt Cồ', 'ATTT01', 4, 2023),
 (109, 109, 'Văn Bằng', 'ATTT01', 4, 2023),
-(110, 110, 'Khổng Tử', 'ATTT01', 4, 2023);
+(110, 110, 'Khổng Tử', 'ATTT01', 4, 2023),
+(111, 111, 'Nguyễn Chí Cường', 'ATTT02', 4, 2023);
 
 -- --------------------------------------------------------
 
@@ -1864,6 +1917,14 @@ ALTER TABLE `giaovien`
   ADD KEY `ma_khoa` (`ma_khoa`);
 
 --
+-- Indexes for table `giaovien_monhoc`
+--
+ALTER TABLE `giaovien_monhoc`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `ma_giaovien` (`ma_giaovien`),
+  ADD KEY `ma_monhoc` (`ma_monhoc`);
+
+--
 -- Indexes for table `hieutruong`
 --
 ALTER TABLE `hieutruong`
@@ -2101,6 +2162,12 @@ ALTER TABLE `giaovien`
   MODIFY `id_giaovien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
+-- AUTO_INCREMENT for table `giaovien_monhoc`
+--
+ALTER TABLE `giaovien_monhoc`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `hieutruong`
 --
 ALTER TABLE `hieutruong`
@@ -2134,7 +2201,7 @@ ALTER TABLE `khoa`
 -- AUTO_INCREMENT for table `login_logs`
 --
 ALTER TABLE `login_logs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `lop`
@@ -2158,7 +2225,7 @@ ALTER TABLE `monhoc`
 -- AUTO_INCREMENT for table `nguoidung`
 --
 ALTER TABLE `nguoidung`
-  MODIFY `id_nguoidung` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
+  MODIFY `id_nguoidung` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
 
 --
 -- AUTO_INCREMENT for table `noidungmonhoc`
@@ -2170,7 +2237,7 @@ ALTER TABLE `noidungmonhoc`
 -- AUTO_INCREMENT for table `phanquyen`
 --
 ALTER TABLE `phanquyen`
-  MODIFY `id_phanquyen` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
+  MODIFY `id_phanquyen` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
 
 --
 -- AUTO_INCREMENT for table `phonghoc`
@@ -2182,7 +2249,7 @@ ALTER TABLE `phonghoc`
 -- AUTO_INCREMENT for table `sinhvien`
 --
 ALTER TABLE `sinhvien`
-  MODIFY `id_sinhvien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
+  MODIFY `id_sinhvien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
 
 --
 -- AUTO_INCREMENT for table `thanhtich`
@@ -2295,6 +2362,13 @@ ALTER TABLE `file_nguoidung`
 ALTER TABLE `giaovien`
   ADD CONSTRAINT `giaovien_ibfk_1` FOREIGN KEY (`id_nguoidung`) REFERENCES `nguoidung` (`id_nguoidung`) ON DELETE CASCADE,
   ADD CONSTRAINT `giaovien_ibfk_2` FOREIGN KEY (`ma_khoa`) REFERENCES `khoa` (`id_khoa`);
+
+--
+-- Constraints for table `giaovien_monhoc`
+--
+ALTER TABLE `giaovien_monhoc`
+  ADD CONSTRAINT `giaovien_monhoc_ibfk_1` FOREIGN KEY (`ma_giaovien`) REFERENCES `giaovien` (`id_giaovien`),
+  ADD CONSTRAINT `giaovien_monhoc_ibfk_2` FOREIGN KEY (`ma_monhoc`) REFERENCES `monhoc` (`id_monhoc`);
 
 --
 -- Constraints for table `hieutruong`

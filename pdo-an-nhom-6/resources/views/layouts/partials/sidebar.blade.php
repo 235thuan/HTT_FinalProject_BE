@@ -56,14 +56,14 @@
                         <ul class="nav-second-level">
                             <li>
                                 <a href="{{ route('qlnd.listSinhvien') }}" 
-                                   class="nav-link {{ request()->routeIs('qlnd.listSinhvien') ? 'active' : '' }}">
+                                   class="tp-link {{ request()->routeIs('qlnd.listSinhvien') ? 'active' : '' }}">
                                     <i class="mdi mdi-account-multiple"></i>
                                     <span>Danh sách lớp</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="{{ route('qlnd.listGiaovien') }}" 
-                                   class="nav-link {{ request()->routeIs('qlnd.listGiaovien') ? 'active' : '' }}">
+                                   class="tp-link {{ request()->routeIs('qlnd.listGiaovien') ? 'active' : '' }}">
                                     <i class="mdi mdi-account-multiple" style="color: #000;"></i>
                                     <span>Danh sách giáo viên</span>
                                 </a>

@@ -42,8 +42,9 @@ Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->group(
     
     // QLND routes - MUST be before catch-all routes
     Route::prefix('qlnd')->name('qlnd.')->group(function () {
-        // Search route should come before detail routes to avoid conflicts
+        // Search routes
         Route::get('/sinhvien/search', [LopController::class, 'searchSinhvien'])->name('searchSinhvien');
+        Route::get('/giaovien/search', [GiaoVienController::class, 'search'])->name('searchGiaovien');
         
         // List routes
         Route::get('/listSinhvien', [LopController::class, 'listAll'])->name('listSinhvien');
@@ -52,6 +53,10 @@ Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->group(
         // Detail routes
         Route::get('/sinhvien/{id}', [SinhVienController::class, 'detail'])->name('sinhvien.detail');
         Route::get('/giaovien/{id}', [GiaoVienController::class, 'detail'])->name('giaovien.detail');
+        Route::post('/giaovien/store', [GiaoVienController::class, 'store'])->name('giaovien.store');
+        Route::get('/check-email-giaovien', [GiaoVienController::class, 'checkEmail'])->name('checkEmailGiaovien');
+        Route::get('/get-chuyennganh', [GiaoVienController::class, 'getChuyenNganh'])->name('getChuyenNganh');
+        Route::get('/getMonHoc', [GiaoVienController::class, 'getMonHoc'])->name('getMonHoc');
     });
 
     // Sinhvien routes

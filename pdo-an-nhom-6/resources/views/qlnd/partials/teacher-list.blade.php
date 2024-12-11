@@ -1,76 +1,60 @@
-@foreach($khoas as $khoa)
-<div class="row mb-4">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-0">
-                     {{ $khoa->ten_khoa }}
-                    <span class="badge bg-primary ms-2">
-                        {{ $khoa->giaoviens->total() }} giáo viên
-                    </span>
-                </h5>
-            </div>
-            <div class="card-body" id="teacher-list-{{ $khoa->id_khoa }}">
-                @if($khoa->giaoviens->count() > 0)
-                    <div class="table-responsive">
-                        <table class="table table-centered table-nowrap mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Họ và tên</th>
-                                    <th>Email</th>
-                                    <th>Số điện thoại</th>
-                                    <th style="width: 125px;">Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($khoa->giaoviens as $gv)
-                                <tr>
-                                    <td>{{ $gv->id_giaovien }}</td>
-                                    <td>{{ $gv->ten_giaovien }}</td>
-                                    <td>{{ $gv->email }}</td>
-                                    <td>{{ $gv->so_dien_thoai }}</td>
-                                    <td>
-                                        <div class="btn-group">
-                                            <a href="{{ route('qlnd.giaovien.detail', $gv->id_giaovien) }}" 
-                                               class="btn btn-soft-primary btn-sm" 
-                                               title="Xem chi tiết">
-                                                <i class="mdi mdi-eye"></i>
-                                            </a>
-                                            <button type="button" 
-                                                    class="btn btn-soft-info btn-sm edit-btn" 
-                                                    data-bs-toggle="modal" 
-                                                    data-bs-target="#editGiaoVienModal"
-                                                    data-id="{{ $gv->id_giaovien }}"
-                                                    data-name="{{ $gv->ten_giaovien }}"
-                                                    data-email="{{ $gv->email }}"
-                                                    data-phone="{{ $gv->so_dien_thoai }}"
-                                                    data-khoa="{{ $gv->ma_khoa }}"
-                                                    data-khoa-name="{{ $khoa->ten_khoa }}"
-                                                    title="Chỉnh sửa">
-                                                <i class="mdi mdi-pencil"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-
-                        <div class="mt-3" id="pagination-{{ $khoa->id_khoa }}">
-                            {{ $khoa->giaoviens->appends(['khoa_id' => $khoa->id_khoa])->onEachSide(1)->links('vendor.pagination.bootstrap-5') }}
-                        </div>
-                    </div>
-                @else
-                    <div class="text-center p-4">
-                        <p class="text-muted">Không có giáo viên nào trong khoa này</p>
-                    </div>
-                @endif
-            </div>
-        </div>
+@if($teachers->isEmpty())
+    <div class="text-center p-4">
+        <p>Không tìm thấy giáo viên nào phù hợp với tìm kiếm của bạn.</p>
     </div>
-</div>
-@endforeach
+@else
+    <div class="table-responsive">
+        <table class="table table-centered table-striped dt-responsive nowrap w-100" id="products-datatable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Họ và tên</th>
+                    <th>Khoa</th>
+                    <th>Email</th>
+                    <th>Số điện thoại</th>
+                    <th style="width: 125px;">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($teachers as $teacher)
+                    <tr>
+                        <td>{{ $teacher->id_giaovien }}</td>
+                        <td>{{ $teacher->ten_giaovien }}</td>
+                        <td>{{ $teacher->ten_khoa }}</td>
+                        <td>{{ $teacher->email }}</td>
+                        <td>{{ $teacher->so_dien_thoai }}</td>
+                        <td>
+                            <div class="btn-group">
+                                <a href="{{ route('qlnd.giaovien.detail', $teacher->id_giaovien) }}" 
+                                   class="btn btn-soft-primary btn-sm" 
+                                   title="Xem chi tiết">
+                                    <i class="mdi mdi-eye"></i>
+                                </a>
+                                <button type="button" 
+                                        class="btn btn-soft-info btn-sm edit-btn" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#editGiaoVienModal"
+                                        data-id="{{ $teacher->id_giaovien }}"
+                                        data-name="{{ $teacher->ten_giaovien }}"
+                                        data-email="{{ $teacher->email }}"
+                                        data-phone="{{ $teacher->so_dien_thoai }}"
+                                        data-khoa="{{ $teacher->ma_khoa }}"
+                                        data-khoa-name="{{ $teacher->ten_khoa }}"
+                                        title="Chỉnh sửa">
+                                    <i class="mdi mdi-pencil"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="mt-3">
+        {{ $teachers->links('vendor.pagination.bootstrap-5') }}
+    </div>
+@endif
 
 <!-- Edit Modal -->
 <div class="modal fade" id="editGiaoVienModal" tabindex="-1" aria-hidden="true">

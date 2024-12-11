@@ -303,45 +303,18 @@ public function store(Request $request)
 
         DB::beginTransaction();
 
-        $nguoiDung = DB::table('nguoidung')
-            ->where('email', $request->email)
-            ->first();
-
-        if ($nguoiDung) {
-            // Check if user already has any role
-            $hasRole = DB::table('phanquyen')
-            ->where('id_nguoidung', $nguoiDung->id_nguoidung)
-            ->exists();
-            
-            if ($hasRole) {
-                DB::rollBack();
-                return response()->json([
-                    'errors' => ['email' => ['Email đã được sử dụng bởi một giáo viên khác']]
-                ], 422);
-            }
-            
-            $id_nguoidung = $nguoiDung->id_nguoidung;
-        } else {
-            // Create new nguoidung
-            $id_nguoidung = DB::table('nguoidung')->insertGetId([
-                'ten_dang_nhap' => strtolower(str_replace(' ', '', $request->ten_giaovien)) . rand(100, 999),
-                'mat_khau' => bcrypt('123456@a'),
-                'email' => $request->email,
-                'so_dien_thoai' => $request->so_dien_thoai,
-                'trang_thai' => 'hoạt động'
-               
-            ]);
-        }
-
-        DB::table('phanquyen')->insert([
-            'id_nguoidung' => $id_nguoidung,
-            'id_vaitro' => 4
+        // Create nguoidung first
+        $idNguoiDung = DB::table('nguoidung')->insertGetId([
+            'email' => $validated['email'],
+            'so_dien_thoai' => $validated['so_dien_thoai']
+         
         ]);
+
         // Create giaovien with ma_khoa
         $idGiaovien = DB::table('giaovien')->insertGetId([
             'ten_giaovien' => $validated['ten_giaovien'],
-            'id_nguoidung' => $id_nguoidung,
-            'ma_khoa' => $validated['ma_khoa']
+            'id_nguoidung' => $idNguoiDung,
+            'ma_khoa' => $validated['ma_khoa'],
         
         ]);
 
@@ -349,9 +322,7 @@ public function store(Request $request)
         foreach ($validated['ma_monhoc'] as $monhocId) {
             DB::table('giaovien_monhoc')->insert([
                 'ma_giaovien' => $idGiaovien,
-                'ma_monhoc' => $monhocId,
-                'created_at' => now(),
-                'updated_at' => now()
+                'ma_monhoc' => $monhocId
 
             ]);
         }
@@ -373,54 +344,13 @@ public function store(Request $request)
 
 public function checkEmailExists(Request $request)
 {
-    try {
-        $email = $request->input('email');
+    $email = $request->input('email');
+    
+    $exists = DB::table('nguoidung')
+        ->where('email', $email)
+        ->exists();
         
-        if (!$email) {
-            return response()->json([
-                'exists' => false,
-                'message' => 'Vui lòng nhập email'
-            ]);
-        }
-
-        $nguoiDung = DB::table('nguoidung')
-            ->where('email', $email)
-            ->first();
-        
-        if ($nguoiDung) {
-            // Check if user already has a teacher role
-            $hasTeacherRole = DB::table('giaovien')
-                ->where('id_nguoidung', $nguoiDung->id_nguoidung)
-                ->exists();
-            
-            if ($hasTeacherRole) {
-                return response()->json([
-                    'exists' => true,
-                    'canUse' => false,
-                    'message' => 'Email đã được sử dụng bởi một giáo viên khác'
-                ]);
-            }
-            
-            return response()->json([
-                'exists' => true,
-                'canUse' => true,
-                'message' => 'Email đã tồn tại và có thể sử dụng cho giáo viên mới'
-            ]);
-        }
-        
-        return response()->json([
-            'exists' => false,
-            'canUse' => true,
-            'message' => 'Email chưa tồn tại, tài khoản sẽ được tạo tự động'
-        ]);
-
-    } catch (\Exception $e) {
-        \Log::error('Error checking email: ' . $e->getMessage());
-        return response()->json([
-            'error' => true,
-            'message' => 'Có lỗi xảy ra khi kiểm tra email'
-        ], 500);
-    }
+    return response()->json(['exists' => $exists]);
 }
 
 public function getMonHoc(Request $request)
@@ -458,38 +388,80 @@ public function getMonHoc(Request $request)
 public function getMonHocByKhoa($khoa_id)
 {
     try {
-        \Log::info('Getting monhoc for khoa_id: ' . $khoa_id);
-
+        // Add header to force JSON response
+        header('Content-Type: application/json');
+        
         $monhoc = DB::table('monhoc')
+            ->join('chuyennganh', 'monhoc.ma_chuyen_nganh', '=', 'chuyennganh.id_chuyennganh')
+            ->join('khoa', 'chuyennganh.ma_khoa', '=', 'khoa.id_khoa')
+            ->where('khoa.id_khoa', $khoa_id)
             ->select(
                 'monhoc.id_monhoc',
                 'monhoc.ten_monhoc',
-                'monhoc.so_tin_chi',
-                'chuyennganh.ten_chuyennganh'
+                'monhoc.so_tin_chi'
             )
-            ->join('chuyennganh', 'monhoc.ma_chuyen_nganh', '=', 'chuyennganh.id_chuyennganh')
-            ->where('chuyennganh.ma_khoa', '=', $khoa_id)
             ->orderBy('monhoc.ten_monhoc')
             ->get();
 
-        \Log::info('Found monhoc:', ['count' => $monhoc->count(), 'data' => $monhoc]);
+        // Log the response for debugging
+        \Log::info('getMonHocByKhoa response:', ['khoa_id' => $khoa_id, 'data' => $monhoc]);
 
-        return response()->json([
-            'success' => true,
-            'data' => $monhoc->map(function($item) {
-                return [
-                    'id' => $item->id_monhoc,
-                    'text' => "{$item->ten_monhoc} ({$item->so_tin_chi} tín chỉ) - {$item->ten_chuyennganh}"
-                ];
-            })
-        ]);
+        return response()->json($monhoc)
+            ->header('Content-Type', 'application/json')
+            ->header('X-Content-Type-Options', 'nosniff');
 
     } catch (\Exception $e) {
         \Log::error('Error in getMonHocByKhoa: ' . $e->getMessage());
+        
+        return response()->json([
+            'error' => 'Server error',
+            'message' => $e->getMessage()
+        ], 500)
+        ->header('Content-Type', 'application/json')
+        ->header('X-Content-Type-Options', 'nosniff');
+    }
+}
+
+public function findTeacherPage(Request $request)
+{
+    try {
+        $teacherId = $request->teacher_id;
+        $perPage = 5; // Match your pagination setting
+        
+        // Find the teacher and their khoa
+        $teacher = DB::table('giaovien')
+            ->join('khoa', 'giaovien.ma_khoa', '=', 'khoa.id_khoa')
+            ->where('id_giaovien', $teacherId)
+            ->select('giaovien.*', 'khoa.id_khoa')
+            ->first();
+
+        if ($teacher) {
+            // Find position of teacher in their khoa's list
+            $position = DB::table('giaovien')
+                ->where('ma_khoa', $teacher->id_khoa)
+                ->where('id_giaovien', '<=', $teacherId)
+                ->count();
+
+            // Calculate page number
+            $page = ceil($position / $perPage);
+
+            return response()->json([
+                'success' => true,
+                'list' => $teacher->id_khoa, // Use khoa ID as list identifier
+                'page' => $page
+            ]);
+        }
+
         return response()->json([
             'success' => false,
-            'message' => 'Có lỗi xảy ra khi tải danh sách môn học'
-        ], 500);
+            'message' => 'Không tìm thấy giáo viên'
+        ]);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Có lỗi xảy ra: ' . $e->getMessage()
+        ]);
     }
 }
 } 

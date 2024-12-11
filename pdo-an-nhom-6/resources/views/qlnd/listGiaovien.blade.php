@@ -211,45 +211,45 @@ $(document).ready(function() {
         const khoaId = $(this).val();
         const monhocSelect = $('#add_ma_monhoc');
         
-        console.log('Selected khoa:', khoaId);
-        
+        // Reset and disable monhoc select if no khoa is selected
         if (!khoaId) {
-            monhocSelect.prop('disabled', true)
-                .html('<option value="">Vui lòng chọn khoa trước</option>');
+            monhocSelect.prop('disabled', true);
+            monhocSelect.html('<option value="">Vui lòng chọn khoa trước</option>');
             return;
         }
         
         // Show loading state
-        monhocSelect.prop('disabled', true)
-            .html('<option value="">Đang tải...</option>');
-        
-        // Fetch monhoc for selected khoa
+        monhocSelect.prop('disabled', true);
+        monhocSelect.html('<option>Đang tải...</option>');
+
+        // Get monhoc data using jQuery AJAX
         $.ajax({
             url: `/qlnd/monhoc-by-khoa/${khoaId}`,
             method: 'GET',
-            success: function(response) {
-                console.log('Monhoc response:', response);
+            dataType: 'json',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                'Accept': 'application/json'
+            },
+            success: function(data) {
+                let options = '';
                 
-                if (response.success && response.data && response.data.length > 0) {
-                    let options = '<option value="">Chọn môn học</option>';
-                    response.data.forEach(function(monhoc) {
-                        options += `<option value="${monhoc.id}">${monhoc.text}</option>`;
+                if (data && data.length > 0) {
+                    data.forEach(function(monhoc) {
+                        options += `<option value="${monhoc.id_monhoc}">${monhoc.ten_monhoc} (${monhoc.so_tin_chi} tín chỉ)</option>`;
                     });
-                    monhocSelect.html(options).prop('disabled', false);
+                    monhocSelect.prop('disabled', false);
                 } else {
-                    monhocSelect.html('<option value="">Không có môn học cho khoa này</option>')
-                        .prop('disabled', true);
+                    options = '<option value="">Không có môn học cho khoa này</option>';
+                    monhocSelect.prop('disabled', true);
                 }
+                
+                monhocSelect.html(options);
             },
             error: function(xhr, status, error) {
-                console.error('Error loading monhoc:', {
-                    status: xhr.status,
-                    statusText: xhr.statusText,
-                    responseText: xhr.responseText,
-                    error: error
-                });
-                monhocSelect.html('<option value="">Lỗi tải danh sách môn học</option>')
-                    .prop('disabled', true);
+                console.error('Error:', error);
+                monhocSelect.prop('disabled', true);
+                monhocSelect.html('<option value="">Không thể tải danh sách môn học</option>');
             }
         });
     });
@@ -279,9 +279,9 @@ $(document).ready(function() {
                 console.log('Sending request...'); // Debug log
             },
             success: function(response) {
-               
+                console.log('Success response:', response); // Debug log
                 if (response.success) {
-                 
+                    alert('Thêm giáo viên thành công!'); // Add notification
                     // Close modal
                     $('#addTeacherModal').modal('hide');
                     // Reset form
@@ -311,12 +311,25 @@ $(document).ready(function() {
     });
 
     // Reset form when modal is closed
-    $('#addTeacherModal').on('hidden.bs.modal', function () {
-        console.log('Modal closed - resetting form');
+    $('#addTeacherModal').on('hidden.bs.modal', function() {
+        console.log('Modal closed - resetting form'); // Debug log
         $('#addTeacherForm')[0].reset();
-        $('#add_ma_monhoc').prop('disabled', true)
-            .html('<option value="">Vui lòng chọn khoa trước</option>');
+        $('#email-error').hide();
+        $('#add_email').removeClass('is-invalid');
+        $('#add_ma_monhoc').prop('disabled', true).html('<option value="">Vui lòng chọn khoa trước</option>');
     });
 });
 </script>
+
+@if(request()->has('find_teacher'))
+<script>
+$(document).ready(function() {
+    // Wait for the page to fully load
+    setTimeout(function() {
+        var teacherId = {{ request()->find_teacher }};
+        scrollToTeacher(teacherId);
+    }, 500);
+});
+</script>
+@endif
 @endpush

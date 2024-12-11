@@ -132,7 +132,7 @@
                                         </a>
                                     @empty
                                         <div class="text-center p-2">
-                                            <p class="text-muted">Không có thông báo</p>
+                                            <p class="text-muted">Không có th��ng báo</p>
                                         </div>
                                     @endforelse
                                 </div>
@@ -603,17 +603,41 @@ $(document).ready(function() {
     }
     
     function scrollToTeacher(id) {
-        var teacherRow = $(`tr[data-id="${id}"]`);
-        if (teacherRow.length) {
+        var teacherCard = $(`[data-teacher-id="${id}"]`);
+        
+        if (teacherCard.length) {
             // Teacher is visible on current page
             $('html, body').animate({
-                scrollTop: teacherRow.offset().top - 100
+                scrollTop: teacherCard.offset().top - 100
             }, 500);
-            teacherRow.addClass('highlight-row');
-            setTimeout(() => teacherRow.removeClass('highlight-row'), 3000);
+            teacherCard.addClass('highlight-row');
+            setTimeout(() => teacherCard.removeClass('highlight-row'), 3000);
         } else {
-            // Teacher might be on another page, reload with search parameters
-            window.location.href = window.location.pathname + '?find_teacher=' + id;
+            // Find which list and page contains the teacher
+            $.ajax({
+                url: '/qlnd/giaovien/find-page',
+                method: 'GET',
+                data: { teacher_id: id },
+                success: function(response) {
+                    if (response.success) {
+                        // Construct URL with correct page parameter
+                        let currentUrl = new URL(window.location.href);
+                        let params = new URLSearchParams(currentUrl.search);
+                        
+                        // Update or add the page parameter for the correct list
+                        params.set(`page_${response.list}`, response.page);
+                        params.set('find_teacher', id);
+                        
+                        // Redirect to the correct page
+                        window.location.href = `${window.location.pathname}?${params.toString()}`;
+                    } else {
+                        toastr.error('Không tìm thấy giáo viên');
+                    }
+                },
+                error: function() {
+                    toastr.error('Có lỗi xảy ra khi tìm kiếm giáo viên');
+                }
+            });
         }
     }
   

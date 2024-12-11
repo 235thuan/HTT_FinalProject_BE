@@ -45,7 +45,8 @@ Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->group(
         // Search routes
         Route::get('/sinhvien/search', [LopController::class, 'searchSinhvien'])->name('searchSinhvien');
         Route::get('/giaovien/search', [GiaoVienController::class, 'search'])->name('searchGiaovien');
-        
+        Route::get('/giaovien/find-page', [GiaoVienController::class, 'findTeacherPage']);
+
         // List routes
         Route::get('/listSinhvien', [LopController::class, 'listAll'])->name('listSinhvien');
         Route::get('/listGiaovien', [GiaoVienController::class, 'listAll'])->name('listGiaovien');
@@ -56,8 +57,6 @@ Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->group(
         Route::post('/giaovien/store', [GiaoVienController::class, 'store'])->name('giaovien.store');
         Route::get('/check-email-giaovien', [GiaoVienController::class, 'checkEmailExists'])->name('checkEmailGiaovien');
         Route::get('/giaovien/get-monhoc', [GiaoVienController::class, 'getMonHoc'])->name('getMonHoc');
-        Route::get('monhoc-by-khoa/{khoa_id}', [GiaoVienController::class, 'getMonHocByKhoa'])
-            ->name('monhoc.byKhoa');
     });
 
     // Sinhvien routes

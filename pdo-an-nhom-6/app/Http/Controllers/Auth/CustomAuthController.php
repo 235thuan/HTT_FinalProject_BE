@@ -34,7 +34,7 @@ class CustomAuthController extends Controller
             $request->session()->regenerate();
             
             if (Auth::user()->hasRole('Admin')) {
-                return redirect('/index');
+                return redirect('/admin/index');
             }
             
             return redirect()->intended('home');
@@ -64,6 +64,6 @@ class CustomAuthController extends Controller
         $cookie = cookie()->forget('remember_web_');
         
         // Redirect with cookie clearing
-        return redirect('/login')->withCookie($cookie);
+        return redirect('/admin/login')->withCookie($cookie);
     }
 } 

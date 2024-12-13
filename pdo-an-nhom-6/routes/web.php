@@ -96,4 +96,9 @@ Route::prefix('admin')->group(function () {
     });
 });
 
+// thêm routes ví dụ 
+// Route::get('/cuong', function () {
+//     return view('cuong.cuongView');   //cuongView.blade.php nằm trong thư mục resources/views/cuong
+// });
+
 

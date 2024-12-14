@@ -14,19 +14,6 @@ Route::get('/', function () {
     return view('thuan.home');
 });
 
-// Debug routes
-Route::get('/debug-routes', function() {
-    $routes = collect(Route::getRoutes())->map(function ($route) {
-        return [
-            'uri' => $route->uri(),
-            'name' => $route->getName(),
-            'methods' => $route->methods(),
-            'action' => $route->getActionName(),
-        ];
-    });
-    dd($routes->toArray());
-});
-
 // Admin routes group
 Route::prefix('admin')->group(function () {
     // Guest middleware group
@@ -61,6 +48,10 @@ Route::prefix('admin')->group(function () {
             Route::post('/giaovien/store', [GiaoVienController::class, 'store'])->name('giaovien.store');
             Route::get('/check-email-giaovien', [GiaoVienController::class, 'checkEmailExists'])->name('checkEmailGiaovien');
             Route::get('/giaovien/get-monhoc', [GiaoVienController::class, 'getMonHoc'])->name('getMonHoc');
+
+            // Thêm route mới để lấy môn học theo khoa
+            Route::get('/monhoc-by-khoa/{khoa_id}', [GiaoVienController::class, 'getMonHocByKhoa'])
+                ->name('monhoc-by-khoa');
         });
 
         // Sinhvien routes

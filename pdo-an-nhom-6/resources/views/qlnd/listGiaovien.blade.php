@@ -135,7 +135,6 @@
 </div>
 
 @endsection
-
 @push('css')
 
 @endpush
@@ -157,25 +156,21 @@ $(document).ready(function() {
     
     // Function to check email
     function checkEmail(email) {
-        console.log('Checking email:', email); // Debug log
-        
         $.ajax({
-            url: '/qlnd/check-email-giaovien',
+            url: '/admin/qlnd/check-email-giaovien',
             method: 'GET',
             data: { email: email },
             success: function(response) {
-                console.log('Response:', response); // Debug log
-                
-                if (response.exists) {
-                    $('#email-error').text('Email đã tồn tại trong hệ thống').show();
+                if (response.exists && !response.canUse) {
+                    $('#email-error').text(response.message).show();
                     $('#add_email').addClass('is-invalid');
                 } else {
-                    $('#email-error').text('Email chưa được đăng ký trong hệ thống').show();
-                    $('#add_email').addClass('is-invalid');
+                    $('#email-error').text(response.message).show();
+                    $('#add_email').removeClass('is-invalid');
                 }
             },
             error: function(xhr, status, error) {
-                console.error('Error:', error); // Debug log
+                console.error('Error:', error);
                 $('#email-error').text('Có lỗi xảy ra khi kiểm tra email').show();
                 $('#add_email').addClass('is-invalid');
             }
@@ -209,33 +204,30 @@ $(document).ready(function() {
    
     $('#add_ma_khoa').on('change', function() {
         const khoaId = $(this).val();
+        console.log('Selected khoa_id:', khoaId); // Debug log
+        
         const monhocSelect = $('#add_ma_monhoc');
         
-        // Reset and disable monhoc select if no khoa is selected
         if (!khoaId) {
             monhocSelect.prop('disabled', true);
             monhocSelect.html('<option value="">Vui lòng chọn khoa trước</option>');
             return;
         }
         
-        // Show loading state
         monhocSelect.prop('disabled', true);
         monhocSelect.html('<option>Đang tải...</option>');
 
-        // Get monhoc data using jQuery AJAX
         $.ajax({
-            url: `/qlnd/monhoc-by-khoa/${khoaId}`,
+            url: `/admin/qlnd/monhoc-by-khoa/${khoaId}`,
             method: 'GET',
             dataType: 'json',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                'Accept': 'application/json'
-            },
             success: function(data) {
-                let options = '';
+                console.log('Received data:', data); // Debug log
                 
+                let options = '';
                 if (data && data.length > 0) {
                     data.forEach(function(monhoc) {
+                        console.log('Processing monhoc:', monhoc); // Debug each item
                         options += `<option value="${monhoc.id_monhoc}">${monhoc.ten_monhoc} (${monhoc.so_tin_chi} tín chỉ)</option>`;
                     });
                     monhocSelect.prop('disabled', false);
@@ -243,11 +235,11 @@ $(document).ready(function() {
                     options = '<option value="">Không có môn học cho khoa này</option>';
                     monhocSelect.prop('disabled', true);
                 }
-                
                 monhocSelect.html(options);
             },
             error: function(xhr, status, error) {
                 console.error('Error:', error);
+                console.error('Response:', xhr.responseText);
                 monhocSelect.prop('disabled', true);
                 monhocSelect.html('<option value="">Không thể tải danh sách môn học</option>');
             }
@@ -267,7 +259,7 @@ $(document).ready(function() {
         }
         
         $.ajax({
-            url: '/qlnd/giaovien/store',
+            url: '/admin/qlnd/giaovien/store',
             method: 'POST',
             data: formData,
             processData: false,

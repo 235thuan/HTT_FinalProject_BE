@@ -292,133 +292,217 @@ public function search(Request $request)
 public function store(Request $request)
 {
     try {
-        $validated = $request->validate([
+        $request->validate([
             'ten_giaovien' => 'required',
-            'ma_khoa' => 'required|exists:khoa,id_khoa',  // Simple validation
+            'email' => 'required|email',
+            'so_dien_thoai' => 'required',
+            'ma_khoa' => 'required|exists:khoa,id_khoa',
             'ma_monhoc' => 'required|array',
-            'ma_monhoc.*' => 'exists:monhoc,id_monhoc',
-            'email' => 'required|email|unique:nguoidung,email',
-            'so_dien_thoai' => 'required'
+            'ma_monhoc.*' => 'exists:monhoc,id_monhoc'
         ]);
 
+        // Start transaction
         DB::beginTransaction();
 
-        // Create nguoidung first
-        $idNguoiDung = DB::table('nguoidung')->insertGetId([
-            'email' => $validated['email'],
-            'so_dien_thoai' => $validated['so_dien_thoai']
-         
+        // Generate new teacher ID
+        $lastId = DB::table('giaovien')
+            ->orderBy('id_giaovien', 'desc')
+            ->value('id_giaovien') ?? 0;
+        
+        $newId = $lastId + 1;
+
+        // Find or create nguoidung based on email
+        $nguoiDung = DB::table('nguoidung')
+            ->where('email', $request->email)
+            ->first();
+
+        if ($nguoiDung) {
+            // Check if user already has any role
+            $hasRole = DB::table('phanquyen')
+                ->where('id_nguoidung', $nguoiDung->id_nguoidung)
+                ->exists();
+            
+            if ($hasRole) {
+                DB::rollBack();
+                return response()->json([
+                    'errors' => ['email' => ['Email đã được sử dụng bởi một tài khoản khác']]
+                ], 422);
+            }
+            
+            $id_nguoidung = $nguoiDung->id_nguoidung;
+        } else {
+            // Create new nguoidung
+            $id_nguoidung = DB::table('nguoidung')->insertGetId([
+                'ten_dang_nhap' => $request->email,
+                'mat_khau' => bcrypt('123456@a'),
+                'email' => $request->email,
+                'so_dien_thoai' => $request->so_dien_thoai,
+                'trang_thai' => 'hoạt động'
+            ]);
+        }
+
+        // Assign teacher role (id_vaitro = 2)
+        DB::table('phanquyen')->insert([
+            'id_nguoidung' => $id_nguoidung,
+            'id_vaitro' => 4
         ]);
 
-        // Create giaovien with ma_khoa
-        $idGiaovien = DB::table('giaovien')->insertGetId([
-            'ten_giaovien' => $validated['ten_giaovien'],
-            'id_nguoidung' => $idNguoiDung,
-            'ma_khoa' => $validated['ma_khoa'],
-        
+        // Create new giao vien
+        DB::table('giaovien')->insert([
+            'id_giaovien' => $newId,
+            'id_nguoidung' => $id_nguoidung,
+            'ten_giaovien' => $request->ten_giaovien,
+            'ma_khoa' => $request->ma_khoa
         ]);
 
         // Add monhoc relationships
-        foreach ($validated['ma_monhoc'] as $monhocId) {
+        foreach ($request->ma_monhoc as $monhocId) {
             DB::table('giaovien_monhoc')->insert([
-                'ma_giaovien' => $idGiaovien,
+                'ma_giaovien' => $newId,
                 'ma_monhoc' => $monhocId
-
             ]);
         }
 
         DB::commit();
-
         return response()->json([
             'success' => true,
-            'message' => 'Thêm giáo viên thành công'
+            'message' => 'Thêm giáo viên thành công',
+            'data' => [
+                'id_giaovien' => $newId,
+                'ten_giaovien' => $request->ten_giaovien,
+                'email' => $request->email,
+                'so_dien_thoai' => $request->so_dien_thoai
+            ]
         ]);
+
     } catch (\Exception $e) {
         DB::rollBack();
-        \Log::error('Error in GiaoVienController@store: ' . $e->getMessage());
         return response()->json([
-            'error' => 'Có lỗi xảy ra: ' . $e->getMessage()
+            'errors' => ['general' => [$e->getMessage()]]
         ], 500);
     }
 }
 
 public function checkEmailExists(Request $request)
 {
-    $email = $request->input('email');
-    
-    $exists = DB::table('nguoidung')
-        ->where('email', $email)
-        ->exists();
-        
-    return response()->json(['exists' => $exists]);
-}
-
-public function getMonHoc(Request $request)
-{
     try {
-        $khoaId = $request->khoa_id;
+        $email = $request->get('email');
         
-        if (!$khoaId) {
-            return response()->json([], 400);
+        if (!$email) {
+            return response()->json([
+                'exists' => false,
+                'message' => 'Vui lòng nhập email'
+            ]);
         }
 
-        $monhoc = DB::table('monhoc')
-            ->join('chuyennganh', 'monhoc.ma_chuyen_nganh', '=', 'chuyennganh.id_chuyennganh')
-            ->join('khoa', 'chuyennganh.ma_khoa', '=', 'khoa.id_khoa')
-            ->where('khoa.id_khoa', $khoaId)
-            ->select(
-                'monhoc.id_monhoc',
-                'monhoc.ten_monhoc',
-                'monhoc.so_tin_chi'
-            )
-            ->orderBy('monhoc.ten_monhoc')
-            ->get()
-            ->toArray(); // Convert to array
-
-        // Debug log
-        \Log::info('getMonHoc response:', ['data' => $monhoc]);
-
-        return response()->json($monhoc);
+        $nguoiDung = DB::table('nguoidung')
+            ->where('email', $email)
+            ->first();
+        
+        if ($nguoiDung) {
+            // Check if user already has any role
+            $hasRole = DB::table('phanquyen')
+                ->where('id_nguoidung', $nguoiDung->id_nguoidung)
+                ->exists();
+            
+            if ($hasRole) {
+                return response()->json([
+                    'exists' => true,
+                    'canUse' => false,
+                    'message' => 'Email đã được sử dụng bởi một tài khoản khác'
+                ]);
+            }
+            
+            return response()->json([
+                'exists' => true,
+                'canUse' => true,
+                'message' => 'Email đã tồn tại và có thể sử dụng cho giáo viên mới'
+            ]);
+        }
+        
+        return response()->json([
+            'exists' => false,
+            'canUse' => true,
+            'message' => 'Email chưa tồn tại, tài khoản sẽ được tạo tự động'
+        ]);
     } catch (\Exception $e) {
-        \Log::error('Error in getMonHoc: ' . $e->getMessage());
-        return response()->json([], 500);
+        \Log::error('Error checking email: ' . $e->getMessage());
+        return response()->json([
+            'error' => true,
+            'message' => 'Có lỗi xảy ra khi kiểm tra email'
+        ], 500);
     }
 }
+
+// public function getMonHoc(Request $request)
+// {
+//     try {
+//         $khoaId = $request->khoa_id;
+        
+//         if (!$khoaId) {
+//             return response()->json([], 400);
+//         }
+
+//         $monhoc = DB::table('monhoc')
+//             ->join('chuyennganh', 'monhoc.ma_chuyen_nganh', '=', 'chuyennganh.id_chuyennganh')
+//             ->join('khoa', 'chuyennganh.ma_khoa', '=', 'khoa.id_khoa')
+//             ->where('khoa.id_khoa', $khoaId)
+//             ->select(
+//                 'monhoc.id_monhoc',
+//                 'monhoc.ten_monhoc',
+//                 'monhoc.so_tin_chi'
+//             )
+//             ->distinct()
+//             ->orderBy('monhoc.ten_monhoc')
+//             ->get()
+//             ->toArray(); // Convert to array
+
+//         // Debug log
+//         \Log::info('getMonHoc response:', ['data' => $monhoc]);
+
+//         return response()->json($monhoc);
+//     } catch (\Exception $e) {
+//         \Log::error('Error in getMonHoc: ' . $e->getMessage());
+//         return response()->json([], 500);
+//     }
+// }
 
 public function getMonHocByKhoa($khoa_id)
 {
     try {
-        // Add header to force JSON response
-        header('Content-Type: application/json');
+        DB::enableQueryLog();
         
-        $monhoc = DB::table('monhoc')
-            ->join('chuyennganh', 'monhoc.ma_chuyen_nganh', '=', 'chuyennganh.id_chuyennganh')
-            ->join('khoa', 'chuyennganh.ma_khoa', '=', 'khoa.id_khoa')
-            ->where('khoa.id_khoa', $khoa_id)
-            ->select(
-                'monhoc.id_monhoc',
-                'monhoc.ten_monhoc',
-                'monhoc.so_tin_chi'
-            )
-            ->orderBy('monhoc.ten_monhoc')
+        $monhoc = DB::table('monhoc as m')
+            ->select([
+                'm.id_monhoc',
+                'm.ten_monhoc',
+                'm.so_tin_chi'
+            ])
+            ->join('chuyennganh as cn', 'm.ma_chuyen_nganh', '=', 'cn.id_chuyennganh')
+            ->where('cn.ma_khoa', '=', $khoa_id)
+            ->distinct()
+            ->orderBy('m.ten_monhoc')
             ->get();
 
-        // Log the response for debugging
-        \Log::info('getMonHocByKhoa response:', ['khoa_id' => $khoa_id, 'data' => $monhoc]);
+        // Log the query for debugging
+        \Log::info('Query executed:', [
+            'sql' => DB::getQueryLog(),
+            'khoa_id' => $khoa_id,
+            'count' => $monhoc->count()
+        ]);
 
-        return response()->json($monhoc)
-            ->header('Content-Type', 'application/json')
-            ->header('X-Content-Type-Options', 'nosniff');
+        return response()->json($monhoc);
 
     } catch (\Exception $e) {
-        \Log::error('Error in getMonHocByKhoa: ' . $e->getMessage());
+        \Log::error('Error:', [
+            'message' => $e->getMessage(),
+            'khoa_id' => $khoa_id
+        ]);
         
         return response()->json([
             'error' => 'Server error',
             'message' => $e->getMessage()
-        ], 500)
-        ->header('Content-Type', 'application/json')
-        ->header('X-Content-Type-Options', 'nosniff');
+        ], 500);
     }
 }
 

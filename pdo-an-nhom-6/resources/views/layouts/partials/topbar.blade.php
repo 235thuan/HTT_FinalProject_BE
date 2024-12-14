@@ -615,7 +615,7 @@ $(document).ready(function() {
         } else {
             // Find which list and page contains the teacher
             $.ajax({
-                url: '/qlnd/giaovien/find-page',
+                url: '/admin/qlnd/giaovien/find-page',
                 method: 'GET',
                 data: { teacher_id: id },
                 success: function(response) {

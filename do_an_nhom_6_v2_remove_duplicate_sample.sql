@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 11, 2024 at 05:35 PM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.2.4
+-- Generation Time: Dec 14, 2024 at 05:08 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -187,13 +187,6 @@ INSERT INTO `chitietchuyennganh` (`id_chitiet`, `ma_chuyennganh`, `ma_monhoc`) V
 (151, 2, 41),
 (152, 2, 42),
 (153, 2, 43),
-(154, 2, 44),
-(155, 2, 45),
-(156, 2, 46),
-(157, 2, 47),
-(158, 2, 48),
-(159, 2, 49),
-(160, 2, 50),
 (161, 3, 21),
 (162, 3, 22),
 (163, 3, 23),
@@ -217,13 +210,6 @@ INSERT INTO `chitietchuyennganh` (`id_chitiet`, `ma_chuyennganh`, `ma_monhoc`) V
 (181, 3, 41),
 (182, 3, 42),
 (183, 3, 43),
-(184, 3, 44),
-(185, 3, 45),
-(186, 3, 46),
-(187, 3, 47),
-(188, 3, 48),
-(189, 3, 49),
-(190, 3, 50),
 (191, 4, 31),
 (192, 4, 32),
 (193, 4, 33),
@@ -237,113 +223,9 @@ INSERT INTO `chitietchuyennganh` (`id_chitiet`, `ma_chuyennganh`, `ma_monhoc`) V
 (201, 4, 41),
 (202, 4, 42),
 (203, 4, 43),
-(204, 4, 44),
-(205, 4, 45),
-(206, 4, 46),
-(207, 4, 47),
-(208, 4, 48),
-(209, 4, 49),
-(210, 4, 50),
-(211, 4, 51),
-(212, 4, 52),
-(213, 4, 53),
-(214, 4, 54),
-(215, 4, 55),
-(216, 4, 56),
-(217, 4, 57),
-(218, 4, 58),
-(219, 4, 59),
-(220, 4, 60),
 (221, 5, 41),
 (222, 5, 42),
-(223, 5, 43),
-(224, 5, 44),
-(225, 5, 45),
-(226, 5, 46),
-(227, 5, 47),
-(228, 5, 48),
-(229, 5, 49),
-(230, 5, 50),
-(231, 5, 51),
-(232, 5, 52),
-(233, 5, 53),
-(234, 5, 54),
-(235, 5, 55),
-(236, 5, 56),
-(237, 5, 57),
-(238, 5, 58),
-(239, 5, 59),
-(240, 5, 60),
-(241, 5, 61),
-(242, 5, 62),
-(243, 5, 63),
-(244, 5, 64),
-(245, 5, 65),
-(246, 5, 66),
-(247, 5, 67),
-(248, 5, 68),
-(249, 5, 69),
-(250, 5, 70),
-(251, 6, 51),
-(252, 6, 52),
-(253, 6, 53),
-(254, 6, 54),
-(255, 6, 55),
-(256, 6, 56),
-(257, 6, 57),
-(258, 6, 58),
-(259, 6, 59),
-(260, 6, 60),
-(261, 6, 61),
-(262, 6, 62),
-(263, 6, 63),
-(264, 6, 64),
-(265, 6, 65),
-(266, 6, 66),
-(267, 6, 67),
-(268, 6, 68),
-(269, 6, 69),
-(270, 6, 70),
-(271, 6, 71),
-(272, 6, 72),
-(273, 6, 73),
-(274, 6, 74),
-(275, 6, 75),
-(276, 6, 76),
-(277, 6, 77),
-(278, 6, 78),
-(279, 6, 79),
-(280, 6, 80),
-(281, 7, 56),
-(282, 7, 57),
-(283, 7, 58),
-(284, 7, 59),
-(285, 7, 60),
-(286, 7, 61),
-(287, 7, 62),
-(288, 7, 63),
-(289, 7, 64),
-(290, 7, 65),
-(291, 7, 66),
-(292, 7, 67),
-(293, 7, 68),
-(294, 7, 69),
-(295, 7, 70),
-(296, 7, 71),
-(297, 7, 72),
-(298, 7, 73),
-(299, 7, 74),
-(300, 7, 75),
-(301, 7, 76),
-(302, 7, 77),
-(303, 7, 78),
-(304, 7, 79),
-(305, 7, 80),
-(306, 7, 81),
-(307, 7, 82),
-(308, 7, 83),
-(309, 7, 84),
-(310, 7, 85);
+(223, 5, 43);
 
 -- --------------------------------------------------------
 
@@ -493,25 +375,7 @@ INSERT INTO `chuyennganh` (`id_chuyennganh`, `ten_chuyennganh`, `ma_khoa`) VALUE
 (15, 'Xây Dựng Dân Dụng', 4),
 (16, 'Kỹ Thuật Cầu Đường', 4),
 (17, 'Điện Tử Viễn Thông', 5),
-(18, 'Kỹ Thuật Điện Tử', 5),
-(19, 'Kỹ Thuật Phần Mềm', 1),
-(20, 'Mạng Máy Tính', 1),
-(21, 'Trí Tuệ Nhân Tạo', 1),
-(22, 'An Toàn Thông Tin', 1),
-(23, 'Hệ Thống Thông Tin', 1),
-(24, 'Khoa Học Dữ Liệu', 1),
-(25, 'Quản Trị Kinh Doanh', 2),
-(26, 'Tài Chính Ngân Hàng', 2),
-(27, 'Kinh Tế Học', 2),
-(28, 'Marketing', 2),
-(29, 'Kế Toán', 2),
-(30, 'Dược Học', 3),
-(31, 'Y Khoa', 3),
-(32, 'Răng Hàm Mặt', 3),
-(33, 'Xây Dựng Dân Dụng', 4),
-(34, 'Kỹ Thuật Cầu Đường', 4),
-(35, 'Điện Tử Viễn Thông', 5),
-(36, 'Kỹ Thuật Điện Tử', 5);
+(18, 'Kỹ Thuật Điện Tử', 5);
 
 -- --------------------------------------------------------
 
@@ -660,7 +524,8 @@ INSERT INTO `giaovien` (`id_giaovien`, `id_nguoidung`, `ma_khoa`, `ten_giaovien`
 (48, 59, 4, 'Giáo viên 48', 'giaovien48@example.com', '0123456836'),
 (49, 60, 4, 'Giáo viên 49', 'giaovien49@example.com', '0123456837'),
 (50, 114, 1, 'abcd', NULL, NULL),
-(51, 115, 1, 'abcdefgh', NULL, NULL);
+(51, 115, 1, 'abcdefgh', NULL, NULL),
+(52, 117, 1, 'cuong', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -681,10 +546,7 @@ CREATE TABLE `giaovien_monhoc` (
 --
 
 INSERT INTO `giaovien_monhoc` (`id`, `ma_giaovien`, `ma_monhoc`, `created_at`, `updated_at`) VALUES
-(1, 50, 6, '2024-12-11 09:20:58', '2024-12-11 09:20:58'),
-(2, 51, 6, '2024-12-11 09:24:06', '2024-12-11 09:24:06'),
-(3, 51, 49, '2024-12-11 09:24:06', '2024-12-11 09:24:06'),
-(4, 51, 45, '2024-12-11 09:24:06', '2024-12-11 09:24:06');
+(5, 52, 42, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -914,92 +776,49 @@ CREATE TABLE `monhoc` (
 --
 
 INSERT INTO `monhoc` (`id_monhoc`, `ten_monhoc`, `so_tin_chi`, `ma_chuyen_nganh`) VALUES
-(1, 'Lập Trình C', 3, 1),
-(2, 'Cấu Trúc Dữ Liệu', 4, 1),
-(3, 'Hệ Điều Hành', 3, 1),
-(4, 'Mạng Máy Tính', 4, 1),
-(5, 'Kỹ Thuật Phần Mềm', 3, 1),
-(6, 'An Toàn Thông Tin', 2, 1),
-(7, 'Giải Thuật', 4, 1),
-(8, 'Khoa Học Dữ Liệu', 4, 1),
-(9, 'Lập Trình Java', 3, 1),
-(10, 'Mạng Viễn Thông', 3, 1),
-(11, 'Kinh Tế Vi Mô', 3, 2),
-(12, 'Quản Trị Kinh Doanh', 3, 2),
-(13, 'Kế Toán Quản Trị', 3, 2),
-(14, 'Marketing', 4, 2),
-(15, 'Tài Chính Ngân Hàng', 4, 2),
-(16, 'Kinh Tế Lượng', 3, 2),
-(17, 'Kinh Tế Học', 4, 2),
-(18, 'Lý Thuyết Tài Chính', 3, 2),
-(19, 'Đầu Tư Tài Chính', 3, 2),
-(20, 'Pháp Luật Kinh Tế', 3, 2),
-(21, 'Y Học Cơ Sở', 4, 3),
-(22, 'Sinh Lý Học', 3, 3),
-(23, 'Dược Học Cơ Sở', 3, 3),
-(24, 'Chẩn Đoán Bệnh', 4, 3),
-(25, 'Điều Dưỡng', 3, 3),
-(26, 'Vi sinh học Y Dược', 3, 3),
+(1, 'Lập Trình C', 3, 12),
+(2, 'Cấu Trúc Dữ Liệu', 4, 8),
+(3, 'Hệ Điều Hành', 3, 13),
+(4, 'Mạng Máy Tính', 4, 14),
+(5, 'Kỹ Thuật Phần Mềm', 3, 6),
+(6, 'An Toàn Thông Tin', 2, 14),
+(7, 'Giải Thuật', 4, 4),
+(8, 'Khoa Học Dữ Liệu', 4, 5),
+(9, 'Lập Trình Java', 3, 6),
+(10, 'Mạng Viễn Thông', 3, 7),
+(11, 'Kinh Tế Vi Mô', 3, 9),
+(12, 'Quản Trị Kinh Doanh', 3, 10),
+(13, 'Kế Toán Quản Trị', 3, 11),
+(14, 'Marketing', 4, 12),
+(15, 'Tài Chính Ngân Hàng', 4, 13),
+(16, 'Kinh Tế Lượng', 3, 14),
+(17, 'Kinh Tế Học', 4, 15),
+(18, 'Lý Thuyết Tài Chính', 3, 16),
+(19, 'Đầu Tư Tài Chính', 3, 17),
+(20, 'Pháp Luật Kinh Tế', 3, 18),
+(21, 'Y Học Cơ Sở', 4, 15),
+(22, 'Sinh Lý Học', 3, 16),
+(23, 'Dược Học Cơ Sở', 3, 17),
+(24, 'Chẩn Đoán Bệnh', 4, 18),
+(25, 'Điều Dưỡng', 3, 1),
+(26, 'Vi sinh học Y Dược', 3, 2),
 (27, 'Răng Hàm Mặt', 3, 3),
-(28, 'Sức Khỏe Cộng Đồng', 4, 3),
-(29, 'Giải Phẫu Học', 3, 3),
-(30, 'Kỹ Thuật Cầu Đường', 3, 4),
-(31, 'Xây Dựng Dân Dụng', 3, 4),
-(32, 'Kết Cấu Công Trình', 4, 4),
-(33, 'Kỹ Thuật Xây Dựng', 4, 4),
-(34, 'Vật Liệu Xây Dựng', 3, 4),
-(35, 'Đo Lường và Thiết Kế', 4, 4),
-(36, 'Quản Lý Dự Án', 4, 4),
-(37, 'Điện Tử Viễn Thông', 3, 5),
-(38, 'Kỹ Thuật Điện Tử', 3, 5),
-(39, 'Viễn Thông và Mạng', 4, 5),
-(40, 'Mạng và An Toàn Thông Tin', 3, 5),
-(41, 'Xử Lý Tín Hiệu', 4, 5),
-(42, 'Điện Tử Công Nghiệp', 3, 5),
-(43, 'Điện Tử Viễn Thông 2', 3, 5),
-(44, 'Lập Trình C', 3, 1),
-(45, 'Cấu Trúc Dữ Liệu', 4, 1),
-(46, 'Hệ Điều Hành', 3, 1),
-(47, 'Mạng Máy Tính', 4, 1),
-(48, 'Kỹ Thuật Phần Mềm', 3, 1),
-(49, 'An Toàn Thông Tin', 2, 1),
-(50, 'Giải Thuật', 4, 1),
-(51, 'Khoa Học Dữ Liệu', 4, 1),
-(52, 'Lập Trình Java', 3, 1),
-(53, 'Mạng Viễn Thông', 3, 1),
-(54, 'Kinh Tế Vi Mô', 3, 2),
-(55, 'Quản Trị Kinh Doanh', 3, 2),
-(56, 'Kế Toán Quản Trị', 3, 2),
-(57, 'Marketing', 4, 2),
-(58, 'Tài Chính Ngân Hàng', 4, 2),
-(59, 'Kinh Tế Lượng', 3, 2),
-(60, 'Kinh Tế Học', 4, 2),
-(61, 'Lý Thuyết Tài Chính', 3, 2),
-(62, 'Đầu Tư Tài Chính', 3, 2),
-(63, 'Pháp Luật Kinh Tế', 3, 2),
-(64, 'Y Học Cơ Sở', 4, 3),
-(65, 'Sinh Lý Học', 3, 3),
-(66, 'Dược Học Cơ Sở', 3, 3),
-(67, 'Chẩn Đoán Bệnh', 4, 3),
-(68, 'Điều Dưỡng', 3, 3),
-(69, 'Vi sinh học Y Dược', 3, 3),
-(70, 'Răng Hàm Mặt', 3, 3),
-(71, 'Sức Khỏe Cộng Đồng', 4, 3),
-(72, 'Giải Phẫu Học', 3, 3),
-(73, 'Kỹ Thuật Cầu Đường', 3, 4),
-(74, 'Xây Dựng Dân Dụng', 3, 4),
-(75, 'Kết Cấu Công Trình', 4, 4),
-(76, 'Kỹ Thuật Xây Dựng', 4, 4),
-(77, 'Vật Liệu Xây Dựng', 3, 4),
-(78, 'Đo Lường và Thiết Kế', 4, 4),
-(79, 'Quản Lý Dự Án', 4, 4),
-(80, 'Điện Tử Viễn Thông', 3, 5),
-(81, 'Kỹ Thuật Điện Tử', 3, 5),
-(82, 'Viễn Thông và Mạng', 4, 5),
-(83, 'Mạng và An Toàn Thông Tin', 3, 5),
-(84, 'Xử Lý Tín Hiệu', 4, 5),
-(85, 'Điện Tử Công Nghiệp', 3, 5),
-(86, 'Điện Tử Viễn Thông 2', 3, 5);
+(28, 'Sức Khỏe Cộng Đồng', 4, 4),
+(29, 'Giải Phẫu Học', 3, 5),
+(30, 'Kỹ Thuật Cầu Đường', 3, 7),
+(31, 'Xây Dựng Dân Dụng', 3, 8),
+(32, 'Kết Cấu Công Trình', 4, 9),
+(33, 'Kỹ Thuật Xây Dựng', 4, 10),
+(34, 'Vật Liệu Xây Dựng', 3, 11),
+(35, 'Đo Lường và Thiết Kế', 4, 12),
+(36, 'Quản Lý Dự Án', 4, 13),
+(37, 'Điện Tử Viễn Thông', 3, 15),
+(38, 'Kỹ Thuật Điện Tử', 3, 16),
+(39, 'Viễn Thông và Mạng', 4, 17),
+(40, 'Mạng và An Toàn Thông Tin', 3, 18),
+(41, 'Xử Lý Tín Hiệu', 4, 1),
+(42, 'Điện Tử Công Nghiệp', 3, 2),
+(43, 'Điện Tử Viễn Thông 2', 3, 3);
 
 -- --------------------------------------------------------
 
@@ -1133,7 +952,9 @@ INSERT INTO `nguoidung` (`id_nguoidung`, `ten_dang_nhap`, `mat_khau`, `email`, `
 (110, 'user159@example.com', '$2y$12$lQ7xoawS1zpznNrwEQ2lzO/G87dkaBkAKTWPMi/gcCnp04uWwE/Jy', 'user159@example.com', NULL, 'hoạt động'),
 (111, 'user200@example.com', '$2y$12$HmZl30BApA44CQ.KUh44HucIzpkS2MPCwINj/C./04fxyeK03ysAi', 'user200@example.com', NULL, 'hoạt động'),
 (114, 'abcd598', '$2y$12$hptNtTQYuU4PGtA3RvvUbuOCn8FESlk8Bd7And9ocHa8xESUxUrie', 'abc@example.com', '0901234628', 'hoạt động'),
-(115, 'abcdefgh275', '$2y$12$YB3LDWZoaJUvFSBNcpjvtOYkfwSbAWW763o3sRggvICC5tvyicWga', 'abcdefgh@example.com', '0901234628', 'hoạt động');
+(115, 'abcdefgh275', '$2y$12$YB3LDWZoaJUvFSBNcpjvtOYkfwSbAWW763o3sRggvICC5tvyicWga', 'abcdefgh@example.com', '0901234628', 'hoạt động'),
+(116, 'cuong@example.com', '$2y$12$q5.xFa4TjteZQ81KydOpKumuFgweOgb24dTmzTcFK.sdpsRCG0qca', 'cuong@example.com', NULL, 'hoạt động'),
+(117, 'cuong2@example.com', '$2y$12$4hF8zMI38ekbjZ19ukrQh.OSN3BY82UZmQdiDNOhJW0N74Oi02UIi', 'cuong2@example.com', '0901234582', 'hoạt động');
 
 -- --------------------------------------------------------
 
@@ -1292,7 +1113,9 @@ INSERT INTO `phanquyen` (`id_phanquyen`, `id_nguoidung`, `id_vaitro`) VALUES
 (110, 110, 3),
 (111, 111, 3),
 (114, 114, 4),
-(115, 115, 4);
+(115, 115, 4),
+(116, 116, 3),
+(117, 117, 4);
 
 -- --------------------------------------------------------
 
@@ -1549,7 +1372,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('zUHcyEZdtw5YfR0mpmyZfEx8V1LABhLAQs6SXaj7', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiTkdiTmhkQlJsTVdiR2ZCNjVxQ29nZXh4NkZmaDI5VVY2WDVjYzFpMCI7czozOiJ1cmwiO2E6MTp7czo4OiJpbnRlbmRlZCI7czoyMToiaHR0cDovL2xvY2FsaG9zdDo4MDAwIjt9czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjQ6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9xbG5kL2xpc3RHaWFvdmllbj9maW5kX3RlYWNoZXI9NTAmcGFnZV8xPTMiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO30=', 1733934890);
+('0BZnfdUzT2TPRxvxhATRdUJ2yF8sKgYqixg8nLtk', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiYkl2TTNRZ0pkZkZWeTJyQVVWdXVBV1RuTGxXNDZDRDJQNEtmbzNOdyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NzA6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9hZG1pbi9xbG5kL2xpc3RHaWFvdmllbj9maW5kX3RlYWNoZXI9NTImcGFnZV8xPTMiO31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxO30=', 1734149264);
 
 -- --------------------------------------------------------
 
@@ -1620,7 +1443,8 @@ INSERT INTO `sinhvien` (`id_sinhvien`, `id_nguoidung`, `ten_sinhvien`, `lop`, `m
 (108, 108, 'Hoàng Việt Cồ', 'ATTT01', 4, 2023),
 (109, 109, 'Văn Bằng', 'ATTT01', 4, 2023),
 (110, 110, 'Khổng Tử', 'ATTT01', 4, 2023),
-(111, 111, 'Nguyễn Chí Cường', 'ATTT02', 4, 2023);
+(111, 111, 'Nguyễn Chí Cường', 'ATTT02', 4, 2023),
+(112, 116, 'Cường', 'HTTT04', 5, 2023);
 
 -- --------------------------------------------------------
 
@@ -1738,14 +1562,7 @@ INSERT INTO `thoikhoabieu` (`id_thoikhoabieu`, `id_monhoc`, `id_giaovien`, `id_l
 (342, 40, 24, 16, 80, '2024-12-03', '07:30:00', '09:00:00'),
 (343, 41, 25, 16, 81, '2024-12-04', '07:30:00', '09:00:00'),
 (344, 42, 26, 16, 82, '2024-12-05', '07:30:00', '09:00:00'),
-(345, 43, 27, 17, 83, '2024-12-02', '13:00:00', '15:00:00'),
-(346, 44, 28, 17, 84, '2024-12-03', '13:00:00', '15:00:00'),
-(347, 45, 29, 17, 85, '2024-12-04', '13:00:00', '15:00:00'),
-(348, 46, 30, 17, 86, '2024-12-05', '13:00:00', '15:00:00'),
-(349, 47, 31, 18, 87, '2024-12-02', '07:30:00', '09:00:00'),
-(350, 48, 32, 18, 88, '2024-12-03', '07:30:00', '09:00:00'),
-(351, 49, 33, 18, 89, '2024-12-04', '07:30:00', '09:00:00'),
-(352, 50, 34, 18, 90, '2024-12-05', '07:30:00', '09:00:00');
+(345, 43, 27, 17, 83, '2024-12-02', '13:00:00', '15:00:00');
 
 -- --------------------------------------------------------
 
@@ -2170,13 +1987,13 @@ ALTER TABLE `file_nguoidung`
 -- AUTO_INCREMENT for table `giaovien`
 --
 ALTER TABLE `giaovien`
-  MODIFY `id_giaovien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `id_giaovien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
 -- AUTO_INCREMENT for table `giaovien_monhoc`
 --
 ALTER TABLE `giaovien_monhoc`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `hieutruong`
@@ -2236,7 +2053,7 @@ ALTER TABLE `monhoc`
 -- AUTO_INCREMENT for table `nguoidung`
 --
 ALTER TABLE `nguoidung`
-  MODIFY `id_nguoidung` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=116;
+  MODIFY `id_nguoidung` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=118;
 
 --
 -- AUTO_INCREMENT for table `noidungmonhoc`
@@ -2248,7 +2065,7 @@ ALTER TABLE `noidungmonhoc`
 -- AUTO_INCREMENT for table `phanquyen`
 --
 ALTER TABLE `phanquyen`
-  MODIFY `id_phanquyen` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=116;
+  MODIFY `id_phanquyen` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=118;
 
 --
 -- AUTO_INCREMENT for table `phonghoc`
@@ -2260,7 +2077,7 @@ ALTER TABLE `phonghoc`
 -- AUTO_INCREMENT for table `sinhvien`
 --
 ALTER TABLE `sinhvien`
-  MODIFY `id_sinhvien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
+  MODIFY `id_sinhvien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
 
 --
 -- AUTO_INCREMENT for table `thanhtich`

@@ -8,11 +8,10 @@ use App\Http\Controllers\SinhVienController;
 use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\GiaoVienController;
+use App\Http\Controllers\Thuan\HomeController;
 
-// Trang chủ mặc định
-Route::get('/', function () {
-    return view('thuan.home');
-});
+// Trang chủ - không cần prefix
+Route::get('/', [App\Http\Controllers\Thuan\HomeController::class, 'index'])->name('home');
 
 // Admin routes group
 Route::prefix('admin')->group(function () {
@@ -91,5 +90,28 @@ Route::prefix('admin')->group(function () {
 // Route::get('/cuong', function () {
 //     return view('cuong.cuongView');   //cuongView.blade.php nằm trong thư mục resources/views/cuong
 // });
+
+// Add these routes
+// Route::prefix('auth')->group(function () {
+//     Route::post('/login', [App\Http\Controllers\Thuan\AuthController::class, 'login'])->name('auth.login');
+//     Route::post('/register', [App\Http\Controllers\Thuan\AuthController::class, 'register'])->name('auth.register');
+//     Route::post('/logout', [App\Http\Controllers\Thuan\AuthController::class, 'logout'])->name('auth.logout');
+// });
+
+// Thuan authentication routes
+Route::prefix('thuan')->group(function () {
+    // Routes xử lý authentication
+    Route::post('/login', [HomeController::class, 'login'])
+        ->name('thuan.login')
+        ->middleware('guest');
+        
+    Route::post('/register', [HomeController::class, 'register'])
+        ->name('thuan.register')
+        ->middleware('guest');
+        
+    Route::post('/logout', [HomeController::class, 'logout'])
+        ->name('thuan.logout')
+        ->middleware('auth');
+});
 
 

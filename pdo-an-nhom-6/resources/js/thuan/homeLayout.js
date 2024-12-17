@@ -1,114 +1,342 @@
- function showModal(modalId) {
+document.addEventListener('DOMContentLoaded', function() {
+    // Hàm kiểm tra email hợp lệ
+    function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+
+    // Hàm kiểm tra mật khẩu hợp lệ (ít nhất 6 ký tự, có chữ hoa, chữ thường và số)
+    function isValidPassword(password) {
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/;
+        return passwordRegex.test(password);
+    }
+
+    // Các hàm xử lý UI
+    window.showModal = function(modalId) {
         document.getElementById(modalId).style.display = 'flex';
     }
 
-    function hideModal(modalId) {
+    window.hideModal = function(modalId) {
         document.getElementById(modalId).style.display = 'none';
     }
 
-    function login() {
-        // Hide all elements with the class 'home1331'
+    window.homeLogin = function() {
         var elements = document.querySelectorAll('.home1331');
         elements.forEach(function (element) {
             element.style.display = 'none';
         });
 
-        // Show all elements with the class 'home1332'
         var showElements = document.querySelectorAll('.home1332');
         showElements.forEach(function (element) {
             element.style.display = 'block';
         });
 
-        hideModal('loginModalContent'); // Assuming you want to close the modal on login
+        hideModal('loginModalContent');
     }
 
-    function logout() {
-        // Show all elements with the class 'home1331'
+    window.homeLogout = function() {
         var elements = document.querySelectorAll('.home1331');
         elements.forEach(function (element) {
             element.style.display = 'block';
         });
 
-        // Hide all elements with the class 'home1332'
         var hideElements = document.querySelectorAll('.home1332');
         hideElements.forEach(function (element) {
             element.style.display = 'none';
         });
     }
 
-    function toggleDropdown() {
-        var dropdown = document.getElementById('dropdownMenu');
-        if (dropdown.style.display === 'none') {
-            dropdown.style.display = 'block';
-        } else {
-            dropdown.style.display = 'none';
-        }
+    window.toggleHomeDropdown = function() {
+        var dropdown = document.getElementById('homeDropdownMenu');
+        dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
     }
 
-    // Optionally, add this to close the dropdown if clicked outside
-    window.onclick = function (event) {
-        if (!event.target.matches('.home1332 img')) {
-            var dropdowns = document.getElementsByClassName("dropdown-content");
-            for (var i = 0; i < dropdowns.length; i++) {
-                var openDropdown = dropdowns[i];
-                if (openDropdown.style.display === "block") {
-                    openDropdown.style.display = "none";
+    // Xử lý dropdown avatar
+    const userAvatar = document.querySelector('.home-user-avatar');
+    const userDropdown = document.getElementById('homeUserDropdown');
+    
+    if (userAvatar && userDropdown) {
+        let isDropdownVisible = false;
+
+        userAvatar.addEventListener('click', function(e) {
+            e.stopPropagation();
+            isDropdownVisible = !isDropdownVisible;
+            userDropdown.style.display = isDropdownVisible ? 'block' : 'none';
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!userDropdown.contains(e.target) && !userAvatar.contains(e.target)) {
+                isDropdownVisible = false;
+                userDropdown.style.display = 'none';
+            }
+        });
+    }
+
+    // Xử lý form đăng nhập
+    const loginForm = document.querySelector('#loginModalContent .modal-content');
+    if (loginForm) {
+        loginForm.addEventListener('click', function(e) {
+            if (e.target && e.target.matches('button')) {
+                e.preventDefault();
+                
+                const email = loginForm.querySelector('input[type="email"]').value;
+                const password = loginForm.querySelector('input[type="password"]').value;
+
+                if (!email || !password) {
+                    alert('Vui lòng điền đầy đủ thông tin');
+                    return;
+                }
+
+                if (!isValidEmail(email)) {
+                    alert('Email không hợp lệ');
+                    return;
+                }
+
+                fetch('/thuan/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        hideModal('loginModalContent');
+                        homeLogin();
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Có lỗi xảy ra khi đăng nhập');
+                });
+            }
+        });
+    }
+
+    // Xử lý form đăng ký
+    const registerForm = document.querySelector('#registerModalContent .modal-content');
+    if (registerForm) {
+        registerForm.addEventListener('click', function(e) {
+            if (e.target && e.target.matches('button')) {
+                e.preventDefault();
+
+                const formData = {
+                    ho_ten: registerForm.querySelector('input[placeholder="Họ và tên"]').value,
+                    email: registerForm.querySelector('input[type="email"]').value,
+                    password: registerForm.querySelector('input[placeholder="Mật khẩu"]').value,
+                    password_confirmation: registerForm.querySelector('input[placeholder="Xác nhận mật khẩu"]').value,
+                    user_type: registerForm.querySelector('input[name="userType"]:checked')?.value
+                };
+
+                if (!formData.ho_ten || !formData.email || !formData.password || !formData.password_confirmation) {
+                    alert('Vui lòng điền đầy đủ thông tin');
+                    return;
+                }
+
+                if (!isValidEmail(formData.email)) {
+                    alert('Email không hợp lệ');
+                    return;
+                }
+
+                if (!isValidPassword(formData.password)) {
+                    alert('Mật khẩu phải có ít nhất 6 ký tự, bao gồm chữ hoa, chữ thường và số');
+                    return;
+                }
+
+                if (formData.password !== formData.password_confirmation) {
+                    alert('Mật khẩu xác nhận không khớp');
+                    return;
+                }
+
+                if (!formData.user_type) {
+                    alert('Vui lòng chọn loại tài khoản');
+                    return;
+                }
+
+                fetch('/thuan/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        hideModal('registerModalContent');
+                        alert('Đăng ký thành công! Vui lòng đăng nhập.');
+                        registerForm.reset();
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Có lỗi xảy ra khi đăng ký');
+                });
+            }
+        });
+    }
+
+    // Xử lý đăng xuất
+    const logoutLink = document.querySelector('a[href="#logout"]');
+    if (logoutLink) {
+        logoutLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+                fetch('/thuan/logout', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        homeLogout();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Có lỗi xảy ra khi đăng xuất');
+                });
+            }
+        });
+    }
+
+    // Back to top functionality
+    const backToTopButton = document.getElementById('backToTop');
+    if (backToTopButton) {
+        window.onscroll = function() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                backToTopButton.style.display = 'block';
+            } else {
+                backToTopButton.style.display = 'none';
+            }
+        };
+
+        backToTopButton.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    }
+
+    // Video slider functionality
+    const video = document.getElementById('mainVideo');
+    const dots = document.getElementsByClassName('nav-dot');
+    let autoPlayInterval;
+    
+    if (video && dots.length > 0) {
+        let currentVideoIndex = 0;
+        const sources = Array.from(video.getElementsByTagName('source'));
+
+        if (sources.length > 0) {
+            // Video navigation function
+            window.changeVideo = function(direction) {
+                // Remove active class from current dot
+                dots[currentVideoIndex].classList.remove('active');
+                
+                // Update index
+                currentVideoIndex = (currentVideoIndex + direction + sources.length) % sources.length;
+                
+                // Add active class to new dot
+                dots[currentVideoIndex].classList.add('active');
+                
+                // Update video
+                video.src = sources[currentVideoIndex].src;
+                video.play().catch(function(error) {
+                    console.log("Video play failed:", error);
+                });
+            }
+
+            window.goToVideo = function(index) {
+                if (index !== currentVideoIndex) {
+                    dots[currentVideoIndex].classList.remove('active');
+                    currentVideoIndex = index;
+                    dots[currentVideoIndex].classList.add('active');
+                    
+                    video.src = sources[currentVideoIndex].src;
+                    video.play().catch(function(error) {
+                        console.log("Video play failed:", error);
+                    });
                 }
             }
+
+            // Set first dot as active initially
+            dots[0].classList.add('active');
+
+            // Auto-play next video after 3 seconds
+            autoPlayInterval = setInterval(function() {
+                changeVideo(1);
+            }, 5000); // Increased to 5 seconds for better viewing
+
+            // Pause auto-play on hover
+            video.addEventListener('mouseover', function() {
+                if (autoPlayInterval) {
+                    clearInterval(autoPlayInterval);
+                }
+            });
+
+            video.addEventListener('mouseout', function() {
+                autoPlayInterval = setInterval(function() {
+                    changeVideo(1);
+                }, 5000);
+            });
         }
     }
 
-    let dropdownVisible = false;
-    const authImage = document.querySelector('.auth-image');
-    const authDropdown = document.getElementById('authDropdown');
+    // Category slider functionality
+    const categoryTrack = document.querySelector('.home222-track');
+    const categories = document.querySelectorAll('.home2221');
+    
+    if (categories.length > 4) {
+        const controls = document.querySelector('.slider-controls');
+        if (controls) controls.style.display = 'flex';
 
-    authImage.addEventListener('mouseenter', () => {
-        dropdownVisible = !dropdownVisible;
-        authDropdown.style.display = dropdownVisible ? 'block' : 'none';
-    });
+        let currentSlide = 0;
+        const totalSlides = Math.ceil(categories.length / 4) - 1;
 
-    // Video navigation function
-    function changeVideo(direction) {
-        const video = document.getElementById('mainVideo');
-        const sources = video.getElementsByTagName('source');
-        const dots = document.getElementsByClassName('nav-dot');
-        const currentSrc = video.currentSrc;
-        let nextIndex = 0;
+        function updateSlider() {
+            const slideWidth = categories[0].offsetWidth * 4 + (3 * 20); // 4 items + 3 gaps
+            categoryTrack.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
 
-        // Find current video index
-        for(let i = 0; i < sources.length; i++) {
-            if(sources[i].src === currentSrc) {
-                nextIndex = (i + direction + sources.length) % sources.length;
-                break;
+            // Update controls visibility
+            const prevButton = document.querySelector('.slider-prev');
+            const nextButton = document.querySelector('.slider-next');
+            if (prevButton) prevButton.style.display = currentSlide === 0 ? 'none' : 'flex';
+            if (nextButton) nextButton.style.display = currentSlide === totalSlides ? 'none' : 'flex';
+        }
+
+        // Previous slide
+        document.querySelector('.slider-prev')?.addEventListener('click', () => {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlider();
             }
-        }
+        });
 
-        // Update dots
-        for (let i = 0; i < dots.length; i++) {
-            dots[i].className = dots[i].className.replace(" active", "");
-        }
-        dots[nextIndex].className += " active";
+        // Next slide
+        document.querySelector('.slider-next')?.addEventListener('click', () => {
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+                updateSlider();
+            }
+        });
 
-        // Change video
-        video.src = sources[nextIndex].src;
-        video.play();
+        // Initial setup
+        updateSlider();
+
+        // Update on window resize
+        window.addEventListener('resize', updateSlider);
     }
-
-    function goToVideo(index) {
-        const video = document.getElementById('mainVideo');
-        const sources = video.getElementsByTagName('source');
-        const dots = document.getElementsByClassName('nav-dot');
-        
-        // Update dots
-        for (let i = 0; i < dots.length; i++) {
-            dots[i].className = dots[i].className.replace(" active", "");
-        }
-        dots[index].className += " active";
-        
-        // Change video
-        video.src = sources[index].src;
-        video.play();
-    }
-
-    // Set first dot as active initially
-    document.getElementsByClassName('nav-dot')[0].className += " active";
+});

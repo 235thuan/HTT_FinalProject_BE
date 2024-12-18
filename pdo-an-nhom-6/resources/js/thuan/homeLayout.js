@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Xử lý dropdown avatar
     const userAvatar = document.querySelector('.home-user-avatar');
     const userDropdown = document.getElementById('homeUserDropdown');
-    
+
     if (userAvatar && userDropdown) {
         let isDropdownVisible = false;
 
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
         loginForm.addEventListener('click', function(e) {
             if (e.target && e.target.matches('button')) {
                 e.preventDefault();
-                
+
                 const email = loginForm.querySelector('input[type="email"]').value;
                 const password = loginForm.querySelector('input[type="password"]').value;
 
@@ -235,7 +235,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const video = document.getElementById('mainVideo');
     const dots = document.getElementsByClassName('nav-dot');
     let autoPlayInterval;
-    
+
     if (video && dots.length > 0) {
         let currentVideoIndex = 0;
         const sources = Array.from(video.getElementsByTagName('source'));
@@ -245,13 +245,13 @@ document.addEventListener('DOMContentLoaded', function() {
             window.changeVideo = function(direction) {
                 // Remove active class from current dot
                 dots[currentVideoIndex].classList.remove('active');
-                
+
                 // Update index
                 currentVideoIndex = (currentVideoIndex + direction + sources.length) % sources.length;
-                
+
                 // Add active class to new dot
                 dots[currentVideoIndex].classList.add('active');
-                
+
                 // Update video
                 video.src = sources[currentVideoIndex].src;
                 video.play().catch(function(error) {
@@ -264,7 +264,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     dots[currentVideoIndex].classList.remove('active');
                     currentVideoIndex = index;
                     dots[currentVideoIndex].classList.add('active');
-                    
+
                     video.src = sources[currentVideoIndex].src;
                     video.play().catch(function(error) {
                         console.log("Video play failed:", error);
@@ -298,7 +298,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Category slider functionality
     const categoryTrack = document.querySelector('.home222-track');
     const categories = document.querySelectorAll('.home2221');
-    
+
     if (categories.length > 4) {
         const controls = document.querySelector('.slider-controls');
         if (controls) controls.style.display = 'flex';
@@ -339,4 +339,16 @@ document.addEventListener('DOMContentLoaded', function() {
         // Update on window resize
         window.addEventListener('resize', updateSlider);
     }
+
+
+
+
+
+
+
+
+
+
 });
+
+

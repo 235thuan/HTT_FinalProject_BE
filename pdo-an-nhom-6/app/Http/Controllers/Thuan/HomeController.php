@@ -4,15 +4,40 @@ namespace App\Http\Controllers\Thuan;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Services\Thuan\ChuyenNganhService;
 
 class HomeController extends Controller
 {
+    protected $chuyenNganhService;
     /**
      * Hiển thị trang chủ
      */
+    public function __construct(ChuyenNganhService $chuyenNganhService)
+    {
+        $this->chuyenNganhService = $chuyenNganhService;
+    }
     public function index()
     {
-        return view('thuan.home');
+        try {
+            // Lấy dữ liệu từ service
+            $result = $this->chuyenNganhService->getChuyenNganhForHomePage();
+
+            if (!$result['success']) {
+                // Log lỗi và hiển thị thông báo cho người dùng
+
+                return view('thuan.home')->with('error', 'Có lỗi xảy ra khi tải dữ liệu');
+            }
+
+//            // Truyền dữ liệu sang view
+            return view('thuan.home', [
+                'chuyenNganhs' => $result['chuyenNganhs'],
+                'soNhom' => $result['soNhom']
+            ]);
+
+        } catch (\Exception $e) {
+
+            return view('thuan.home')->with('error', 'Có lỗi xảy ra, vui lòng thử lại sau');
+        }
     }
 
     /**

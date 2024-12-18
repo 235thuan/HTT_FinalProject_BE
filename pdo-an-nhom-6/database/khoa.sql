@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 09, 2024 at 11:10 AM
+-- Generation Time: Dec 18, 2024 at 07:29 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -41,12 +41,7 @@ INSERT INTO `khoa` (`id_khoa`, `ten_khoa`) VALUES
 (2, 'Khoa Kinh Tế'),
 (3, 'Khoa Y Dược'),
 (4, 'Khoa Xây Dựng'),
-(5, 'Khoa Điện Tử Viễn Thông'),
-(6, 'Khoa Công Nghệ Thông Tin'),
-(7, 'Khoa Kinh Tế'),
-(8, 'Khoa Y Dược'),
-(9, 'Khoa Xây Dựng'),
-(10, 'Khoa Điện Tử Viễn Thông');
+(5, 'Khoa Điện Tử Viễn Thông');
 
 --
 -- Indexes for dumped tables

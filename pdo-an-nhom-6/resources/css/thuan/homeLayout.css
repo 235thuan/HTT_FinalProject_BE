@@ -47,13 +47,13 @@
             margin-bottom: 10px;
             grid-area: home1;
             background-color: #ffffff;
-        
+
             box-shadow: 2px 2px 4px rgba(3, 3, 3, 0.1);
             text-align: center;
             padding: 20px;
             color: #080a0b;
             font-size: 16px;
-            
+
 
             display: grid;
             grid-template-areas:
@@ -61,6 +61,10 @@
             grid-template-columns: 0.5fr 1fr 2fr;
 
             gap: 10px;
+
+            a{
+                text-decoration: none;
+            }
 
             .home11 {
                 grid-area: home11;
@@ -125,6 +129,9 @@
                 grid-template-columns: 1fr auto auto;
                 align-items: center;
                 gap: 10px;
+                a{
+                    text-decoration: none;
+                }
 
                 .home131 {
                     grid-area: home131;
@@ -689,7 +696,7 @@
                             margin-bottom: 20px;
                             overflow: hidden;
                             border-radius: 8px;
-                            
+
                             img {
                                 width: 100%;
                                 height: 200px;

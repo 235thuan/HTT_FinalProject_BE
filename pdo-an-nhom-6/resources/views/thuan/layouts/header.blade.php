@@ -1,7 +1,8 @@
 <div class="home1">
     <div class="home11">
         <div class="home111">
-            <img src="{{ Vite::asset('resources/image/thuan/homeIcon4.png') }}">
+            <a href="{{ route('home') }}" class="nav-link"> <img src="{{ Vite::asset('resources/image/thuan/homeIcon4.png') }}"></a>
+
         </div>
         <div class="home112">Đồ án nhóm 6</div>
     </div>
@@ -32,4 +33,4 @@
             @include('thuan.layouts.home-dropdown')
         </div>
     </div>
-</div> 
+</div>

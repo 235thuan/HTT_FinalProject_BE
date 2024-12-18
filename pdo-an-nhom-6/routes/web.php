@@ -32,7 +32,7 @@ Route::prefix('admin')->group(function () {
 
         // Dashboard
         Route::get('/index', fn() => view('index'))->name('index');
-        
+
         // QLND routes
         Route::prefix('qlnd')->name('qlnd.')->group(function () {
             Route::get('/sinhvien/search', [LopController::class, 'searchSinhvien'])->name('searchSinhvien');
@@ -41,7 +41,7 @@ Route::prefix('admin')->group(function () {
 
             Route::get('/listSinhvien', [LopController::class, 'listAll'])->name('listSinhvien');
             Route::get('/listGiaovien', [GiaoVienController::class, 'listAll'])->name('listGiaovien');
-            
+
             Route::get('/sinhvien/{id}', [SinhVienController::class, 'detail'])->name('sinhvien.detail');
             Route::get('/giaovien/{id}', [GiaoVienController::class, 'detail'])->name('giaovien.detail');
             Route::post('/giaovien/store', [GiaoVienController::class, 'store'])->name('giaovien.store');
@@ -86,32 +86,26 @@ Route::prefix('admin')->group(function () {
     });
 });
 
-// thêm routes ví dụ 
-// Route::get('/cuong', function () {
-//     return view('cuong.cuongView');   //cuongView.blade.php nằm trong thư mục resources/views/cuong
-// });
-
-// Add these routes
-// Route::prefix('auth')->group(function () {
-//     Route::post('/login', [App\Http\Controllers\Thuan\AuthController::class, 'login'])->name('auth.login');
-//     Route::post('/register', [App\Http\Controllers\Thuan\AuthController::class, 'register'])->name('auth.register');
-//     Route::post('/logout', [App\Http\Controllers\Thuan\AuthController::class, 'logout'])->name('auth.logout');
-// });
-
 // Thuan authentication routes
 Route::prefix('thuan')->group(function () {
+    Route::get('/chuyennganh/{id}', [HomeController::class, 'showChuyenNganh'])->name('chuyennganh.show');
+
+
     // Routes xử lý authentication
     Route::post('/login', [HomeController::class, 'login'])
         ->name('thuan.login')
         ->middleware('guest');
-        
+
     Route::post('/register', [HomeController::class, 'register'])
         ->name('thuan.register')
         ->middleware('guest');
-        
+
     Route::post('/logout', [HomeController::class, 'logout'])
         ->name('thuan.logout')
         ->middleware('auth');
+
 });
+
+
 
 

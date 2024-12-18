@@ -3,7 +3,10 @@
 namespace App\Repositories;
 
 use App\Models\ChuyenNganh;
+use App\Models\FileUpload;
+use App\Models\MonHoc;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 
 class ChuyenNganhRepository
@@ -31,6 +34,51 @@ class ChuyenNganhRepository
 
         } catch (\Exception $e) {
 
+            throw $e;
+        }
+    }
+
+
+    public function getChuyenNganhById($id)
+    {
+        try {
+            return ChuyenNganh::with(['khoa', 'files'])
+                ->where('id_chuyennganh', $id)
+                ->firstOrFail();
+        } catch (\Exception $e) {
+            Log::error('Lỗi trong ChuyenNganhRepository::getChuyenNganhById: ' . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function getMonHocByChuyenNganh($id)
+    {
+        try {
+            // Direct query to get subjects
+            $monHocs = DB::table('monhoc as m')
+                ->join('chitietchuyennganh as ct', 'm.id_monhoc', '=', 'ct.ma_monhoc')
+                ->where('ct.ma_chuyennganh', '=', $id)
+                ->select('m.*')
+                ->get();
+
+
+            return $monHocs;
+
+        } catch (\Exception $e) {
+            Log::error('Lỗi trong ChuyenNganhRepository::getMonHocByChuyenNganh: ' . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function getFilesByChuyenNganh($id)
+    {
+        try {
+            return FileUpload::where('id_chuyennganh', $id)
+                ->where('loai_file', 'image')
+                ->orderBy('ngay_upload', 'desc')
+                ->get();
+        } catch (\Exception $e) {
+            Log::error('Lỗi trong ChuyenNganhRepository::getFilesByChuyenNganh: ' . $e->getMessage());
             throw $e;
         }
     }

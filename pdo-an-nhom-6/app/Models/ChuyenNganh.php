@@ -75,4 +75,21 @@ class ChuyenNganh extends Model
         $file = $this->latest_image;
         return $file ? asset($file->duong_dan) : asset('path/to/default/image.jpg');
     }
+
+
+
+    public function chiTietChuyenNganh()
+    {
+        return $this->hasMany(ChiTietChuyenNganh::class, 'ma_chuyennganh', 'id_chuyennganh');
+    }
+
+    public function monHocs()
+    {
+        return $this->belongsToMany(
+            MonHoc::class,
+            'chitietchuyennganh',
+            'ma_chuyennganh',
+            'ma_monhoc'
+        );
+    }
 }

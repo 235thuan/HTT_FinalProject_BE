@@ -69,12 +69,235 @@
         .home22211 img.error {
             opacity: 0.5;
         }
+
+        .home21 {
+            display: flex;
+            background: white;
+            border-radius: 15px;
+            margin: 2rem 0;
+            min-height: 400px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .home211 {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 2rem;
+            height: 400px;
+        }
+
+        .home212 {
+            flex: 1;
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .home212:hover {
+            transform: scale(1.02);
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+        }
+
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .content-wrapper h2 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .action-button {
+            margin-top: auto;
+            /*align-self: flex-start; !* Align button to the left *!*/
+        }
+
+        .action-button button {
+            padding: 12px 28px;
+            background: linear-gradient(to right, #f9a825, #f57f17); /* Amber/Orange gradient */
+            color: black;
+            border: none;
+            border-radius: 25px; /* More rounded corners like home-events */
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase; /* Match home-events style */
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-button button:hover {
+            background: linear-gradient(to right, #f57f17, #f9a825); /* Reversed gradient on hover */
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(249, 168, 37, 0.4); /* Updated shadow color to match */
+        }
+
+        .action-button button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0.1), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+
+        .action-button button:hover::after {
+            transform: translateX(100%);
+        }
+
+        .image-wrapper {
+            height: 100%;
+            width: 100%;
+        }
+
+        .image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .home212:hover .image-wrapper img {
+            transform: scale(1.1);
+        }
+
+        .image-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: white;
+            font-size: 1.1rem;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .home212:hover .image-caption {
+            transform: translateY(0);
+        }
+
+
+        /*button monhoc*/
+        .expand-section {
+            display: flex;
+            justify-content: center;
+            padding: 15px 0;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1));
+        }
+
+        .expand-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 24px;
+            background: white;
+            border: 1px solid #f57f17;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #f57f17;
+            font-weight: 500;
+        }
+
+        .expand-toggle:hover {
+            background: #f57f17;
+            color: white;
+        }
+
+        .expand-text {
+            font-size: 0.95rem;
+        }
+
+        .expand-icon {
+            width: 20px;
+            height: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .expand-toggle:hover .expand-icon {
+            filter: brightness(0) invert(1); /* Makes the icon white on hover */
+        }
+
+        .expand-toggle.expanded .expand-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Update the container styles */
+        .home2321 {
+            max-height: 120px;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .home2321.expanded {
+            max-height: 1000px;
+        }
+        /*end button monhoc*/
+
+
+        /*chuyennganh slide*/
+        .chuyennganh-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .chuyennganh-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        /*end chuyen ngah slide*/
+
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .home21 {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .home211, .home212 {
+                width: 100%;
+                height: 300px;
+            }
+
+            .content-wrapper h2 {
+                font-size: 1.5rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+        }
     </style>
     <div class="home1-2">
         <div class="video-slider">
             <a class="slider-prev" onclick="changeVideo(-1)">❮</a>
             <a class="slider-next" onclick="changeVideo(1)">❯</a>
-            <video id="mainVideo" autoplay muted loop>
+            <video id="mainVideo"  autoplay muted loop playsinline preload="auto">
                 <source src="{{ Vite::asset('resources/video/thuan/ab.mp4') }}" type="video/mp4">
                 <source src="{{ Vite::asset('resources/video/thuan/abc.mp4') }}" type="video/mp4">
                 <source src="{{ Vite::asset('resources/video/thuan/abcd.mp4') }}" type="video/mp4">
@@ -94,19 +317,21 @@
     <div class="home2">
         <div class="home21">
             <div class="home211">
-                <div class="home2110">
-                    <div class="home2111">Nền tảng vững chắc - Hội nhập quốc tế - Vươn tới tương lai</div>
-                    <div class="home2112">Subtitle</div>
-                </div>
-                <div class="home2113">
-                    <button>Button</button>
+                <div class="content-wrapper">
+                    <h2>Nền tảng vững chắc</h2>
+                    <p class="subtitle">Hội nhập quốc tế - Vươn tới tương lai</p>
+                    <div class="action-button">
+                        <button class="hover-effect">Tìm hiểu thêm</button>
+                    </div>
                 </div>
             </div>
             <div class="home212">
-                <div class="home2121">
-                    <img src="{{ Vite::asset('resources/image/thuan/homeImage1.png') }}">
+                <div class="image-wrapper">
+                    <img src="{{ asset('storage/thuan/homeImage1.png') }}"
+                         alt="University Image"
+                         onerror="this.src='{{ asset('storage/thuan/default.png') }}'">
+                    <div class="image-caption">Môi trường học tập hiện đại</div>
                 </div>
-                <div class="home2122">Image subtitle</div>
             </div>
         </div>
 
@@ -129,6 +354,7 @@
                                     <div class="home222-group">
                                         @foreach($nhom as $chuyenNganh)
                                             <div class="home2221">
+                                                <a href="{{ route('chuyennganh.show', $chuyenNganh->id_chuyennganh) }}" class="chuyennganh-link">
                                                 <div class="home22211">
                                                     <img src="{{ asset($chuyenNganh->image_url) }}"
                                                          alt="{{ $chuyenNganh->ten_chuyennganh }}"
@@ -137,6 +363,7 @@
                                                 </div>
                                                 <div class="home22212">{{ $chuyenNganh->ten_khoa }}</div>
                                                 <div class="home22212">{{ $chuyenNganh->ten_chuyennganh }}</div>
+                                                </a>
                                             </div>
                                         @endforeach
                                     </div>
@@ -163,25 +390,33 @@
         <div class="home23">
             <div class="home231">Danh mục môn học</div>
             <div class="home232">
-                <div class="home2321">
-                    <button>Button1</button>
-                    <button>Button1</button>
-                    <button>Button1</button>
-                    <button>Button1</button>
-                    <button>Button1</button>
-                    <button>Button1</button>
-                    <button>Button1</button>
-                    <button>Button1</button>
-                    <button>Button1</button>
-                    <button>Button1</button>
-                    <button>Button1</button>
-                    <button>Button1</button>
-                    <button>Button1</button>
-                    <button>Button1</button>
+                <div class="home2321" id="subjectList">
+                    @if(isset($monHocs) && $monHocs->isNotEmpty())
+                        @foreach($monHocs as $monHoc)
+                            <button>{{ $monHoc->ten_monhoc }}</button>
+                        @endforeach
+                    @else
+                        <div class="alert alert-info">
+                            Không có dữ liệu môn học
+                        </div>
+                    @endif
+                </div>
+                <div class="expand-section">
+                    <button class="expand-toggle" id="expandButton">
+                        <span class="expand-text">Xem thêm môn học</span>
+                        <img src="{{ asset('storage/thuan/expand-arrow.png') }}"
+                             alt="expand"
+                             class="expand-icon"
+                             onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjZjU3ZjE3Ij48cGF0aCBkPSJNNy40MSA4LjU5TDEyIDEzLjE3bDQuNTktNC41OEwxOCAxMGwtNiA2LTYtNiAxLjQxLTEuNDF6Ii8+PC9zdmc+'" />
+                    </button>
                 </div>
             </div>
             <div class="homeLineBreak"></div>
         </div>
+
+
+
+
         <div class="home24">
             <div class="home241">Đăng ký chuyên ngành</div>
             <div class="home242">
@@ -464,6 +699,46 @@
         }
 
         document.addEventListener('DOMContentLoaded', handleImages);
+
+
+    //     monhoc script
+        document.addEventListener('DOMContentLoaded', function() {
+            const subjectList = document.getElementById('subjectList');
+            const expandButton = document.getElementById('expandButton');
+            const expandText = expandButton.querySelector('.expand-text');
+            let isExpanded = false;
+
+            function checkIfExpandNeeded() {
+                const scrollHeight = subjectList.scrollHeight;
+                const clientHeight = subjectList.clientHeight;
+
+                if (scrollHeight <= 120) {
+                    expandButton.parentElement.style.display = 'none';
+                    subjectList.style.maxHeight = 'none';
+                } else {
+                    expandButton.parentElement.style.display = 'flex';
+                }
+            }
+
+            expandButton.addEventListener('click', function() {
+                isExpanded = !isExpanded;
+                subjectList.classList.toggle('expanded');
+                this.classList.toggle('expanded');
+
+                if (isExpanded) {
+                    expandText.textContent = 'Thu gọn danh sách';
+                    subjectList.style.maxHeight = subjectList.scrollHeight + 'px';
+                } else {
+                    expandText.textContent = 'Xem thêm môn học';
+                    subjectList.style.maxHeight = '120px';
+                    subjectList.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            });
+
+            checkIfExpandNeeded();
+            window.addEventListener('resize', checkIfExpandNeeded);
+        });
+    //     end monhoc
     </script>
 
 

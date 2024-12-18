@@ -232,6 +232,71 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Video slider functionality
+
+    // const video = document.getElementById('mainVideo');
+    // const dots = document.getElementsByClassName('nav-dot');
+    // let autoPlayInterval;
+    //
+    // if (video && dots.length > 0) {
+    //     let currentVideoIndex = 0;
+    //     const sources = Array.from(video.getElementsByTagName('source'));
+    //
+    //     if (sources.length > 0) {
+    //         // Video navigation function
+    //         window.changeVideo = function(direction) {
+    //             // Remove active class from current dot
+    //             dots[currentVideoIndex].classList.remove('active');
+    //
+    //             // Update index
+    //             currentVideoIndex = (currentVideoIndex + direction + sources.length) % sources.length;
+    //
+    //             // Add active class to new dot
+    //             dots[currentVideoIndex].classList.add('active');
+    //
+    //             // Update video
+    //             video.src = sources[currentVideoIndex].src;
+    //             video.play().catch(function(error) {
+    //                 console.log("Video play failed:", error);
+    //             });
+    //         }
+    //
+    //         window.goToVideo = function(index) {
+    //             if (index !== currentVideoIndex) {
+    //                 dots[currentVideoIndex].classList.remove('active');
+    //                 currentVideoIndex = index;
+    //                 dots[currentVideoIndex].classList.add('active');
+    //
+    //                 video.src = sources[currentVideoIndex].src;
+    //                 video.play().catch(function(error) {
+    //                     console.log("Video play failed:", error);
+    //                 });
+    //             }
+    //         }
+    //
+    //         // Set first dot as active initially
+    //         dots[0].classList.add('active');
+    //
+    //         // Auto-play next video after 3 seconds
+    //         autoPlayInterval = setInterval(function() {
+    //             changeVideo(1);
+    //         }, 5000); // Increased to 5 seconds for better viewing
+    //
+    //         // Pause auto-play on hover
+    //         video.addEventListener('mouseover', function() {
+    //             if (autoPlayInterval) {
+    //                 clearInterval(autoPlayInterval);
+    //             }
+    //         });
+    //
+    //         video.addEventListener('mouseout', function() {
+    //             autoPlayInterval = setInterval(function() {
+    //                 changeVideo(1);
+    //             }, 5000);
+    //         });
+    //     }
+    // }
+
+
     const video = document.getElementById('mainVideo');
     const dots = document.getElementsByClassName('nav-dot');
     let autoPlayInterval;
@@ -241,8 +306,33 @@ document.addEventListener('DOMContentLoaded', function() {
         const sources = Array.from(video.getElementsByTagName('source'));
 
         if (sources.length > 0) {
+            // Helper function for video playback
+            async function playVideo() {
+                try {
+                    if (video.paused) {
+                        video.muted = true;
+                        video.playsInline = true;
+                        await video.load();
+                        await video.play();
+                    }
+                } catch (error) {
+                    // Silently handle power-saving interruptions
+                    if (!error.message.includes('interrupted because video-only background media was paused')) {
+                        console.log("Video playback issue:", error);
+                    }
+                }
+            }
+
+            // Function to start autoplay
+            function startAutoPlay() {
+                if (autoPlayInterval) {
+                    clearInterval(autoPlayInterval);
+                }
+                autoPlayInterval = setInterval(() => changeVideo(1), 5000);
+            }
+
             // Video navigation function
-            window.changeVideo = function(direction) {
+            window.changeVideo = async function(direction) {
                 // Remove active class from current dot
                 dots[currentVideoIndex].classList.remove('active');
 
@@ -254,46 +344,64 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // Update video
                 video.src = sources[currentVideoIndex].src;
-                video.play().catch(function(error) {
-                    console.log("Video play failed:", error);
-                });
+                await playVideo();
             }
 
-            window.goToVideo = function(index) {
+            window.goToVideo = async function(index) {
                 if (index !== currentVideoIndex) {
                     dots[currentVideoIndex].classList.remove('active');
                     currentVideoIndex = index;
                     dots[currentVideoIndex].classList.add('active');
 
                     video.src = sources[currentVideoIndex].src;
-                    video.play().catch(function(error) {
-                        console.log("Video play failed:", error);
-                    });
+                    await playVideo();
                 }
             }
 
             // Set first dot as active initially
             dots[0].classList.add('active');
 
-            // Auto-play next video after 3 seconds
-            autoPlayInterval = setInterval(function() {
-                changeVideo(1);
-            }, 5000); // Increased to 5 seconds for better viewing
+            // Start initial autoplay
+            startAutoPlay();
 
             // Pause auto-play on hover
-            video.addEventListener('mouseover', function() {
+            video.addEventListener('mouseover', () => {
                 if (autoPlayInterval) {
                     clearInterval(autoPlayInterval);
                 }
             });
 
-            video.addEventListener('mouseout', function() {
-                autoPlayInterval = setInterval(function() {
-                    changeVideo(1);
-                }, 5000);
+            video.addEventListener('mouseout', () => {
+                startAutoPlay();
             });
+
+            // Handle visibility changes
+            document.addEventListener("visibilitychange", () => {
+                if (document.visibilityState === 'visible') {
+                    playVideo();
+                    startAutoPlay();
+                } else {
+                    if (autoPlayInterval) {
+                        clearInterval(autoPlayInterval);
+                    }
+                }
+            });
+
+            // Handle video end
+            video.addEventListener('ended', () => {
+                changeVideo(1);
+            });
+
+            // Initial video setup
+            playVideo();
         }
     }
+
+
+
+
+
+
 
     // Category slider functionality
     const categoryTrack = document.querySelector('.home222-track');

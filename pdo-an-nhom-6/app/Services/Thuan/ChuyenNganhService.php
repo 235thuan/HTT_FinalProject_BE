@@ -2,8 +2,11 @@
 
 namespace App\Services\Thuan;
 
+use App\Models\ChuyenNganh;
+use App\Models\MonHoc;
 use App\Repositories\ChuyenNganhRepository;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 class ChuyenNganhService
 {
@@ -72,6 +75,30 @@ class ChuyenNganhService
                 'success' => false,
                 'message' => 'Có lỗi xảy ra khi lấy dữ liệu chuyên ngành',
                 'error' => $e->getMessage()
+            ];
+        }
+    }
+
+
+    public function getChuyenNganhDetail($id): array
+    {
+        try {
+            $chuyenNganh = $this->chuyenNganhRepository->getChuyenNganhById($id);
+            $monHocs = $this->chuyenNganhRepository->getMonHocByChuyenNganh($id);
+
+
+            return [
+                'success' => true,
+                'chuyenNganh' => $chuyenNganh,
+                'monHocs' => $monHocs,
+                'files' => []  // We'll handle files later
+            ];
+
+        } catch (\Exception $e) {
+            Log::error('Lỗi trong ChuyenNganhService::getChuyenNganhDetail: ' . $e->getMessage());
+            return [
+                'success' => false,
+                'message' => 'Không tìm thấy chuyên ngành này hoặc có lỗi xảy ra'
             ];
         }
     }

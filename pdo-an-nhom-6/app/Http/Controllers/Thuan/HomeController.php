@@ -3,39 +3,49 @@
 namespace App\Http\Controllers\Thuan;
 
 use App\Http\Controllers\Controller;
+use App\Models\ChuyenNganh;
+use App\Models\MonHoc;
+use App\Services\Thuan\HomeService;
 use Illuminate\Http\Request;
 use App\Services\Thuan\ChuyenNganhService;
+use App\Services\Thuan\MonHocService;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\View;
 
 class HomeController extends Controller
 {
     protected $chuyenNganhService;
-    /**
-     * Hiển thị trang chủ
-     */
-    public function __construct(ChuyenNganhService $chuyenNganhService)
-    {
+    protected $monHocService;
+    protected $homeService;
+
+    public function __construct(
+        ChuyenNganhService $chuyenNganhService,
+        MonHocService $monHocService,
+        HomeService $homeService
+    ) {
         $this->chuyenNganhService = $chuyenNganhService;
+        $this->monHocService = $monHocService;
+        $this->homeService = $homeService;
     }
     public function index()
     {
         try {
-            // Lấy dữ liệu từ service
-            $result = $this->chuyenNganhService->getChuyenNganhForHomePage();
+            $chuyenNganhResult = $this->chuyenNganhService->getChuyenNganhForHomePage();
+            $monHocResult = $this->monHocService->getMonHocForHomePage();
 
-            if (!$result['success']) {
-                // Log lỗi và hiển thị thông báo cho người dùng
-
+            if (!$chuyenNganhResult['success'] || !$monHocResult['success']) {
                 return view('thuan.home')->with('error', 'Có lỗi xảy ra khi tải dữ liệu');
             }
 
-//            // Truyền dữ liệu sang view
             return view('thuan.home', [
-                'chuyenNganhs' => $result['chuyenNganhs'],
-                'soNhom' => $result['soNhom']
+                'chuyenNganhs' => $chuyenNganhResult['chuyenNganhs'],
+                'soNhom' => $chuyenNganhResult['soNhom'],
+                'monHocs' => $monHocResult['monHocs']
             ]);
 
         } catch (\Exception $e) {
-
+            Log::error('Lỗi không mong muốn trong HomeController: ' . $e->getMessage());
             return view('thuan.home')->with('error', 'Có lỗi xảy ra, vui lòng thử lại sau');
         }
     }
@@ -117,5 +127,48 @@ class HomeController extends Controller
             'success' => true,
             'message' => 'Đăng xuất thành công'
         ]);
+    }
+
+
+    public function chuyenNganh()
+    {
+        try {
+            $result = $this->chuyenNganhService->getChuyenNganhForHomePage();
+
+            if (!$result['success']) {
+                return back()->with('error', 'Có lỗi xảy ra khi tải dữ liệu');
+            }
+
+            return view('thuan.chuyennganh.chuyennganh', [
+                'chuyenNganhs' => $result['chuyenNganhs'],
+                'soNhom' => $result['soNhom']
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('Error in HomeController@chuyenNganh: ' . $e->getMessage());
+            return back()->with('error', 'Có lỗi xảy ra, vui lòng thử lại sau.');
+        }
+    }
+
+    public function showChuyenNganh($id)
+    {
+        try {
+            $result = $this->chuyenNganhService->getChuyenNganhDetail($id);
+
+            if (!$result['success']) {
+                return back()->with('error', $result['message']);
+            }
+
+            // Remove the load() call since we're using DB::table()
+            return view('thuan.chuyennganh.chuyennganh', [
+                'chuyenNganh' => $result['chuyenNganh'],
+                'monHocs' => $result['monHocs'],  // No load() needed
+                'files' => $result['files']
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('Error in HomeController@showChuyenNganh: ' . $e->getMessage());
+            return back()->with('error', 'Có lỗi xảy ra, vui lòng thử lại sau.');
+        }
     }
 }

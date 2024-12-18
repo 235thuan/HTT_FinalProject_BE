@@ -4,7 +4,7 @@
             <div class="home311">Đồ án nhóm 6</div>
             <div class="home312">Connect with us</div>
             <div class="home313">
-                <div class="home3131"><img src="{{ Vite::asset('resources/image/thuan/homeLinkedi.png') }}"></div>
+                <div class="home3131"><img src="{{ Vite::asset('resources/image/thuan/homeLinkendi.png') }}"></div>
                 <div class="home3131"><img src="{{ Vite::asset('resources/image/thuan/homeFacebook.png') }}"></div>
                 <div class="home3131"><img src="{{ Vite::asset('resources/image/thuan/homeYoutube.png') }}"></div>
             </div>
@@ -27,4 +27,4 @@
             </div>
         </div>
     </div>
-</div> 
+</div>

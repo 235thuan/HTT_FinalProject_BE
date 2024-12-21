@@ -9,10 +9,20 @@ use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\GiaoVienController;
 use App\Http\Controllers\Thuan\HomeController;
+use App\Http\Controllers\Thuan\CartController;
+use Illuminate\Support\Facades\Session;
+use App\Http\Controllers\Thuan\TestController;
 
 // Trang chủ - không cần prefix
 Route::get('/', [App\Http\Controllers\Thuan\HomeController::class, 'index'])->name('home');
-
+Route::get('/test', [App\Http\Controllers\Thuan\TestController::class, 'testCart'])->name('cart.test');
+// Test route to add a sample item
+Route::get('/test-add-item', function() {
+    $cartController = new \App\Http\Controllers\Thuan\CartController();
+    // Assuming ID 1 exists in your chuyennganh table
+    $result = $cartController->addToCart(1);
+    return redirect('/test');
+});
 // Admin routes group
 Route::prefix('admin')->group(function () {
     // Guest middleware group
@@ -104,6 +114,9 @@ Route::prefix('thuan')->group(function () {
         ->name('thuan.logout')
         ->middleware('auth');
 
+    Route::post('/cart/add/{id_chuyennganh}', [CartController::class, 'addToCart'])->name('cart.add');
+    Route::delete('/cart/remove/{id_chuyennganh}', [CartController::class, 'removeFromCart'])->name('cart.remove');
+    Route::get('/cart', [CartController::class, 'viewCart'])->name('cart.view');
 });
 
 

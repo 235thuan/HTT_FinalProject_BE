@@ -448,6 +448,38 @@ document.addEventListener('DOMContentLoaded', function() {
         window.addEventListener('resize', updateSlider);
     }
 
+    // Add to cart function
+    function addToCart(id_chuyennganh) {
+        fetch(`/thuan/cart/add/${id_chuyennganh}`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                updateCartCount(Object.keys(data.cart).length);
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Có lỗi xảy ra khi thêm vào giỏ hàng');
+        });
+    }
+
+    // Update cart count in header
+    function updateCartCount(count) {
+        const cartCounter = document.getElementById('cartCounter');
+        if (cartCounter) {
+            cartCounter.textContent = count;
+        }
+    }
+
 
 
 

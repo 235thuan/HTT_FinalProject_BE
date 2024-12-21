@@ -12,6 +12,7 @@ use App\Http\Controllers\Thuan\HomeController;
 use App\Http\Controllers\Thuan\CartController;
 use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\Thuan\TestController;
+use App\Http\Controllers\Thuan\ClientAuthController;
 
 // Trang chủ - không cần prefix
 Route::get('/', [App\Http\Controllers\Thuan\HomeController::class, 'index'])->name('home');
@@ -96,27 +97,21 @@ Route::prefix('admin')->group(function () {
     });
 });
 
-// Thuan authentication routes
+// Thuan routes
 Route::prefix('thuan')->group(function () {
+    Route::get('/chuyennganh', [HomeController::class, 'chuyenNganh'])->name('chuyennganh.index');
     Route::get('/chuyennganh/{id}', [HomeController::class, 'showChuyenNganh'])->name('chuyennganh.show');
-
-
-    // Routes xử lý authentication
-    Route::post('/login', [HomeController::class, 'login'])
-        ->name('thuan.login')
-        ->middleware('guest');
-
-    Route::post('/register', [HomeController::class, 'register'])
-        ->name('thuan.register')
-        ->middleware('guest');
-
-    Route::post('/logout', [HomeController::class, 'logout'])
-        ->name('thuan.logout')
-        ->middleware('auth');
-
+    
     Route::post('/cart/add/{id_chuyennganh}', [CartController::class, 'addToCart'])->name('cart.add');
     Route::delete('/cart/remove/{id_chuyennganh}', [CartController::class, 'removeFromCart'])->name('cart.remove');
     Route::get('/cart', [CartController::class, 'viewCart'])->name('cart.view');
+});
+
+// Client auth routes
+Route::prefix('client')->group(function () {
+    Route::post('/login', [ClientAuthController::class, 'login'])->name('client.login');
+    Route::post('/register', [ClientAuthController::class, 'register'])->name('client.register');
+    Route::post('/logout', [ClientAuthController::class, 'logout'])->name('client.logout');
 });
 
 

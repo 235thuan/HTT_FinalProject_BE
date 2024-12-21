@@ -9,9 +9,10 @@ use App\Services\Thuan\HomeService;
 use Illuminate\Http\Request;
 use App\Services\Thuan\ChuyenNganhService;
 use App\Services\Thuan\MonHocService;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -27,7 +28,21 @@ class HomeController extends Controller
         $this->chuyenNganhService = $chuyenNganhService;
         $this->monHocService = $monHocService;
         $this->homeService = $homeService;
+
+        // Share user avatar with all views using view composer
+        View::composer('*', function($view) {
+            if (Auth::check()) {
+                $userAvatar = DB::table('file_nguoidung')
+                    ->where('id_nguoidung', Auth::id())
+                    ->where('loai_file', 'avatar')
+                    ->orderBy('ngay_upload', 'desc')
+                    ->first();
+
+                $view->with('userAvatar', $userAvatar ? asset($userAvatar->duong_dan) : null);
+            }
+        });
     }
+
     public function index()
     {
         try {
@@ -49,86 +64,6 @@ class HomeController extends Controller
             return view('thuan.home')->with('error', 'Có lỗi xảy ra, vui lòng thử lại sau');
         }
     }
-
-    /**
-     * Xử lý đăng nhập
-     */
-    public function login(Request $request)
-    {
-        try {
-            $credentials = $request->validate([
-                'email' => 'required|email',
-                'password' => 'required|min:6'
-            ], [
-                'email.required' => 'Vui lòng nhập email',
-                'email.email' => 'Email không hợp lệ',
-                'password.required' => 'Vui lòng nhập mật khẩu',
-                'password.min' => 'Mật khẩu phải có ít nhất 6 ký tự'
-            ]);
-
-            $result = $this->homeService->handleLogin(
-                $credentials['email'],
-                $credentials['password']
-            );
-
-            return response()->json($result, $result['success'] ? 200 : 401);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Có lỗi xảy ra: ' . $e->getMessage()
-            ], 500);
-        }
-    }
-
-    /**
-     * Xử lý đăng ký
-     */
-    public function register(Request $request)
-    {
-        try {
-            $validated = $request->validate([
-                'ho_ten' => 'required|string|max:255',
-                'email' => 'required|email|unique:nguoidung,email',
-                'password' => 'required|min:6|confirmed',
-                'user_type' => 'required|in:student,other'
-            ], [
-                'ho_ten.required' => 'Vui lòng nhập họ tên',
-                'email.required' => 'Vui lòng nhập email',
-                'email.email' => 'Email không hợp lệ',
-                'email.unique' => 'Email đã được sử dụng',
-                'password.required' => 'Vui lòng nhập mật khẩu',
-                'password.min' => 'Mật khẩu phải có ít nhất 6 ký tự',
-                'password.confirmed' => 'Mật khẩu xác nhận không khớp',
-                'user_type.required' => 'Vui lòng chọn loại tài khoản'
-            ]);
-
-            $result = $this->homeService->handleRegister($validated);
-            return response()->json($result, $result['success'] ? 200 : 400);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Có lỗi xảy ra: ' . $e->getMessage()
-            ], 500);
-        }
-    }
-
-    /**
-     * Xử lý đăng xuất
-     */
-    public function logout(Request $request)
-    {
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Đăng xuất thành công'
-        ]);
-    }
-
 
     public function chuyenNganh()
     {
@@ -159,10 +94,9 @@ class HomeController extends Controller
                 return back()->with('error', $result['message']);
             }
 
-            // Remove the load() call since we're using DB::table()
             return view('thuan.chuyennganh.chuyennganh', [
                 'chuyenNganh' => $result['chuyenNganh'],
-                'monHocs' => $result['monHocs'],  // No load() needed
+                'monHocs' => $result['monHocs'],
                 'files' => $result['files']
             ]);
 

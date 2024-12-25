@@ -418,72 +418,49 @@
 
 
         <div class="home24">
-            <div class="home241">Đăng ký chuyên ngành</div>
-            <div class="home242">
-                <div class="home2421">
-                    <div class="home24211">Khoa CNTT</div>
-                    <div class="home24212">Điện tử viễn thông</div>
-                    <div class="home24213">
-                        <div class="home242131">
-                            <button type="button" class="icon-button">
-                                <img src="{{ Vite::asset('resources/image/thuan/homeButtonIcon1.png') }}" alt="">
-                            </button>
-                        </div>
-                        <div class="home242132">Chương trình đào tạo kỹ sư điện tử bằng chính qui, hệ 4 năm</div>
+
+
+        
+    <div class="home241">Đăng ký chuyên ngành</div>
+    <div class="home242">
+        @foreach($topChuyenNganhs as $index => $chuyenNganh)
+            <div class="home2421">
+                <div class="home24211">{{ $chuyenNganh->ten_khoa }}</div>
+                <div class="home24212">{{ $chuyenNganh->ten_chuyennganh }}</div>
+                <div class="home24213">
+                    <div class="home242131">
+                        <button type="button" class="icon-button">
+                            <img src="{{ Vite::asset('resources/image/thuan/homeButtonIcon' . ($index + 1) . '.png') }}" alt="">
+                        </button>
                     </div>
-                    <div class="home24213">
-                        <div class="home242131">
-                            <button type="button" class="icon-button">
-                                <img src="{{ Vite::asset('resources/image/thuan/homeButtonIcon1.png') }}" alt="">
-                            </button>
-                        </div>
-                        <div class="home242132">Hỗ trợ việc làm sau tốt nghiệp</div>
-                    </div>
-                    <div class="home24213">
-                        <div class="home242131">
-                            <button type="button" class="icon-button">
-                                <img src="{{ Vite::asset('resources/image/thuan/homeButtonIcon1.png') }}" alt="">
-                            </button>
-                        </div>
-                        <div class="home242132">Liên kết học tập sau tốt nghiệp với đối tác nước ngoài</div>
-                    </div>
-                    <div class="home24214">
-                        <button>Đăng ký ngay</button>
-                    </div>
+                    <div class="home242132">Chương trình đào tạo kỹ sư bằng chính qui, hệ 4 năm</div>
                 </div>
-                <div class="home2421">
-                    <div class="home24211">Khoa Kinh Tế</div>
-                    <div class="home24212">Thạc sĩ quản trị kinh doanh</div>
-                    <div class="home24213">
-                        <div class="home242131">
-                            <button type="button" class="icon-button">
-                                <img src="{{ Vite::asset('resources/image/thuan/homeButtonIcon2.png') }}" alt="">
-                            </button>
-                        </div>
-                        <div class="home242132">Chương trình đạo tạo do trường Đại Học Colombia Hoa Kỳ cấp bằng</div>
+                <div class="home24213">
+                    <div class="home242131">
+                        <button type="button" class="icon-button">
+                            <img src="{{ Vite::asset('resources/image/thuan/homeButtonIcon' . ($index + 1) . '.png') }}" alt="">
+                        </button>
                     </div>
-                    <div class="home24213">
-                        <div class="home242131">
-                            <button type="button" class="icon-button">
-                                <img src="{{ Vite::asset('resources/image/thuan/homeButtonIcon2.png') }}" alt="">
-                            </button>
-                        </div>
-                        <div class="home242132">Đào tạo hoàn toàn tiếng Anh</div>
+                    <div class="home242132">Hỗ trợ việc làm sau tốt nghiệp</div>
+                </div>
+                <div class="home24213">
+                    <div class="home242131">
+                        <button type="button" class="icon-button">
+                            <img src="{{ Vite::asset('resources/image/thuan/homeButtonIcon' . ($index + 1) . '.png') }}" alt="">
+                        </button>
                     </div>
-                    <div class="home24213">
-                        <div class="home242131">
-                            <button type="button" class="icon-button">
-                                <img src="{{ Vite::asset('resources/image/thuan/homeButtonIcon2.png') }}" alt="">
-                            </button>
-                        </div>
-                        <div class="home242132">Thời gian đào tạo 18 tháng</div>
-                    </div>
-                    <div class="home24215">
-                        <button>Đăng ký ngay</button>
-                    </div>
+                    <div class="home242132">Liên kết học tập sau tốt nghiệp với đối tác nước ngoài</div>
+                </div>
+                <div class="{{ $index === 0 ? 'home24214' : 'home24215' }}">
+                    <button>Đăng ký ngay</button>
                 </div>
             </div>
-        </div>
+        @endforeach
+    </div>
+</div>
+
+
+
 
         <div class="home-events">
             <div class="event-header">

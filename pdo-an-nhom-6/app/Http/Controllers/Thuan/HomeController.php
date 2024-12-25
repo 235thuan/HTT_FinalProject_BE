@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ChuyenNganh;
 use App\Models\MonHoc;
 use App\Services\Thuan\HomeService;
+use App\Services\Thuan\ThongKeService;
 use Illuminate\Http\Request;
 use App\Services\Thuan\ChuyenNganhService;
 use App\Services\Thuan\MonHocService;
@@ -19,15 +20,18 @@ class HomeController extends Controller
     protected $chuyenNganhService;
     protected $monHocService;
     protected $homeService;
+    protected $thongKeService;
 
     public function __construct(
         ChuyenNganhService $chuyenNganhService,
         MonHocService $monHocService,
-        HomeService $homeService
+        HomeService $homeService,
+        ThongKeService $thongKeService
     ) {
         $this->chuyenNganhService = $chuyenNganhService;
         $this->monHocService = $monHocService;
         $this->homeService = $homeService;
+        $this->thongKeService = $thongKeService;
 
         // Share user avatar with all views using view composer
         View::composer('*', function($view) {
@@ -48,15 +52,20 @@ class HomeController extends Controller
         try {
             $chuyenNganhResult = $this->chuyenNganhService->getChuyenNganhForHomePage();
             $monHocResult = $this->monHocService->getMonHocForHomePage();
+            $thongkeresult = $this->thongKeService->getTopChuyenNganh();
 
             if (!$chuyenNganhResult['success'] || !$monHocResult['success']) {
                 return view('thuan.home')->with('error', 'Có lỗi xảy ra khi tải dữ liệu');
+            }
+            if (!$thongkeresult['success']) {
+                return back()->with('error', $thongkeresult['message']);
             }
 
             return view('thuan.home', [
                 'chuyenNganhs' => $chuyenNganhResult['chuyenNganhs'],
                 'soNhom' => $chuyenNganhResult['soNhom'],
-                'monHocs' => $monHocResult['monHocs']
+                'monHocs' => $monHocResult['monHocs'],
+                'topChuyenNganhs' => $thongkeresult['data']
             ]);
 
         } catch (\Exception $e) {

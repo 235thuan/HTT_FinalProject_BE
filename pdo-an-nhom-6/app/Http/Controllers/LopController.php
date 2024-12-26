@@ -4,14 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Lop;
 use App\Models\SinhVien;
+use App\Services\Thuan\KhoaService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class LopController extends Controller
 {
+    protected $khoaService;
+    public function __construct(    KhoaService $khoaService){  $this->khoaService=$khoaService;}
     public function index()
     {
         try {
+
+
             // Get all classes with their students
             $lops = DB::table('lop')
                 ->orderBy('ten_lop')
@@ -32,7 +37,7 @@ class LopController extends Controller
                     ->get();
             }
 
-            return view('qlnd.listLop', compact('lops'));
+            return view('qlnd.listLop', compact('lops',));
         } catch (\Exception $e) {
             \Log::error('Error in LopController@index: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Có lỗi xảy ra');
@@ -79,7 +84,7 @@ class LopController extends Controller
             ]);
 
             return view('qlnd.listSinhvien', compact('lop', 'sinhviens'));
-            
+
         } catch (\Exception $e) {
             \Log::error('Error in LopController@show: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Có lỗi xảy ra');
@@ -92,7 +97,8 @@ class LopController extends Controller
             $searchLop = $request->get('search_lop');
             $findStudent = $request->get('find_student');
             $findLop = $request->get('find_lop');
-
+            $khoaResult = $this->khoaService->getKhoasWithChuyenNganh();
+            $khoas = $khoaResult['success'] ? $khoaResult['data'] : collect([]);
             // Get all classes
             $lops = DB::table('lop')
                 ->select('lop.*')
@@ -126,11 +132,11 @@ class LopController extends Controller
                         ->where('lop', $lop->ten_lop)
                         ->where('id_sinhvien', '<', $findStudent)
                         ->count();
-                    
+
                     // Add 1 for 1-based position
                     $position++;
                     $page = ceil($position / 5);
-                    
+
                     // Only redirect if we're not already on the correct page
                     if (!$request->ajax()) {
                         return redirect()->to($request->url() . '?' . http_build_query([
@@ -139,7 +145,7 @@ class LopController extends Controller
                             'page_' . $lop->id_lop => $page
                         ]));
                     }
-                    
+
                     // For AJAX requests, just set the page
                     $request->merge(['page_' . $lop->id_lop => $page]);
                 }
@@ -220,7 +226,8 @@ class LopController extends Controller
                 'chuyenNganhs' => $chuyenNganhs,
                 'lopsByChuyenNganh' => $lopsByChuyenNganh,
                 'title' => 'Danh sách sinh viên',
-                'findStudent' => $findStudent
+                'findStudent' => $findStudent,
+                'khoas' => $khoas
             ]);
 
         } catch (\Exception $e) {
@@ -228,11 +235,11 @@ class LopController extends Controller
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             if ($request->ajax()) {
                 return response()->json(['error' => $e->getMessage()], 500);
             }
-            
+
             return redirect()->back()->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());
         }
     }
@@ -285,9 +292,9 @@ class LopController extends Controller
                     's1.lop',
                     'nguoidung.email',
                     DB::raw('(
-                        SELECT COUNT(*) 
-                        FROM sinhvien as s2 
-                        WHERE s2.lop = s1.lop 
+                        SELECT COUNT(*)
+                        FROM sinhvien as s2
+                        WHERE s2.lop = s1.lop
                         AND s2.id_sinhvien < s1.id_sinhvien
                     ) as position')
                 )
@@ -322,9 +329,9 @@ class LopController extends Controller
             ->select(
                 's1.*',
                 DB::raw('(
-                    SELECT COUNT(*) 
-                    FROM sinhvien as s2 
-                    WHERE s2.lop = s1.lop 
+                    SELECT COUNT(*)
+                    FROM sinhvien as s2
+                    WHERE s2.lop = s1.lop
                     AND s2.id_sinhvien < s1.id_sinhvien
                 ) as position')
             )
@@ -346,4 +353,4 @@ class LopController extends Controller
             'found' => false
         ]);
     }
-} 
+}

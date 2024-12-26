@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Thuan\KhoaService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class SinhVienController extends Controller
 {
+    protected $khoaService;
+    public function __construct(    KhoaService $khoaService){  $this->khoaService=$khoaService;}
     public function show($id)
     {
         try {
@@ -110,6 +113,8 @@ class SinhVienController extends Controller
     public function detail($id)
     {
         try {
+            $khoaResult = $this->khoaService->getKhoasWithChuyenNganh();
+            $khoas = $khoaResult['success'] ? $khoaResult['data'] : collect([]);
             $sinhvien = DB::table('sinhvien')
                 ->join('nguoidung', 'sinhvien.id_nguoidung', '=', 'nguoidung.id_nguoidung')
                 ->join('chuyennganh', 'sinhvien.ma_chuyen_nganh', '=', 'chuyennganh.id_chuyennganh')
@@ -128,7 +133,7 @@ class SinhVienController extends Controller
                 return redirect()->back()->with('error', 'Không tìm thấy sinh viên');
             }
 
-            return view('qlnd.sinhvienDetail', compact('sinhvien'));
+            return view('qlnd.sinhvienDetail', compact('sinhvien', 'khoas'));
         } catch (\Exception $e) {
             \Log::error('Error in SinhVienController@detail: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Có lỗi xảy ra');
@@ -139,7 +144,7 @@ class SinhVienController extends Controller
     {
         try {
             $email = $request->get('email');
-            
+
             if (!$email) {
                 return response()->json([
                     'exists' => false,
@@ -150,13 +155,13 @@ class SinhVienController extends Controller
             $nguoiDung = DB::table('nguoidung')
                 ->where('email', $email)
                 ->first();
-            
+
             if ($nguoiDung) {
                 // Check if user already has any role
                 $hasRole = DB::table('phanquyen')
                     ->where('id_nguoidung', $nguoiDung->id_nguoidung)
                     ->exists();
-                
+
                 if ($hasRole) {
                     return response()->json([
                         'exists' => true,
@@ -164,14 +169,14 @@ class SinhVienController extends Controller
                         'message' => 'Email đã được sử dụng bởi một tài khoản khác'
                     ]);
                 }
-                
+
                 return response()->json([
                     'exists' => true,
                     'canUse' => true,
                     'message' => 'Email đã tồn tại và có thể sử dụng cho sinh viên mới'
                 ]);
             }
-            
+
             return response()->json([
                 'exists' => false,
                 'canUse' => true,
@@ -204,7 +209,7 @@ class SinhVienController extends Controller
             $lastId = DB::table('sinhvien')
                 ->orderBy('id_sinhvien', 'desc')
                 ->value('id_sinhvien') ?? 0;
-            
+
             $newId = $lastId + 1;
 
             // Find or create nguoidung based on email
@@ -217,14 +222,14 @@ class SinhVienController extends Controller
                 $hasRole = DB::table('phanquyen')
                     ->where('id_nguoidung', $nguoiDung->id_nguoidung)
                     ->exists();
-                
+
                 if ($hasRole) {
                     DB::rollBack();
                     return response()->json([
                         'errors' => ['email' => ['Email đã được sử dụng bởi một tài khoản khác']]
                     ], 422);
                 }
-                
+
                 $id_nguoidung = $nguoiDung->id_nguoidung;
             } else {
                 // Create new nguoidung
@@ -272,4 +277,4 @@ class SinhVienController extends Controller
             ], 500);
         }
     }
-} 
+}

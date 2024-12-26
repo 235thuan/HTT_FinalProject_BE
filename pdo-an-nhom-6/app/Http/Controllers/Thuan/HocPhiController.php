@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Thuan;
 use App\Http\Controllers\Controller;
 use App\Services\Thuan\HocPhiSalesService;
 use App\Services\Thuan\HocPhiService;
+use App\Services\Thuan\KhoaService;
 use App\Services\Thuan\MonHocService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -15,15 +16,17 @@ class HocPhiController extends Controller
     protected $monHocService;
 
     protected $hocPhiSalesService;
-
+    protected $khoaService;
     public function __construct(
         HocPhiService $hocPhiService,
         MonHocService $monHocService,
-        HocPhiSalesService $hocPhiSalesService
+        HocPhiSalesService $hocPhiSalesService,
+        KhoaService $khoaService
     ) {
         $this->hocPhiService = $hocPhiService;
         $this->monHocService = $monHocService;
         $this->hocPhiSalesService = $hocPhiSalesService;
+        $this->khoaService=$khoaService;
     }
 
     // Hiển thị danh sách học phí
@@ -31,13 +34,15 @@ class HocPhiController extends Controller
     {
         try {
             $result = $this->hocPhiService->getAllHocPhi();
-
+            $khoaResult = $this->khoaService->getKhoasWithChuyenNganh();
+            $khoas = $khoaResult['success'] ? $khoaResult['data'] : collect([]);
             if (!$result['success']) {
                 return back()->with('error', $result['message']);
             }
 
             return view('qlhp.listHocphi', [
-                'hocPhiList' => $result['data']
+                'hocPhiList' => $result['data'],
+                'khoas' => $khoas,
             ]);
         } catch (\Exception $e) {
             return back()->with('error', 'Có lỗi xảy ra khi tải danh sách học phí');
@@ -49,14 +54,16 @@ class HocPhiController extends Controller
     {
         try {
             $result = $this->hocPhiService->getHocPhiDetail($id);
-
+            $khoaResult = $this->khoaService->getKhoasWithChuyenNganh();
+            $khoas = $khoaResult['success'] ? $khoaResult['data'] : collect([]);
             if (!$result['success']) {
                 return back()->with('error', $result['message']);
             }
 
             // Đảm bảo view file là detailHocphi.blade.php
             return view('qlhp.detailHocphi', [
-                'hocphi' => $result['data']
+                'hocphi' => $result['data'],
+                'khoas' => $khoas,
             ]);
         } catch (\Exception $e) {
             \Log::error('Lỗi trong HocPhiController::detail: ' . $e->getMessage());
@@ -71,7 +78,8 @@ class HocPhiController extends Controller
             // Lấy tất cả môn học thay vì chỉ lấy active
             $monhocsResult = $this->monHocService->getAllMonHoc();
             $discountsResult = $this->hocPhiService->getAllMienGiam();
-
+            $khoaResult = $this->khoaService->getKhoasWithChuyenNganh();
+            $khoas = $khoaResult['success'] ? $khoaResult['data'] : collect([]);
             if (!$monhocsResult['success']) {
                 return back()->with('error', $monhocsResult['message']);
             }
@@ -82,7 +90,8 @@ class HocPhiController extends Controller
 
             return view('qlhp.discount', [
                 'monhocs' => $monhocsResult['data'],
-                'discounts' => $discountsResult['data']
+                'discounts' => $discountsResult['data'],
+                'khoas' => $khoas,
             ]);
 
         } catch (\Exception $e) {
@@ -195,7 +204,8 @@ class HocPhiController extends Controller
     {
         try {
             $result = $this->hocPhiSalesService->getSalesOverview();
-
+            $khoaResult = $this->khoaService->getKhoasWithChuyenNganh();
+            $khoas = $khoaResult['success'] ? $khoaResult['data'] : collect([]);
             if (!$result['success']) {
                 return back()->with('error', $result['message']);
             }
@@ -203,7 +213,8 @@ class HocPhiController extends Controller
             return view('qlhp.sale', [
                 'totalPaid' => $result['data']['totalPaid'],
                 'totalClasses' => $result['data']['totalClasses'],
-                'classSummary' => $result['data']['classSummary']
+                'classSummary' => $result['data']['classSummary'],
+                'khoas' => $khoas,
             ]);
 
         } catch (\Exception $e) {
@@ -216,14 +227,16 @@ class HocPhiController extends Controller
     {
         try {
             $result = $this->hocPhiSalesService->getClassDetail($lop);
-
+            $khoaResult = $this->khoaService->getKhoasWithChuyenNganh();
+            $khoas = $khoaResult['success'] ? $khoaResult['data'] : collect([]);
             if (!$result['success']) {
                 return back()->with('error', $result['message']);
             }
 
             return view('qlhp.saleDetail', [
                 'lop' => $lop,
-                'students' => $result['data']
+                'students' => $result['data'],
+                'khoas' => $khoas,
             ]);
 
         } catch (\Exception $e) {

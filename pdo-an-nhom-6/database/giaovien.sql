@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 11, 2024 at 12:19 PM
+-- Generation Time: Dec 25, 2024 at 11:06 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -89,7 +89,9 @@ INSERT INTO `giaovien` (`id_giaovien`, `id_nguoidung`, `ma_khoa`, `ten_giaovien`
 (46, 57, 5, 'Giáo viên 46', 'giaovien46@example.com', '0123456834'),
 (47, 58, 3, 'Giáo viên 47', 'giaovien47@example.com', '0123456835'),
 (48, 59, 4, 'Giáo viên 48', 'giaovien48@example.com', '0123456836'),
-(49, 60, 4, 'Giáo viên 49', 'giaovien49@example.com', '0123456837');
+(49, 60, 4, 'Giáo viên 49', 'giaovien49@example.com', '0123456837'),
+(50, 114, 1, 'abcd', NULL, NULL),
+(51, 115, 1, 'abcdefgh', NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -111,7 +113,7 @@ ALTER TABLE `giaovien`
 -- AUTO_INCREMENT for table `giaovien`
 --
 ALTER TABLE `giaovien`
-  MODIFY `id_giaovien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `id_giaovien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- Constraints for dumped tables

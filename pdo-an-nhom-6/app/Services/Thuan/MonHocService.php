@@ -40,4 +40,23 @@ class MonHocService
             ];
         }
     }
+
+    public function getAllMonHoc()
+    {
+        try {
+            $monhocs = $this->monHocRepository->getAll();
+
+            return [
+                'success' => true,
+                'data' => $monhocs
+            ];
+        } catch (\Exception $e) {
+            \Log::error('Lỗi trong MonHocService::getAllMonHoc: ' . $e->getMessage());
+            return [
+                'success' => false,
+                'message' => 'Có lỗi xảy ra khi tải danh sách môn học',
+                'data' => []
+            ];
+        }
+    }
 }

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Thuan\HocPhiController;
+use App\Http\Controllers\Thuan\ScheduleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoutingController;
 use App\Http\Controllers\Auth\CustomAuthController;
@@ -42,7 +44,7 @@ Route::prefix('admin')->group(function () {
         })->name('root');
 
         // Dashboard
-        Route::get('/index', fn() => view('index'))->name('index');
+        Route::get('/index', [ScheduleController::class, 'index'])->name('index');
 
         // QLND routes
         Route::prefix('qlnd')->name('qlnd.')->group(function () {
@@ -90,21 +92,59 @@ Route::prefix('admin')->group(function () {
 
         Route::get('/check-email', [SinhVienController::class, 'checkEmail'])->name('check.email');
 
+
+
+
         // Catch-all routes
         Route::get('{first}/{second}/{third}', [RoutingController::class, 'thirdLevel'])->name('third');
         Route::get('{first}/{second}', [RoutingController::class, 'secondLevel'])->name('second');
         Route::get('{any}', [RoutingController::class, 'root'])->name('any');
     });
+
+
+
 });
 
 // Thuan routes
 Route::prefix('thuan')->group(function () {
     Route::get('/chuyennganh', [HomeController::class, 'chuyenNganh'])->name('chuyennganh.index');
     Route::get('/chuyennganh/{id}', [HomeController::class, 'showChuyenNganh'])->name('chuyennganh.show');
-    
+
     Route::post('/cart/add/{id_chuyennganh}', [CartController::class, 'addToCart'])->name('cart.add');
     Route::delete('/cart/remove/{id_chuyennganh}', [CartController::class, 'removeFromCart'])->name('cart.remove');
     Route::get('/cart', [CartController::class, 'viewCart'])->name('cart.view');
+
+    Route::prefix('hocphi')->group(function () {
+        Route::get('/', [HocPhiController::class, 'index'])->name('hocphi.index');
+        Route::get('/detail/{id}', [HocPhiController::class, 'detail'])->name('hocphi.detail');
+
+        // Discount management routes
+        Route::get('discount', [HocPhiController::class, 'discount'])->name('hocphi.discount');
+        Route::get('discount/{id}', [HocPhiController::class, 'getDiscount'])->name('hocphi.discount.get');
+        Route::post('discount', [HocPhiController::class, 'storeDiscount'])->name('hocphi.discount.store');
+        Route::put('discount/{id}', [HocPhiController::class, 'updateDiscount'])->name('hocphi.discount.update');
+        Route::delete('discount/{id}', [HocPhiController::class, 'deleteDiscount'])->name('hocphi.discount.delete');
+
+        Route::get('sales', [HocPhiController::class, 'sales'])->name('hocphi.sales');
+        Route::get('sales/{lop}', [HocPhiController::class, 'salesDetail'])->name('hocphi.sales.detail');
+
+
+    });
+
+    Route::prefix('schedule')->controller(ScheduleController::class)->group(function () {
+        Route::get('chuyennganh/{id}', 'chuyenNganh')->name('schedule.chuyennganh');
+        Route::get('lop/{ten_lop}/{week?}', 'lopSchedule')->name('schedule.lop');  
+
+         // Quản lý thời khóa biểu
+         Route::get('/create', 'create')->name('schedule.create');
+         Route::post('/store', 'store')->name('schedule.store');
+         Route::get('/edit/{id}', 'edit')->name('schedule.edit');
+         Route::put('/update/{id}', 'update')->name('schedule.update');
+         Route::delete('/delete/{id}', 'destroy')->name('schedule.destroy');
+ 
+         // API kiểm tra xung đột
+         Route::post('/check-conflicts', 'checkConflicts')->name('schedule.checkConflicts');
+    });
 });
 
 // Client auth routes

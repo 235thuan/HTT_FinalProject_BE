@@ -37,9 +37,9 @@ class Khoa extends Model
      * Một khoa có nhiều chuyên ngành
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function chuyenNganh()
+    public function chuyenNganhs()
     {
-        return $this->hasMany(ChuyenNganh::class, 'id_khoa', 'id_khoa');
+        return $this->hasMany(ChuyenNganh::class, 'ma_khoa', 'id_khoa');
     }
 
     /**

@@ -30,7 +30,7 @@ class ThongKeRepository
                 ->limit(2)
                 ->get();
         } catch (\Exception $e) {
-            \Log::error('Lỗi trong ThongKeRepository::getTopChuyenNganh: ' . $e->getMessage());
+
             throw $e;
         }
     }

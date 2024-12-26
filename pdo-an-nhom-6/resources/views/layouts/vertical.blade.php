@@ -3,15 +3,20 @@
 <head>
     @include('layouts.partials/title-meta', ['title' => $title])
     @yield('css')
+
+
     @include('layouts.partials/head-css')
-    
-    <!-- Load Bootstrap CSS first -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Then other CSS -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" type="text/css" />
-    
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Then Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Then Datepicker CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker3.min.css" rel="stylesheet">
+
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    
+
     <style>
     /* Ensure dropdowns work properly */
     .dropdown-menu {
@@ -46,7 +51,7 @@
     span{
         color: #000;
     }
-        
+
     </style>
 </head>
 
@@ -68,24 +73,29 @@
 
     <!-- Scripts in correct order -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.vi.min.js"></script>
+
+
     @vite(['resources/js/app.js'])
-    
+
     <script>
         // Initialize Feather icons
         feather.replace();
-        
+
         // Manual dropdown handling
         $(document).ready(function() {
             // Initialize dropdowns manually
             $('.dropdown-toggle').click(function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                
+
                 const menu = $(this).next('.dropdown-menu');
                 $('.dropdown-menu').not(menu).removeClass('show');
                 menu.toggleClass('show');

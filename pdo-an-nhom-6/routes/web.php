@@ -17,7 +17,8 @@ use App\Http\Controllers\Thuan\TestController;
 use App\Http\Controllers\Thuan\ClientAuthController;
 
 // Trang chủ - không cần prefix
-Route::get('/', [App\Http\Controllers\Thuan\HomeController::class, 'index'])->name('home');
+//Route::get('/', [App\Http\Controllers\Thuan\HomeController::class, 'index'])->name('home');
+Route::view('/', 'cuong.tcn')->name('home');
 Route::get('/test', [App\Http\Controllers\Thuan\TestController::class, 'testCart'])->name('cart.test');
 // Test route to add a sample item
 Route::get('/test-add-item', function() {
@@ -133,7 +134,7 @@ Route::prefix('thuan')->group(function () {
 
     Route::prefix('schedule')->controller(ScheduleController::class)->group(function () {
         Route::get('chuyennganh/{id}', 'chuyenNganh')->name('schedule.chuyennganh');
-        Route::get('lop/{ten_lop}/{week?}', 'lopSchedule')->name('schedule.lop');  
+        Route::get('lop/{ten_lop}/{week?}', 'lopSchedule')->name('schedule.lop');
 
          // Quản lý thời khóa biểu
          Route::get('/create', 'create')->name('schedule.create');
@@ -141,7 +142,7 @@ Route::prefix('thuan')->group(function () {
          Route::get('/edit/{id}', 'edit')->name('schedule.edit');
          Route::put('/update/{id}', 'update')->name('schedule.update');
          Route::delete('/delete/{id}', 'destroy')->name('schedule.destroy');
- 
+
          // API kiểm tra xung đột
          Route::post('/check-conflicts', 'checkConflicts')->name('schedule.checkConflicts');
     });
@@ -152,6 +153,11 @@ Route::prefix('client')->group(function () {
     Route::post('/login', [ClientAuthController::class, 'login'])->name('client.login');
     Route::post('/register', [ClientAuthController::class, 'register'])->name('client.register');
     Route::post('/logout', [ClientAuthController::class, 'logout'])->name('client.logout');
+});
+
+//
+Route::prefix('cuong')->group(function () {
+    Route::get('/thoikhoabieu', [ThoiKhoaBieuController::class, 'index']);
 });
 
 

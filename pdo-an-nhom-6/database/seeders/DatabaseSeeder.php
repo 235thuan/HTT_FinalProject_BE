@@ -3,13 +3,13 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\User;
+use App\Models\NguoiDung;
 
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        User::factory()->create([
+        NguoiDung::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
             'password' => bcrypt('password')

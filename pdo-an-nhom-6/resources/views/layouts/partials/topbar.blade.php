@@ -11,12 +11,12 @@
                 <li class="d-none d-lg-block">
                     @if(request()->routeIs('qlnd.listSinhvien'))
                         <div class="position-relative topbar-search">
-                            <input type="text" 
-                                   id="student-search" 
+                            <input type="text"
+                                   id="student-search"
                                    class="form-control bg-light bg-opacity-75 border-light ps-4"
                                    placeholder="Tìm kiếm sinh viên...">
                             <i class="mdi mdi-magnify fs-16 position-absolute text-muted top-50 translate-middle-y ms-2 search-icon"></i>
-                            
+
                             <!-- Suggestions dropdown -->
                             <div id="student-search-suggestions" class="suggestions-dropdown" style="display: none;">
                                 <div class="suggestions-list"></div>
@@ -28,13 +28,13 @@
                     @endif
                     @if(request()->routeIs('qlnd.listGiaovien'))
                         <div class="position-relative topbar-search">
-                            <input type="text" 
-                                   id="teacher-search" 
+                            <input type="text"
+                                   id="teacher-search"
                                    class="form-control bg-light bg-opacity-75 border-light ps-4"
-                                   placeholder="Tìm kiếm giáo viên..." 
+                                   placeholder="Tìm kiếm giáo viên..."
                                    value="{{ request('search') }}">
                             <i class="mdi mdi-magnify fs-16 position-absolute text-muted top-50 translate-middle-y ms-2 search-icon"></i>
-                            
+
                             <!-- Suggestions dropdown -->
                             <div id="teacher-search-suggestions" class="suggestions-dropdown" style="display: none;">
                                 <div class="suggestions-list"></div>
@@ -77,13 +77,13 @@
                             <div class="noti-scroll" data-simplebar>
                                 <div id="unread-notifications">
                                     @forelse(auth()->user()->recentNotifications()->where('da_doc', 0)->get() as $notification)
-                                        <a href="javascript:void(0);" 
-                                           class="dropdown-item notify-item" 
+                                        <a href="javascript:void(0);"
+                                           class="dropdown-item notify-item"
                                            onclick="markAsRead({{ $notification->id_thongbao }})">
                                             <div class="notify-icon">
                                                 @if($notification->nguoiDung && $notification->nguoiDung->avatar_url)
-                                                    <img src="{{ $notification->nguoiDung->avatar_url }}" 
-                                                         class="img-fluid rounded-circle" 
+                                                    <img src="{{ $notification->nguoiDung->avatar_url }}"
+                                                         class="img-fluid rounded-circle"
                                                          alt="" />
                                                 @else
                                                     <i class="mdi mdi-bell-outline"></i>
@@ -106,15 +106,15 @@
                                         </div>
                                     @endforelse
                                 </div>
-                                
+
                                 <div id="all-notifications" style="display: none;">
                                     @forelse(auth()->user()->recentNotifications()->get() as $notification)
-                                        <a href="javascript:void(0);" 
-                                           class="dropdown-item notify-item {{ $notification->da_doc ? '' : 'bg-light' }}" 
+                                        <a href="javascript:void(0);"
+                                           class="dropdown-item notify-item {{ $notification->da_doc ? '' : 'bg-light' }}"
                                            onclick="markAsRead({{ $notification->id_thongbao }})">
                                             <div class="notify-icon">
-                                                <img src="{{ $notification->nguoiDung->avatar_url }}" 
-                                                     class="img-fluid rounded-circle" 
+                                                <img src="{{ $notification->nguoiDung->avatar_url }}"
+                                                     class="img-fluid rounded-circle"
                                                      alt="" />
                                             </div>
                                             <div class="notify-content">
@@ -202,7 +202,7 @@ function toggleNotifications() {
     const unreadSection = document.getElementById('unread-notifications');
     const allSection = document.getElementById('all-notifications');
     const toggleText = document.getElementById('toggle-text');
-    
+
     if (!unreadSection || !allSection || !toggleText) {
         console.error('Required elements not found');
         return;
@@ -242,13 +242,13 @@ function markAllAsRead() {
                     </div>
                 `;
             }
-            
+
             // Hide the notification badge
             const badge = document.querySelector('.noti-icon-badge');
             if (badge) {
                 badge.style.display = 'none';
             }
-            
+
             // Show empty state
             document.querySelector('.noti-scroll').innerHTML = `
                 <div class="text-center p-2">
@@ -267,31 +267,31 @@ function markAllAsRead() {
 $(document).ready(function() {
     var searchTimeout;
     var currentSearchTerm = '';
-    
+
     $('#student-search').on('keyup', function(e) {
         var searchBox = $(this);
         var suggestionsBox = $('#student-search-suggestions');
         var searchTerm = searchBox.val().trim();
         currentSearchTerm = searchTerm;
-        
+
         clearTimeout(searchTimeout);
-        
+
         if (searchTerm.length < 2) {
             suggestionsBox.hide();
             return;
         }
-        
+
         // Handle enter key
         if (e.key === 'Enter') {
             performSearch(searchTerm);
             return;
         }
-        
+
         // Get suggestions
         searchTimeout = setTimeout(function() {
             $.ajax({
                 url: '{{ route("qlnd.searchSinhvien") }}',
-                data: { 
+                data: {
                     search: searchTerm,
                     suggest: true
                 },
@@ -304,15 +304,15 @@ $(document).ready(function() {
                 },
                 success: function(response) {
                     if (searchTerm !== currentSearchTerm) return;
-                    
+
                     var suggestionsList = suggestionsBox.find('.suggestions-list');
                     suggestionsList.empty();
-                    
+
                     if (response.suggestions && response.suggestions.length > 0) {
                         // Add category headers
                         var classHeader = false;
                         var studentHeader = false;
-                        
+
                         response.suggestions.forEach(function(item) {
                             if (item.type === 'class' && !classHeader) {
                                 suggestionsList.append('<div class="suggestion-header">Lớp/Khoa/Chuyên ngành</div>');
@@ -321,32 +321,32 @@ $(document).ready(function() {
                                 suggestionsList.append('<div class="suggestion-header">Sinh viên</div>');
                                 studentHeader = true;
                             }
-                            
+
                             var html = '';
                             if (item.type === 'class') {
                                 html = `
-                                    <div class="suggestion-item" 
-                                         data-type="class" 
+                                    <div class="suggestion-item"
+                                         data-type="class"
                                          data-lop="${item.ten_lop}">
                                         <div class="d-flex justify-content-between">
                                             <span>${highlightMatch(item.ten_lop, searchTerm)}</span>
                                             <small class="text-muted">${item.student_count} sinh viên</small>
                                         </div>
                                         <small class="text-muted">
-                                            ${highlightMatch(item.ten_chuyennganh, searchTerm)} - 
+                                            ${highlightMatch(item.ten_chuyennganh, searchTerm)} -
                                             ${highlightMatch(item.ten_khoa, searchTerm)}
                                         </small>
                                     </div>
                                 `;
                             } else {
                                 html = `
-                                    <div class="suggestion-item" 
+                                    <div class="suggestion-item"
                                          data-type="student"
                                          data-id="${item.id_sinhvien}"
                                          data-lop="${item.lop}">
                                         <div class="d-flex justify-content-between">
                                             <span>${highlightMatch(item.ten_sinhvien, searchTerm)}</span>
-                                            <small class="text-muted">${item.lop}</small>
+                                            <small class="text-muted">${item.ten_lop}</small>
                                         </div>
                                         <small class="text-muted">${item.email}</small>
                                     </div>
@@ -354,20 +354,20 @@ $(document).ready(function() {
                             }
                             suggestionsList.append(html);
                         });
-                        
+
                         suggestionsBox.find('.suggestions-list').show();
                         suggestionsBox.find('.no-results').hide();
                     } else {
                         suggestionsBox.find('.suggestions-list').hide();
                         suggestionsBox.find('.no-results').show();
                     }
-                    
+
                     suggestionsBox.show();
                 }
             });
         }, 300);
     });
-    
+
     // Handle suggestion click
     $(document).on('click', '.suggestion-item', function() {
         var type = $(this).data('type');
@@ -381,7 +381,7 @@ $(document).ready(function() {
         }
         $('#student-search-suggestions').hide();
     });
-    
+
     // Handle search icon click
     $(document).on('click', '.search-icon', function() {
         var searchTerm = $('#student-search').val().trim();
@@ -389,14 +389,14 @@ $(document).ready(function() {
             performSearch(searchTerm);
         }
     });
-    
+
     // Close suggestions on click outside
     $(document).on('click', function(e) {
         if (!$(e.target).closest('.topbar-search').length) {
             $('.suggestions-dropdown').hide();
         }
     });
-    
+
     function performSearch(term) {
         $.ajax({
             url: '{{ route("qlnd.searchSinhvien") }}',
@@ -415,7 +415,7 @@ $(document).ready(function() {
             }
         });
     }
-    
+
     function scrollToStudent(id, lop) {
         var studentRow = $(`tr[data-student-id="${id}"]`);
         if (studentRow.length) {
@@ -429,7 +429,7 @@ $(document).ready(function() {
             // Student might be on another page, reload with search parameters
             var currentUrl = new URL(window.location.href);
             var params = new URLSearchParams(currentUrl.search);
-            
+
             // Keep existing pagination parameters
             var paginationParams = {};
             for (var pair of params.entries()) {
@@ -437,20 +437,20 @@ $(document).ready(function() {
                     paginationParams[pair[0]] = pair[1];
                 }
             }
-            
+
             // Build new URL with both find parameters and pagination
-            var newUrl = window.location.pathname + '?find_student=' + id + 
+            var newUrl = window.location.pathname + '?find_student=' + id +
                 '&find_lop=' + encodeURIComponent(lop);
-            
+
             // Add pagination parameters
             for (var key in paginationParams) {
                 newUrl += '&' + key + '=' + paginationParams[key];
             }
-            
+
             window.location.href = newUrl;
         }
     }
-    
+
     function scrollToClass(lop) {
         // Find the card with the class name in its header
         var classCard = $(`h5:contains("${lop}")`).closest('.card');
@@ -463,11 +463,11 @@ $(document).ready(function() {
             setTimeout(() => classCard.removeClass('highlight-card'), 3000);
         } else {
             // Class might be on another page or needs to be loaded
-            window.location.href = window.location.pathname + 
+            window.location.href = window.location.pathname +
                 '?search_lop=' + encodeURIComponent(lop);
         }
     }
-    
+
     function highlightMatch(text, term) {
         if (!term) return text;
         var regex = new RegExp(`(${term})`, 'gi');
@@ -480,31 +480,31 @@ $(document).ready(function() {
 $(document).ready(function() {
     var searchTimeout;
     var currentSearchTerm = '';
-    
+
     $('#teacher-search').on('keyup', function(e) {
         var searchBox = $(this);
         var suggestionsBox = $('#teacher-search-suggestions');
         var searchTerm = searchBox.val().trim();
         currentSearchTerm = searchTerm;
-        
+
         clearTimeout(searchTimeout);
-        
+
         if (searchTerm.length < 2) {
             suggestionsBox.hide();
             return;
         }
-        
+
         // Handle enter key
         if (e.key === 'Enter') {
             performTeacherSearch(searchTerm);
             return;
         }
-        
+
         // Get suggestions
         searchTimeout = setTimeout(function() {
             $.ajax({
                 url: '{{ route("qlnd.searchGiaovien") }}',
-                data: { 
+                data: {
                     search: searchTerm,
                     suggest: true
                 },
@@ -513,15 +513,15 @@ $(document).ready(function() {
                 },
                 success: function(response) {
                     if (searchTerm !== currentSearchTerm) return;
-                    
+
                     var suggestionsList = suggestionsBox.find('.suggestions-list');
                     suggestionsList.empty();
-                    
+
                     if (response.suggestions && response.suggestions.length > 0) {
                         // Add category headers
                         var departmentHeader = false;
                         var teacherHeader = false;
-                        
+
                         response.suggestions.forEach(function(item) {
                             if (item.type === 'department' && !departmentHeader) {
                                 suggestionsList.append('<div class="suggestion-header">Khoa</div>');
@@ -530,23 +530,23 @@ $(document).ready(function() {
                                 suggestionsList.append('<div class="suggestion-header">Giáo viên</div>');
                                 teacherHeader = true;
                             }
-                            
+
                             var html = '';
                             if (item.type === 'department') {
                                 html = `
-                                    <div class="suggestion-item" 
-                                         data-type="department" 
+                                    <div class="suggestion-item"
+                                         data-type="department"
                                          data-khoa="${item.ma_khoa}">
                                         <div class="d-flex justify-content-between">
                                             <span>${highlightMatch(item.ten_khoa, searchTerm)}</span>
                                             <small class="text-muted">${item.teacher_count} giáo viên</small>
                                         </div>
-                                    
+
                                     </div>
                                 `;
                             } else {
                                 html = `
-                                    <div class="suggestion-item" 
+                                    <div class="suggestion-item"
                                          data-type="teacher"
                                          data-id="${item.id_giaovien}">
                                         <div class="d-flex justify-content-between">
@@ -559,20 +559,20 @@ $(document).ready(function() {
                             }
                             suggestionsList.append(html);
                         });
-                        
+
                         suggestionsBox.find('.suggestions-list').show();
                         suggestionsBox.find('.no-results').hide();
                     } else {
                         suggestionsBox.find('.suggestions-list').hide();
                         suggestionsBox.find('.no-results').show();
                     }
-                    
+
                     suggestionsBox.show();
                 }
             });
         }, 300);
     });
-    
+
     // Handle suggestion click
     $(document).on('click', '.suggestion-item', function() {
         var type = $(this).data('type');
@@ -585,7 +585,7 @@ $(document).ready(function() {
         }
         $('#teacher-search-suggestions').hide();
     });
-    
+
     function performTeacherSearch(term) {
         $.ajax({
             url: '{{ route("qlnd.searchGiaovien") }}',
@@ -601,10 +601,10 @@ $(document).ready(function() {
             }
         });
     }
-    
+
     function scrollToTeacher(id) {
         var teacherCard = $(`[data-teacher-id="${id}"]`);
-        
+
         if (teacherCard.length) {
             // Teacher is visible on current page
             $('html, body').animate({
@@ -623,11 +623,11 @@ $(document).ready(function() {
                         // Construct URL with correct page parameter
                         let currentUrl = new URL(window.location.href);
                         let params = new URLSearchParams(currentUrl.search);
-                        
+
                         // Update or add the page parameter for the correct list
                         params.set(`page_${response.list}`, response.page);
                         params.set('find_teacher', id);
-                        
+
                         // Redirect to the correct page
                         window.location.href = `${window.location.pathname}?${params.toString()}`;
                     } else {
@@ -640,8 +640,8 @@ $(document).ready(function() {
             });
         }
     }
-  
-    
+
+
     function filterByDepartment(khoaId) {
         window.location.href = window.location.pathname + '?khoa=' + khoaId;
     }

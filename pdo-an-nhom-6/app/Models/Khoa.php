@@ -39,7 +39,7 @@ class Khoa extends Model
      */
     public function chuyenNganhs()
     {
-        return $this->hasMany(ChuyenNganh::class, 'ma_khoa', 'id_khoa');
+        return $this->hasMany(ChuyenNganh::class, 'id_khoa', 'id_khoa');
     }
 
     /**

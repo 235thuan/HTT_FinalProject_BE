@@ -17,7 +17,8 @@ class FileUpload extends Model
         'id_chuyennganh',
         'id_khoa',
         'id_monhoc',
-        'id_lop'
+        'id_lop',
+        'thoi_luong'
     ];
 
     /**

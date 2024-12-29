@@ -42,8 +42,8 @@ class GiaoVienController extends Controller
             foreach ($khoas as $khoa) {
                 $teachersQuery = DB::table('giaovien')
                     ->join('nguoidung', 'giaovien.id_nguoidung', '=', 'nguoidung.id_nguoidung')
-                    ->join('khoa', 'giaovien.ma_khoa', '=', 'khoa.id_khoa')
-                    ->where('giaovien.ma_khoa', '=', $khoa->id_khoa)
+                    ->join('khoa', 'giaovien.id_khoa', '=', 'khoa.id_khoa')
+                    ->where('giaovien.id_khoa', '=', $khoa->id_khoa)
                     ->select(
                         'giaovien.*',
                         'nguoidung.email',
@@ -67,7 +67,7 @@ class GiaoVienController extends Controller
                 $khoa->teachers = $teachersQuery->paginate(5, ['*'], 'page_' . $khoa->id_khoa);
 
                 $khoa->total_teachers = DB::table('giaovien')
-                    ->where('ma_khoa', '=', $khoa->id_khoa)
+                    ->where('id_khoa', '=', $khoa->id_khoa)
                     ->count();
             }
 
@@ -125,7 +125,7 @@ class GiaoVienController extends Controller
         try {
             $validated = $request->validate([
                 'ten_giaovien' => 'required',
-                'ma_khoa' => 'required|exists:khoa,id_khoa',
+                'id_khoa' => 'required|exists:khoa,id_khoa',
                 'email' => 'required|email',
                 'so_dien_thoai' => 'required'
             ]);
@@ -135,7 +135,7 @@ class GiaoVienController extends Controller
                 ->where('id_giaovien', $id)
                 ->update([
                     'ten_giaovien' => $validated['ten_giaovien'],
-                    'ma_khoa' => $validated['ma_khoa']
+                    'id_khoa' => $validated['id_khoa']
                 ]);
 
             // Get giaovien record
@@ -159,7 +159,7 @@ class GiaoVienController extends Controller
                     'ten_giaovien' => $validated['ten_giaovien'],
                     'email' => $validated['email'],
                     'so_dien_thoai' => $validated['so_dien_thoai'],
-                    'ma_khoa' => $validated['ma_khoa']
+                    'id_khoa' => $validated['id_khoa']
                 ]
             ]);
         } catch (\Exception $e) {
@@ -176,7 +176,7 @@ class GiaoVienController extends Controller
 
             $giaovien = DB::table('giaovien')
                 ->join('nguoidung', 'giaovien.id_nguoidung', '=', 'nguoidung.id_nguoidung')
-                ->join('khoa', 'giaovien.ma_khoa', '=', 'khoa.id_khoa')
+                ->join('khoa', 'giaovien.id_khoa', '=', 'khoa.id_khoa')
                 ->where('giaovien.id_giaovien', $id)
                 ->select(
                     'giaovien.*',
@@ -209,7 +209,7 @@ class GiaoVienController extends Controller
                     ->orWhere('email', 'LIKE', "%{$search}%")
                     ->orWhere('so_dien_thoai', 'LIKE', "%{$search}%")
                     // Add any other fields you want to search
-                    ->orWhere('ma_giao_vien', 'LIKE', "%{$search}%");
+                    ->orWhere('id_giaovien', 'LIKE', "%{$search}%");
             });
         }
 
@@ -236,11 +236,11 @@ class GiaoVienController extends Controller
                     ->get()
                     ->map(function ($khoa) {
                         $teacherCount = DB::table('giaovien')
-                            ->where('ma_khoa', $khoa->id_khoa)
+                            ->where('id_khoa', $khoa->id_khoa)
                             ->count();
                         return [
                             'type' => 'department',
-                            'ma_khoa' => $khoa->id_khoa,
+                            'id_khoa' => $khoa->id_khoa,
                             'ten_khoa' => $khoa->ten_khoa,
                             'teacher_count' => $teacherCount
                         ];
@@ -248,7 +248,7 @@ class GiaoVienController extends Controller
 
                 // Get matching teachers
                 $teachers = DB::table('giaovien')
-                    ->join('khoa', 'giaovien.ma_khoa', '=', 'khoa.id_khoa')
+                    ->join('khoa', 'giaovien.id_khoa', '=', 'khoa.id_khoa')
                     ->join('nguoidung', 'giaovien.id_nguoidung', '=', 'nguoidung.id_nguoidung')
                     ->where(function ($q) use ($search) {
                         $q->where('giaovien.ten_giaovien', 'LIKE', "%{$search}%")
@@ -280,7 +280,7 @@ class GiaoVienController extends Controller
 
             // Handle direct search
             $teacher = DB::table('giaovien')
-                ->join('khoa', 'giaovien.ma_khoa', '=', 'khoa.id_khoa')
+                ->join('khoa', 'giaovien.id_khoa', '=', 'khoa.id_khoa')
                 ->join('nguoidung', 'giaovien.id_nguoidung', '=', 'nguoidung.id_nguoidung')
                 ->where(function ($q) use ($search) {
                     $q->where('giaovien.ten_giaovien', 'LIKE', "%{$search}%")
@@ -294,9 +294,7 @@ class GiaoVienController extends Controller
                 'type' => 'teacher',
                 'teacher' => $teacher
             ]);
-            return response()->json([
-                'found' => false
-            ]);
+
         } catch (\Exception $e) {
             \Log::error('Error in teacher search: ' . $e->getMessage());
             return response()->json(['error' => 'Có lỗi xảy ra'], 500);
@@ -310,9 +308,9 @@ class GiaoVienController extends Controller
                 'ten_giaovien' => 'required',
                 'email' => 'required|email',
                 'so_dien_thoai' => 'required',
-                'ma_khoa' => 'required|exists:khoa,id_khoa',
-                'ma_monhoc' => 'required|array',
-                'ma_monhoc.*' => 'exists:monhoc,id_monhoc'
+                'id_khoa' => 'required|exists:khoa,id_khoa',
+                'id_monhoc' => 'required|array',
+                'id_monhoc.*' => 'exists:monhoc,id_monhoc'
             ]);
 
             // Start transaction
@@ -366,14 +364,14 @@ class GiaoVienController extends Controller
                 'id_giaovien' => $newId,
                 'id_nguoidung' => $id_nguoidung,
                 'ten_giaovien' => $request->ten_giaovien,
-                'ma_khoa' => $request->ma_khoa
+                'id_khoa' => $request->id_khoa
             ]);
 
             // Add monhoc relationships
-            foreach ($request->ma_monhoc as $monhocId) {
+            foreach ($request->id_monhoc as $monhocId) {
                 DB::table('giaovien_monhoc')->insert([
-                    'ma_giaovien' => $newId,
-                    'ma_monhoc' => $monhocId
+                    'id_giaovien' => $newId,
+                    'id_monhoc' => $monhocId
                 ]);
             }
 
@@ -448,38 +446,7 @@ class GiaoVienController extends Controller
         }
     }
 
-// public function getMonHoc(Request $request)
-// {
-//     try {
-//         $khoaId = $request->khoa_id;
 
-//         if (!$khoaId) {
-//             return response()->json([], 400);
-//         }
-
-//         $monhoc = DB::table('monhoc')
-//             ->join('chuyennganh', 'monhoc.ma_chuyen_nganh', '=', 'chuyennganh.id_chuyennganh')
-//             ->join('khoa', 'chuyennganh.ma_khoa', '=', 'khoa.id_khoa')
-//             ->where('khoa.id_khoa', $khoaId)
-//             ->select(
-//                 'monhoc.id_monhoc',
-//                 'monhoc.ten_monhoc',
-//                 'monhoc.so_tin_chi'
-//             )
-//             ->distinct()
-//             ->orderBy('monhoc.ten_monhoc')
-//             ->get()
-//             ->toArray(); // Convert to array
-
-//         // Debug log
-//         \Log::info('getMonHoc response:', ['data' => $monhoc]);
-
-//         return response()->json($monhoc);
-//     } catch (\Exception $e) {
-//         \Log::error('Error in getMonHoc: ' . $e->getMessage());
-//         return response()->json([], 500);
-//     }
-// }
 
     public function getMonHocByKhoa($khoa_id)
     {
@@ -492,8 +459,8 @@ class GiaoVienController extends Controller
                     'm.ten_monhoc',
                     'm.so_tin_chi'
                 ])
-                ->join('chuyennganh as cn', 'm.ma_chuyen_nganh', '=', 'cn.id_chuyennganh')
-                ->where('cn.ma_khoa', '=', $khoa_id)
+                ->join('chuyennganh as cn', 'm.id_chuyennganh', '=', 'cn.id_chuyennganh')
+                ->where('cn.id_khoa', '=', $khoa_id)
                 ->distinct()
                 ->orderBy('m.ten_monhoc')
                 ->get();
@@ -528,7 +495,7 @@ class GiaoVienController extends Controller
 
             // Find the teacher and their khoa
             $teacher = DB::table('giaovien')
-                ->join('khoa', 'giaovien.ma_khoa', '=', 'khoa.id_khoa')
+                ->join('khoa', 'giaovien.id_khoa', '=', 'khoa.id_khoa')
                 ->where('id_giaovien', $teacherId)
                 ->select('giaovien.*', 'khoa.id_khoa')
                 ->first();
@@ -536,7 +503,7 @@ class GiaoVienController extends Controller
             if ($teacher) {
                 // Find position of teacher in their khoa's list
                 $position = DB::table('giaovien')
-                    ->where('ma_khoa', $teacher->id_khoa)
+                    ->where('id_khoa', $teacher->id_khoa)
                     ->where('id_giaovien', '<=', $teacherId)
                     ->count();
 

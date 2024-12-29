@@ -1,24 +1,24 @@
 <?php
 
+use App\Http\Controllers\Cuong\ProfileController;
 use App\Http\Controllers\Thuan\HocPhiController;
+use App\Http\Controllers\Thuan\MienGiamController;
 use App\Http\Controllers\Thuan\ScheduleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoutingController;
 use App\Http\Controllers\Auth\CustomAuthController;
 use App\Http\Controllers\LopController;
 use App\Http\Controllers\SinhVienController;
-use App\Http\Controllers\NotificationController;
-use Illuminate\Support\Facades\Auth;
+
 use App\Http\Controllers\GiaoVienController;
 use App\Http\Controllers\Thuan\HomeController;
 use App\Http\Controllers\Thuan\CartController;
-use Illuminate\Support\Facades\Session;
-use App\Http\Controllers\Thuan\TestController;
+
 use App\Http\Controllers\Thuan\ClientAuthController;
 
 // Trang chủ - không cần prefix
-//Route::get('/', [App\Http\Controllers\Thuan\HomeController::class, 'index'])->name('home');
-Route::view('/', 'cuong.tcn')->name('home');
+Route::get('/', [App\Http\Controllers\Thuan\HomeController::class, 'index'])->name('home');
+
 Route::get('/test', [App\Http\Controllers\Thuan\TestController::class, 'testCart'])->name('cart.test');
 // Test route to add a sample item
 Route::get('/test-add-item', function() {
@@ -69,10 +69,12 @@ Route::prefix('admin')->group(function () {
 
         // Sinhvien routes
         Route::prefix('sinhvien')->name('sinhvien.')->group(function () {
+            Route::get('/getLopList', [SinhVienController::class, 'getLopList'])->name('getLopList');
+            Route::put('/{id}', [SinhVienController::class, 'update'])->name('update');
             Route::get('/{id}/edit', [SinhVienController::class, 'edit'])->name('edit');
             Route::get('/{id}', [SinhVienController::class, 'show'])->name('show');
-            Route::put('/{id}', [SinhVienController::class, 'update'])->name('update');
             Route::post('/', [SinhVienController::class, 'store'])->name('store');
+
         });
 
         // Giaovien routes
@@ -102,8 +104,9 @@ Route::prefix('admin')->group(function () {
         Route::get('{any}', [RoutingController::class, 'root'])->name('any');
     });
 
-
-
+    // Lock screen routes
+    Route::get('/auth/lockscreen', [CustomAuthController::class, 'lockScreen'])->name('second');
+    Route::post('/auth/unlock', [CustomAuthController::class, 'unlock'])->name('unlock');
 });
 
 // Thuan routes
@@ -118,18 +121,25 @@ Route::prefix('thuan')->group(function () {
     Route::prefix('hocphi')->group(function () {
         Route::get('/', [HocPhiController::class, 'index'])->name('hocphi.index');
         Route::get('/detail/{id}', [HocPhiController::class, 'detail'])->name('hocphi.detail');
+        Route::post('/update-mien-giam', [HocPhiController::class, 'updateMienGiam'])->name('hocphi.updateMienGiam');
+        Route::get('/{id}/edit', [HocPhiController::class, 'edit'])->name('hocphi.edit');
+        Route::put('/{id}', [HocPhiController::class, 'update'])->name('hocphi.update');
+        Route::get('/get-mien-giam/{monhocId}', [HocPhiController::class, 'getMienGiamByMonHoc'])->name('hocphi.getMienGiam');
 
-        // Discount management routes
-        Route::get('discount', [HocPhiController::class, 'discount'])->name('hocphi.discount');
-        Route::get('discount/{id}', [HocPhiController::class, 'getDiscount'])->name('hocphi.discount.get');
-        Route::post('discount', [HocPhiController::class, 'storeDiscount'])->name('hocphi.discount.store');
-        Route::put('discount/{id}', [HocPhiController::class, 'updateDiscount'])->name('hocphi.discount.update');
-        Route::delete('discount/{id}', [HocPhiController::class, 'deleteDiscount'])->name('hocphi.discount.delete');
 
         Route::get('sales', [HocPhiController::class, 'sales'])->name('hocphi.sales');
         Route::get('sales/{lop}', [HocPhiController::class, 'salesDetail'])->name('hocphi.sales.detail');
 
 
+    });
+    Route::prefix('miengiam')->group(function () {
+        Route::get('/',  [MienGiamController::class, 'index'])->name('miengiam.index');
+        Route::get('/create', [MienGiamController::class, 'create'])->name('miengiam.create');
+        Route::post('/', [MienGiamController::class, 'store'])->name('miengiam.store');
+        Route::get('/{id}/edit', [MienGiamController::class, 'edit'])->name('miengiam.edit');
+        Route::put('/{id}', [MienGiamController::class, 'update'])->name('miengiam.update');
+        Route::delete('/{id}', [MienGiamController::class, 'destroy'])->name('miengiam.destroy');
+        Route::post('/check-overlap', [MienGiamController::class, 'checkOverlap'])->name('miengiam.checkOverlap');
     });
 
     Route::prefix('schedule')->controller(ScheduleController::class)->group(function () {
@@ -157,7 +167,7 @@ Route::prefix('client')->group(function () {
 
 //
 Route::prefix('cuong')->group(function () {
-    Route::get('/thoikhoabieu', [ThoiKhoaBieuController::class, 'index']);
+    Route::get('/tcn', [ProfileController::class, 'index'])->name('cuong.profile');
 });
 
 

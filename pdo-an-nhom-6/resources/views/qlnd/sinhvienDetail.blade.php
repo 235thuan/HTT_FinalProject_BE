@@ -29,7 +29,7 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Lớp</label>
-                                <p class="form-control-static">{{ $sinhvien->lop }}</p>
+                                <p class="form-control-static">{{ $sinhvien->ten_lop }}</p>
                             </div>
                         </div>
                     </div>
@@ -77,4 +77,4 @@
         </div>
     </div>
 </div>
-@endsection 
+@endsection

@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
+
 
 class ThongBao extends Model
 {
@@ -28,6 +28,6 @@ class ThongBao extends Model
 
     public function nguoiDung()
     {
-        return $this->belongsTo(User::class, 'id_nguoidung', 'id_nguoidung');
+        return $this->belongsTo(NguoiDung::class, 'id_nguoidung', 'id_nguoidung');
     }
-} 
+}

@@ -3,6 +3,78 @@
 
 @section('content')
     <style>
+        /* Main sections */
+        .home1,
+        .home1-2,
+        .home2 {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+            box-sizing: border-box;
+        }
+
+        /* Home2 subsections containment */
+        .home2 {
+            /* Add spacing between sections if needed */
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+
+        .home2 > * {
+            /* All direct children of home2 */
+            width: 100%;
+            margin-bottom: 20px; /* Space between sections */
+        }
+
+        /* Specific subsections */
+        .home21,
+        .home22,
+        .home23,
+        .home24,
+        .home-events,
+        .home-news,
+        .home-achievements,
+        .home-partners {
+
+            width: 100%;
+            max-width: 1130px; /* Ensure no overflow */
+            box-sizing: border-box;
+            margin-left: auto;
+            margin-right: auto;
+           
+        }
+
+        /* Optional: Grid layout for better organization */
+        .home2 {
+            display: flex;
+            flex-direction: column;
+            gap: 20px; /* Consistent spacing between sections */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .home1,
+            .home1-2,
+            .home2 {
+                width: 95%;
+                padding: 0 10px;
+            }
+
+            .home2 > * {
+                margin-bottom: 15px; /* Smaller spacing on mobile */
+            }
+        }
+
+        /* Keep your existing video slider styles */
+        .video-slider {
+            position: relative;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 16/9;
+            overflow: hidden;
+        }
+
         .home222-wrapper {
             position: relative;
             overflow: hidden;
@@ -292,25 +364,201 @@
                 font-size: 1rem;
             }
         }
+
+        .video-slider {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .video-slider video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .slider-prev, .slider-next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 16px;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            transition: 0.6s ease;
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 2;
+            text-decoration: none;
+        }
+
+        .slider-next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .slider-prev {
+            left: 0;
+        }
+
+        .slider-prev:hover, .slider-next:hover {
+            background-color: rgba(0,0,0,0.9);
+        }
+
+        .home1-2 {
+            width: 100%;
+            max-width: 1200px; /* Adjust this value to match your design */
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .video-slider {
+            position: relative;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 16/9; /* Maintain video aspect ratio */
+            overflow: hidden;
+        }
+
+        .video-slider video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .slider-prev, .slider-next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 16px;
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+            transition: 0.6s ease;
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 2;
+            text-decoration: none;
+        }
+
+        .slider-next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .slider-prev {
+            left: 0;
+        }
+
+        .slider-prev:hover, .slider-next:hover {
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .home1-2 {
+                width: 95%; /* Slightly smaller on mobile */
+            }
+        }
+
+        /* Common width for all main sections */
+        .home1,
+        .home1-2,
+        .home2 {
+            width: 100%;
+            max-width: 1200px; /* Adjust this value to match your design */
+            margin: 0 auto;
+            padding: 0 15px; /* Add some padding for smaller screens */
+            box-sizing: border-box;
+        }
+
+        /* Video slider specific styles */
+        .video-slider {
+            position: relative;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 16/9;
+            overflow: hidden;
+        }
+
+        .video-slider video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Navigation arrows */
+        .slider-prev, .slider-next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 16px;
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+            transition: 0.6s ease;
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 2;
+            text-decoration: none;
+        }
+
+        .slider-next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .slider-prev {
+            left: 0;
+        }
+
+        .slider-prev:hover, .slider-next:hover {
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .home1,
+            .home1-2,
+            .home2 {
+                width: 95%;
+                padding: 0 10px;
+            }
+        }
+
+        /* Add these styles for the category slider */
+        .home222-wrapper {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .home222-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .home222-group {
+            flex: 0 0 100%;
+            width: 100%;
+        }
     </style>
     <div class="home1-2">
         <div class="video-slider">
-            <a class="slider-prev" onclick="changeVideo(-1)">❮</a>
-            <a class="slider-next" onclick="changeVideo(1)">❯</a>
-            <video id="mainVideo"  autoplay muted loop playsinline preload="auto">
+            <a class="slider-prev" onclick="window.prevVideo()">❮</a>
+            <video id="mainVideo" autoplay muted playsinline preload="auto">
                 <source src="{{ Vite::asset('resources/video/thuan/ab.mp4') }}" type="video/mp4">
-                <source src="{{ Vite::asset('resources/video/thuan/abc.mp4') }}" type="video/mp4">
-                <source src="{{ Vite::asset('resources/video/thuan/abcd.mp4') }}" type="video/mp4">
             </video>
-            <div class="slider-navigation">
-                <span class="nav-dot" onclick="goToVideo(0)"></span>
-                <span class="nav-dot" onclick="goToVideo(1)"></span>
-                <span class="nav-dot" onclick="goToVideo(2)"></span>
-            </div>
-            <div class="slider-caption">
-                <h2>Nền tảng vững chắc</h2>
-                <p>Hội nhập quốc tế - Vươn tới tương lai</p>
-            </div>
+            <a class="slider-next" onclick="window.nextVideo()">❯</a>
         </div>
     </div>
 
@@ -420,7 +668,7 @@
         <div class="home24">
 
 
-        
+
     <div class="home241">Đăng ký chuyên ngành</div>
     <div class="home242">
         @foreach($topChuyenNganhs as $index => $chuyenNganh)
@@ -537,43 +785,121 @@
     </div>
 
     <script>
-        // Khai báo biến toàn cục
-        let currentCategoryIndex = 0;
-        let slideInterval;
+        // Make variables and functions global
+        window.videos = [
+            '{{ Vite::asset("resources/video/thuan/ab.mp4") }}',
+            '{{ Vite::asset("resources/video/thuan/abc.mp4") }}',
+            '{{ Vite::asset("resources/video/thuan/abcd.mp4") }}'
+        ];
 
-        /**
-         * Hàm chuyển đổi category
-         */
-        window.changeCategory = function (direction) {
+        window.currentVideoIndex = 0;
+        window.slideInterval = null;
+
+        // Make functions global
+        window.nextVideo = function() {
+            window.currentVideoIndex = (window.currentVideoIndex + 1) % window.videos.length;
+            updateVideo();
+        };
+
+        window.prevVideo = function() {
+            window.currentVideoIndex = (window.currentVideoIndex - 1 + window.videos.length) % window.videos.length;
+            updateVideo();
+        };
+
+        function updateVideo() {
+            const videoElement = document.getElementById('mainVideo');
+            if (!videoElement) return;
+
+            // Fade out current video
+            videoElement.style.opacity = 0;
+
+            setTimeout(() => {
+                videoElement.src = window.videos[window.currentVideoIndex];
+                videoElement.load();
+
+                const playPromise = videoElement.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        // Fade in new video
+                        videoElement.style.opacity = 1;
+                    }).catch(error => {
+                        console.log("Video playback error:", error);
+                    });
+                }
+            }, 500); // Wait for fade out
+
+            resetSlideInterval();
+        }
+
+        function startSlideInterval() {
+            if (window.slideInterval) {
+                clearInterval(window.slideInterval);
+            }
+
+            // Change video when current video ends
+            const videoElement = document.getElementById('mainVideo');
+            if (videoElement) {
+                videoElement.addEventListener('ended', window.nextVideo);
+            }
+
+            // Also set a backup interval
+            window.slideInterval = setInterval(window.nextVideo, 15000); // 15 seconds backup
+        }
+
+        function resetSlideInterval() {
+            clearInterval(window.slideInterval);
+            startSlideInterval();
+        }
+
+        // Initialize when document is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            const videoElement = document.getElementById('mainVideo');
+            const sliderContainer = document.querySelector('.video-slider');
+
+            if (videoElement && sliderContainer) {
+                // Add transition for smooth fade effect
+                videoElement.style.transition = 'opacity 0.5s ease-in-out';
+
+                startSlideInterval();
+
+                sliderContainer.addEventListener('mouseenter', () => {
+                    clearInterval(window.slideInterval);
+                });
+
+                sliderContainer.addEventListener('mouseleave', () => {
+                    startSlideInterval();
+                });
+
+                videoElement.addEventListener('error', (e) => {
+                    console.error('Video error:', e);
+                });
+            }
+        });
+
+        // Add these new functions for category changes
+        window.currentCategoryIndex = 0;
+        window.categoryInterval;
+
+        window.changeCategory = function(direction) {
             const track = document.querySelector('.home222-track');
             if (!track) return;
 
             const groups = document.querySelectorAll('.home222-group');
             const totalGroups = groups.length;
 
-            currentCategoryIndex += direction;
+            window.currentCategoryIndex += direction;
 
-            if (currentCategoryIndex >= totalGroups) {
-                currentCategoryIndex = 0;
-            } else if (currentCategoryIndex < 0) {
-                currentCategoryIndex = totalGroups - 1;
+            // Loop through categories
+            if (window.currentCategoryIndex >= totalGroups) {
+                window.currentCategoryIndex = 0;
+            } else if (window.currentCategoryIndex < 0) {
+                window.currentCategoryIndex = totalGroups - 1;
             }
 
             updateCategorySlider();
+            resetCategoryInterval();
         }
 
-        /**
-         * Hàm chuyển đến category cụ thể
-         */
-        window.goToCategory = function (index) {
-            currentCategoryIndex = index;
-            updateCategorySlider();
-            resetSlideInterval();
-        }
-
-        /**
-         * Cập nhật vị trí slider
-         */
         function updateCategorySlider() {
             const track = document.querySelector('.home222-track');
             const groups = document.querySelectorAll('.home222-group');
@@ -581,141 +907,53 @@
             if (!track || groups.length === 0) return;
 
             const groupWidth = groups[0].offsetWidth;
-            track.style.transform = `translateX(-${currentCategoryIndex * groupWidth}px)`;
+            track.style.transform = `translateX(-${window.currentCategoryIndex * groupWidth}px)`;
 
-            // Cập nhật trạng thái dots
+            // Update active dots
             const dots = document.querySelectorAll('.nav-dot');
             dots.forEach((dot, index) => {
-                dot.classList.toggle('active', index === currentCategoryIndex);
+                dot.classList.toggle('active', index === window.currentCategoryIndex);
             });
         }
 
-        /**
-         * Bắt đầu auto slide
-         */
-        function startSlideInterval() {
-            if (slideInterval) {
-                clearInterval(slideInterval);
-            }
-
-            slideInterval = setInterval(() => {
-                changeCategory(1);
-            }, 5000);
-        }
-
-        /**
-         * Reset interval khi có tương tác
-         */
-        function resetSlideInterval() {
-            clearInterval(slideInterval);
-            startSlideInterval();
-        }
-
-        /**
-         * Khởi tạo slider
-         */
-        function initializeSlider() {
-            // Kiểm tra xem có dữ liệu không
-            const track = document.querySelector('.home222-track');
-            const groups = document.querySelectorAll('.home222-group');
-
-            if (!track || groups.length === 0) {
-                console.warn('Không tìm thấy phần tử slider hoặc không có dữ liệu');
-                return;
-            }
-
-            // Khởi tạo slider
+        window.goToCategory = function(index) {
+            window.currentCategoryIndex = index;
             updateCategorySlider();
-            startSlideInterval();
-
-            // Thêm sự kiện pause khi hover
-            const wrapper = document.querySelector('.home222-wrapper');
-            if (wrapper) {
-                wrapper.addEventListener('mouseenter', () => clearInterval(slideInterval));
-                wrapper.addEventListener('mouseleave', startSlideInterval);
-            }
-
-            // Thêm sự kiện cho nút prev/next
-            const prevButton = document.querySelector('.slider-prev');
-            const nextButton = document.querySelector('.slider-next');
-
-            if (prevButton) {
-                prevButton.addEventListener('click', () => {
-                    changeCategory(-1);
-                    resetSlideInterval();
-                });
-            }
-
-            if (nextButton) {
-                nextButton.addEventListener('click', () => {
-                    changeCategory(1);
-                    resetSlideInterval();
-                });
-            }
+            resetCategoryInterval();
         }
 
-        // Đảm bảo trang đã load hoàn toàn trước khi khởi tạo slider
-        document.addEventListener('DOMContentLoaded', function () {
-            // Thêm một chút delay để đảm bảo nội dung đã được render
-            setTimeout(() => {
-                initializeSlider();
-            }, 100);
-        });
-        function handleImages() {
-            const images = document.querySelectorAll('.home22211 img');
-            images.forEach(img => {
-                img.classList.add('loading');
-                img.onload = function() {
-                    this.classList.remove('loading');
-                };
-                img.onerror = function() {
-                    this.classList.add('error');
-                    this.src = '{{ asset("storage/thuan/default.png") }}';
-                };
-            });
+        function startCategoryInterval() {
+            if (window.categoryInterval) {
+                clearInterval(window.categoryInterval);
+            }
+            window.categoryInterval = setInterval(() => {
+                changeCategory(1);
+            }, 5000); // Change category every 5 seconds
         }
 
-        document.addEventListener('DOMContentLoaded', handleImages);
+        function resetCategoryInterval() {
+            clearInterval(window.categoryInterval);
+            startCategoryInterval();
+        }
 
-
-    //     monhoc script
+        // Initialize category slider when document is ready
         document.addEventListener('DOMContentLoaded', function() {
-            const subjectList = document.getElementById('subjectList');
-            const expandButton = document.getElementById('expandButton');
-            const expandText = expandButton.querySelector('.expand-text');
-            let isExpanded = false;
+            // Initialize both video and category sliders
+            const categoryTrack = document.querySelector('.home222-track');
+            if (categoryTrack) {
+                updateCategorySlider();
+                startCategoryInterval();
 
-            function checkIfExpandNeeded() {
-                const scrollHeight = subjectList.scrollHeight;
-                const clientHeight = subjectList.clientHeight;
-
-                if (scrollHeight <= 120) {
-                    expandButton.parentElement.style.display = 'none';
-                    subjectList.style.maxHeight = 'none';
-                } else {
-                    expandButton.parentElement.style.display = 'flex';
+                // Pause auto-slide on hover
+                const wrapper = document.querySelector('.home222-wrapper');
+                if (wrapper) {
+                    wrapper.addEventListener('mouseenter', () => {
+                        clearInterval(window.categoryInterval);
+                    });
+                    wrapper.addEventListener('mouseleave', startCategoryInterval);
                 }
             }
-
-            expandButton.addEventListener('click', function() {
-                isExpanded = !isExpanded;
-                subjectList.classList.toggle('expanded');
-                this.classList.toggle('expanded');
-
-                if (isExpanded) {
-                    expandText.textContent = 'Thu gọn danh sách';
-                    subjectList.style.maxHeight = subjectList.scrollHeight + 'px';
-                } else {
-                    expandText.textContent = 'Xem thêm môn học';
-                    subjectList.style.maxHeight = '120px';
-                    subjectList.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                }
-            });
-
-            checkIfExpandNeeded();
-            window.addEventListener('resize', checkIfExpandNeeded);
         });
-    //     end monhoc
     </script>
 
 

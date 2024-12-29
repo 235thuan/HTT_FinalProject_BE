@@ -17,10 +17,10 @@
 
                     <div class="text-start mt-3">
                         <h4 class="font-13 text-uppercase">Thông tin cơ bản:</h4>
-                        
+
                         @if(isset($sinhvien))
                             <p class="text-muted mb-2 font-13"><strong>Mã sinh viên:</strong> <span class="ms-2">{{ $sinhvien->id_sinhvien }}</span></p>
-                            <p class="text-muted mb-2 font-13"><strong>Lớp:</strong> <span class="ms-2">{{ $sinhvien->lop }}</span></p>
+                            <p class="text-muted mb-2 font-13"><strong>Lớp:</strong> <span class="ms-2">{{ $sinhvien->ten_lop }}</span></p>
                             <p class="text-muted mb-2 font-13"><strong>Năm vào học:</strong> <span class="ms-2">{{ $sinhvien->nam_vao_hoc }}</span></p>
                         @else
                             <p class="text-muted mb-2 font-13"><strong>Mã giáo viên:</strong> <span class="ms-2">{{ $giaovien->id_giaovien }}</span></p>

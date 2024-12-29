@@ -30,7 +30,7 @@ class ChuyenNganh extends Model
      */
     protected $fillable = [
         'ten_chuyennganh',
-        'ma_khoa'
+        'id_khoa'
 
     ];
 
@@ -41,7 +41,7 @@ class ChuyenNganh extends Model
      */
     public function khoa()
     {
-        return $this->belongsTo(Khoa::class, 'ma_khoa', 'id_khoa');
+        return $this->belongsTo(Khoa::class, 'id_khoa', 'id_khoa');
     }
 
     /**
@@ -80,7 +80,7 @@ class ChuyenNganh extends Model
 
     public function chiTietChuyenNganh()
     {
-        return $this->hasMany(ChiTietChuyenNganh::class, 'ma_chuyennganh', 'id_chuyennganh');
+        return $this->hasMany(ChiTietChuyenNganh::class, 'id_chuyennganh', 'id_chuyennganh');
     }
 
     public function monHocs()
@@ -88,8 +88,8 @@ class ChuyenNganh extends Model
         return $this->belongsToMany(
             MonHoc::class,
             'chitietchuyennganh',
-            'ma_chuyennganh',
-            'ma_monhoc'
+            'id_chuyennganh',
+            'id_monhoc'
         );
     }
 }

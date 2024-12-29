@@ -13,170 +13,135 @@ use Illuminate\Validation\ValidationException;
 class HocPhiController extends Controller
 {
     protected $hocPhiService;
-    protected $monHocService;
-
-    protected $hocPhiSalesService;
     protected $khoaService;
-    public function __construct(
-        HocPhiService $hocPhiService,
-        MonHocService $monHocService,
-        HocPhiSalesService $hocPhiSalesService,
-        KhoaService $khoaService
-    ) {
+
+    public function __construct(HocPhiService $hocPhiService, KhoaService $khoaService)
+    {
         $this->hocPhiService = $hocPhiService;
-        $this->monHocService = $monHocService;
-        $this->hocPhiSalesService = $hocPhiSalesService;
-        $this->khoaService=$khoaService;
+        $this->khoaService = $khoaService;
     }
 
-    // Hiển thị danh sách học phí
     public function index()
     {
         try {
+            // Get học phí list
             $result = $this->hocPhiService->getAllHocPhi();
+
+            // Get khoa list for filtering
             $khoaResult = $this->khoaService->getKhoasWithChuyenNganh();
-            $khoas = $khoaResult['success'] ? $khoaResult['data'] : collect([]);
+
             if (!$result['success']) {
                 return back()->with('error', $result['message']);
             }
 
             return view('qlhp.listHocphi', [
                 'hocPhiList' => $result['data'],
-                'khoas' => $khoas,
+                'khoas' => $khoaResult['success'] ? $khoaResult['data'] : collect([])
             ]);
         } catch (\Exception $e) {
+            \Log::error('Lỗi trong HocPhiController::index: ' . $e->getMessage());
             return back()->with('error', 'Có lỗi xảy ra khi tải danh sách học phí');
         }
     }
 
-    // Hiển thị chi tiết học phí
     public function detail($id)
     {
         try {
             $result = $this->hocPhiService->getHocPhiDetail($id);
             $khoaResult = $this->khoaService->getKhoasWithChuyenNganh();
-            $khoas = $khoaResult['success'] ? $khoaResult['data'] : collect([]);
             if (!$result['success']) {
                 return back()->with('error', $result['message']);
             }
 
-            // Đảm bảo view file là detailHocphi.blade.php
             return view('qlhp.detailHocphi', [
                 'hocphi' => $result['data'],
-                'khoas' => $khoas,
+                'khoas' => $khoaResult['success'] ? $khoaResult['data'] : collect([])
             ]);
         } catch (\Exception $e) {
             \Log::error('Lỗi trong HocPhiController::detail: ' . $e->getMessage());
-            return back()->with('error', 'Có lỗi xảy ra khi tải thông tin chi tiết học phí');
+            return back()->with('error', 'Có lỗi xảy ra khi tải chi tiết học phí');
         }
     }
 
-    // Hiển thị trang miễn giảm
-    public function discount()
+    public function edit($id)
     {
         try {
-            // Lấy tất cả môn học thay vì chỉ lấy active
-            $monhocsResult = $this->monHocService->getAllMonHoc();
-            $discountsResult = $this->hocPhiService->getAllMienGiam();
+            $result = $this->hocPhiService->getHocPhiForEdit($id);
             $khoaResult = $this->khoaService->getKhoasWithChuyenNganh();
-            $khoas = $khoaResult['success'] ? $khoaResult['data'] : collect([]);
-            if (!$monhocsResult['success']) {
-                return back()->with('error', $monhocsResult['message']);
+
+            if (!$result['success']) {
+                return back()->with('error', $result['message']);
             }
 
-            if (!$discountsResult['success']) {
-                return back()->with('error', $discountsResult['message']);
-            }
-
-            return view('qlhp.discount', [
-                'monhocs' => $monhocsResult['data'],
-                'discounts' => $discountsResult['data'],
-                'khoas' => $khoas,
+            // Debug info
+            \Log::info('Edit view data:', [
+                'mien_giam_list' => $result['data']['mien_giam_list'],
+                'chi_tiet' => collect($result['data']['chi_tiet'])->pluck('mon_hoc.id')->all()
             ]);
 
+            return view('qlhp.editHocphi', [
+                'hocphi' => $result['data'],
+                'khoas' => $khoaResult['success'] ? $khoaResult['data'] : collect([]),
+                'mienGiamList' => $result['data']['mien_giam_list']
+            ]);
         } catch (\Exception $e) {
-            \Log::error('Lỗi trong HocPhiController::discount: ' . $e->getMessage());
-            return back()->with('error', 'Có lỗi xảy ra khi tải trang miễn giảm');
+            \Log::error('Lỗi trong HocPhiController::edit: ' . $e->getMessage());
+            return back()->with('error', 'Có lỗi xảy ra khi tải form sửa học phí');
         }
     }
 
-    public function getDiscount($id)
-    {
-        try {
-            $result = $this->hocPhiService->getMienGiam($id);
-
-            return response()->json($result);
-
-        } catch (\Exception $e) {
-            \Log::error('Lỗi trong HocPhiController::getDiscount: ' . $e->getMessage());
-            return response()->json([
-                'success' => false,
-                'message' => 'Có lỗi xảy ra khi tải thông tin miễn giảm'
-            ], 500);
-        }
-    }
-
-    public function storeDiscount(Request $request)
+    public function update(Request $request, $id)
     {
         try {
             $validated = $request->validate([
-                'id_monhoc' => 'required|exists:monhoc,id_monhoc',
-                'discount_type' => 'required|in:percent,fixed',
-                'ty_le_mien_giam' => 'required_if:discount_type,percent|nullable|numeric|min:0|max:100',
-                'so_tien_mien_giam' => 'required_if:discount_type,fixed|nullable|numeric|min:0',
-                'ngay_bat_dau' => 'required|date_format:d/m/Y',
-                'ngay_ket_thuc' => 'nullable|date_format:d/m/Y|after_or_equal:ngay_bat_dau',
-                'mo_ta' => 'nullable|string|max:255',
+                'chi_tiet' => 'required|array',
+                'chi_tiet.*.id_chitiethocphi' => 'required|exists:chitiethocphi,id_chitiethocphi',
+                'chi_tiet.*.id_monhoc' => 'required|exists:monhoc,id_monhoc',
+                'chi_tiet.*.id_mien_giam' => 'nullable|exists:mien_giam_hoc_phi,id_mien_giam'
             ]);
 
-            $result = $this->hocPhiService->createMienGiam($validated);
+            $result = $this->hocPhiService->updateHocPhi($id, $validated['chi_tiet']);
 
-            return response()->json($result);
+            if (!$result['success']) {
+                return redirect()->back()
+                    ->withInput()
+                    ->withErrors(['message' => $result['message']]);
+            }
 
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            \Log::error('Lỗi validation: ' . json_encode($e->errors()));
-            return response()->json([
-                'success' => false,
-                'message' => 'Dữ liệu không hợp lệ',
-                'errors' => $e->errors()
-            ], 422);
+            return redirect()->route('hocphi.detail', $id)
+                ->with('success', 'Cập nhật học phí thành công');
 
+        } catch (ValidationException $e) {
+            return redirect()->back()
+                ->withInput()
+                ->withErrors($e->errors());
         } catch (\Exception $e) {
-            \Log::error('Lỗi trong HocPhiController::storeDiscount: ' . $e->getMessage());
-            return response()->json([
-                'success' => false,
-                'message' => 'Có lỗi xảy ra khi thêm miễn giảm'
-            ], 500);
+            \Log::error('Lỗi trong HocPhiController::update: ' . $e->getMessage());
+            return redirect()->back()
+                ->withInput()
+                ->withErrors(['message' => 'Có lỗi xảy ra khi cập nhật học phí']);
         }
     }
 
-    public function updateDiscount(Request $request, $id)
+    public function updateMienGiam(Request $request)
     {
         try {
             $validated = $request->validate([
+                'id_hocphi' => 'required|exists:hocphi,id_hocphi',
                 'id_monhoc' => 'required|exists:monhoc,id_monhoc',
-                'discount_type' => 'required|in:percent,fixed',
-                'ty_le_mien_giam' => 'required_if:discount_type,percent|nullable|numeric|min:0|max:100',
-                'so_tien_mien_giam' => 'required_if:discount_type,fixed|nullable|numeric|min:0',
-                'ngay_bat_dau' => 'required|date_format:d/m/Y',
-                'ngay_ket_thuc' => 'nullable|date_format:d/m/Y|after_or_equal:ngay_bat_dau',
-                'mo_ta' => 'nullable|string|max:255',
+                'id_mien_giam' => 'nullable|exists:mien_giam_hoc_phi,id_mien_giam'
             ]);
 
-            $result = $this->hocPhiService->updateMienGiam($id, $validated);
+            $result = $this->hocPhiService->updateMienGiamByMonHoc(
+                $validated['id_hocphi'],
+                $validated['id_monhoc'],
+                $validated['id_mien_giam']
+            );
 
-            return response()->json($result);
-
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            \Log::error('Lỗi validation: ' . json_encode($e->errors()));
-            return response()->json([
-                'success' => false,
-                'message' => 'Dữ liệu không hợp lệ',
-                'errors' => $e->errors()
-            ], 422);
+            return response()->json($result, $result['success'] ? 200 : 400);
 
         } catch (\Exception $e) {
-            \Log::error('Lỗi trong HocPhiController::updateDiscount: ' . $e->getMessage());
+            \Log::error('Lỗi trong HocPhiController::updateMienGiam: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'message' => 'Có lỗi xảy ra khi cập nhật miễn giảm'
@@ -184,66 +149,37 @@ class HocPhiController extends Controller
         }
     }
 
-    public function deleteDiscount($id)
-    {
-        try {
-            $result = $this->hocPhiService->deleteMienGiam($id);
-
-            return response()->json($result);
-
-        } catch (\Exception $e) {
-            \Log::error('Lỗi trong HocPhiController::deleteDiscount: ' . $e->getMessage());
-            return response()->json([
-                'success' => false,
-                'message' => 'Có lỗi xảy ra khi xóa miễn giảm'
-            ], 500);
-        }
-    }
 
     public function sales()
     {
         try {
-            $result = $this->hocPhiSalesService->getSalesOverview();
+            $data = $this->hocPhiService->getSalesOverview();
             $khoaResult = $this->khoaService->getKhoasWithChuyenNganh();
-            $khoas = $khoaResult['success'] ? $khoaResult['data'] : collect([]);
-            if (!$result['success']) {
-                return back()->with('error', $result['message']);
-            }
-
             return view('qlhp.sale', [
-                'totalPaid' => $result['data']['totalPaid'],
-                'totalClasses' => $result['data']['totalClasses'],
-                'classSummary' => $result['data']['classSummary'],
-                'khoas' => $khoas,
+                'totalPaid' => $data['totalPaid'],
+                'totalClasses' => $data['totalClasses'],
+                'classSummary' => $data['classSummary'],
+                'khoas' => $khoaResult['success'] ? $khoaResult['data'] : collect([])
             ]);
-
         } catch (\Exception $e) {
-            \Log::error('Lỗi trong HocPhiController::sales: ' . $e->getMessage());
-            return back()->with('error', 'Có lỗi xảy ra khi tải trang thống kê');
+            \Log::error('Lỗi khi lấy thống kê doanh thu: ' . $e->getMessage());
+            return back()->with('error', 'Có lỗi xảy ra khi tải dữ liệu thống kê');
         }
     }
 
     public function salesDetail($lop)
     {
         try {
-            $result = $this->hocPhiSalesService->getClassDetail($lop);
+            $students = $this->hocPhiService->getSalesDetailByClass($lop);
             $khoaResult = $this->khoaService->getKhoasWithChuyenNganh();
-            $khoas = $khoaResult['success'] ? $khoaResult['data'] : collect([]);
-            if (!$result['success']) {
-                return back()->with('error', $result['message']);
-            }
-
             return view('qlhp.saleDetail', [
                 'lop' => $lop,
-                'students' => $result['data'],
-                'khoas' => $khoas,
+                'students' => $students,
+                'khoas' => $khoaResult['success'] ? $khoaResult['data'] : collect([])
             ]);
-
         } catch (\Exception $e) {
-            \Log::error('Lỗi trong HocPhiController::salesDetail: ' . $e->getMessage());
-            return back()->with('error', 'Có lỗi xảy ra khi tải chi tiết lớp');
+            \Log::error('Lỗi khi lấy chi tiết doanh thu lớp: ' . $e->getMessage());
+            return back()->with('error', 'Có lỗi xảy ra khi tải dữ liệu chi tiết');
         }
     }
-
-
 }

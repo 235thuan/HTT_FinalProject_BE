@@ -26,11 +26,12 @@ class LopController extends Controller
             foreach ($lops as $lop) {
                 $lop->sinhviens = DB::table('sinhvien')
                     ->join('nguoidung', 'sinhvien.id_nguoidung', '=', 'nguoidung.id_nguoidung')
-                    ->where('sinhvien.lop', '=', $lop->ten_lop)
+                    ->join('lop', 'sinhvien.id_lop', '=', 'lop.id_lop')
+                    ->where('lop.ten_lop', '=', $lop->ten_lop)
                     ->select(
                         'sinhvien.id_sinhvien',
                         'sinhvien.ten_sinhvien',
-                        'sinhvien.nam_vao_hoc',
+                        'lop.nam_vao_hoc',
                         'nguoidung.email',
                         'nguoidung.so_dien_thoai'
                     )
@@ -64,13 +65,14 @@ class LopController extends Controller
             // Get students in class with their major and faculty info
             $sinhviens = DB::table('sinhvien')
                 ->join('nguoidung', 'sinhvien.id_nguoidung', '=', 'nguoidung.id_nguoidung')
-                ->join('chuyennganh', 'sinhvien.ma_chuyen_nganh', '=', 'chuyennganh.id_chuyennganh')
-                ->join('khoa', 'chuyennganh.ma_khoa', '=', 'khoa.id_khoa')
-                ->where('sinhvien.lop', '=', $lop->ten_lop)
+                ->join('lop', 'sinhvien.id_lop', '=', 'lop.id_lop')
+                ->join('chuyennganh', 'lop.id_chuyennganh', '=', 'chuyennganh.id_chuyennganh')
+                ->join('khoa', 'chuyennganh.id_khoa', '=', 'khoa.id_khoa')
+                ->where('lop.ten_lop', '=', $lop->ten_lop)
                 ->select(
                     'sinhvien.id_sinhvien',
                     'sinhvien.ten_sinhvien',
-                    'sinhvien.nam_vao_hoc',
+                    'lop.nam_vao_hoc',
                     'nguoidung.email',
                     'nguoidung.so_dien_thoai',
                     'chuyennganh.ten_chuyennganh',
@@ -112,9 +114,10 @@ class LopController extends Controller
             foreach ($lops as $lop) {
                 // Get major and faculty info
                 $majorInfo = DB::table('sinhvien')
-                    ->join('chuyennganh', 'sinhvien.ma_chuyen_nganh', '=', 'chuyennganh.id_chuyennganh')
-                    ->join('khoa', 'chuyennganh.ma_khoa', '=', 'khoa.id_khoa')
-                    ->where('sinhvien.lop', '=', $lop->ten_lop)
+                    ->join('lop', 'sinhvien.id_lop', '=', 'lop.id_lop')
+                    ->join('chuyennganh', 'lop.id_chuyennganh', '=', 'chuyennganh.id_chuyennganh')
+                    ->join('khoa', 'chuyennganh.id_khoa', '=', 'khoa.id_khoa')
+                    ->where('lop.ten_lop', '=', $lop->ten_lop)
                     ->select('chuyennganh.ten_chuyennganh', 'khoa.ten_khoa')
                     ->first();
 
@@ -124,12 +127,14 @@ class LopController extends Controller
                 // Build base query for students
                 $query = DB::table('sinhvien')
                     ->join('nguoidung', 'sinhvien.id_nguoidung', '=', 'nguoidung.id_nguoidung')
-                    ->where('sinhvien.lop', '=', $lop->ten_lop);
+                    ->join('lop', 'sinhvien.id_lop', '=', 'lop.id_lop')
+                    ->where('lop.ten_lop', '=', $lop->ten_lop);
 
                 // If finding a specific student, calculate their page
                 if ($findStudent && $findLop === $lop->ten_lop && !$request->has('page_' . $lop->id_lop)) {
                     $position = DB::table('sinhvien')
-                        ->where('lop', $lop->ten_lop)
+                        ->join('lop', 'sinhvien.id_lop', '=', 'lop.id_lop')
+                        ->where('lop.ten_lop', $lop->ten_lop)
                         ->where('id_sinhvien', '<', $findStudent)
                         ->count();
 
@@ -154,8 +159,8 @@ class LopController extends Controller
                 $lop->all_students = $query->select(
                     'sinhvien.id_sinhvien',
                     'sinhvien.ten_sinhvien',
-                    'sinhvien.nam_vao_hoc',
-                    'sinhvien.lop',
+                    'lop.nam_vao_hoc',
+                    'lop.ten_lop',
                     'nguoidung.email',
                     'nguoidung.so_dien_thoai'
                 )->get();
@@ -164,8 +169,8 @@ class LopController extends Controller
                 $lop->sinhviens = $query->select(
                     'sinhvien.id_sinhvien',
                     'sinhvien.ten_sinhvien',
-                    'sinhvien.nam_vao_hoc',
-                    'sinhvien.lop',
+                    'lop.nam_vao_hoc',
+                    'lop.ten_lop',
                     'nguoidung.email',
                     'nguoidung.so_dien_thoai'
                 )
@@ -174,7 +179,8 @@ class LopController extends Controller
 
                 // Store total count
                 $lop->total_students = DB::table('sinhvien')
-                    ->where('lop', '=', $lop->ten_lop)
+                    ->join('lop', 'sinhvien.id_lop', '=', 'lop.id_lop')
+                    ->where('lop.ten_lop', '=', $lop->ten_lop)
                     ->count();
             }
 
@@ -252,9 +258,9 @@ class LopController extends Controller
         if ($isSuggestion) {
             // First, search for classes
             $classResults = DB::table('lop')
-                ->leftJoin('sinhvien', 'sinhvien.lop', '=', 'lop.ten_lop')
-                ->leftJoin('chuyennganh', 'sinhvien.ma_chuyen_nganh', '=', 'chuyennganh.id_chuyennganh')
-                ->leftJoin('khoa', 'chuyennganh.ma_khoa', '=', 'khoa.id_khoa')
+                ->leftJoin('sinhvien', 'sinhvien.id_lop', '=', 'lop.id_lop')
+                ->leftJoin('chuyennganh', 'lop.id_chuyennganh', '=', 'chuyennganh.id_chuyennganh')
+                ->leftJoin('khoa', 'chuyennganh.id_khoa', '=', 'khoa.id_khoa')
                 ->where('lop.ten_lop', 'LIKE', "%{$searchTerm}%")
                 ->select(
                     'lop.id_lop',
@@ -280,6 +286,7 @@ class LopController extends Controller
             // Then, search for students
             $studentResults = DB::table('sinhvien as s1')
                 ->join('nguoidung', 'nguoidung.id_nguoidung', '=', 's1.id_nguoidung')
+                ->join('lop as l1' , 's1.id_lop', '=', 'l1.id_lop')
                 ->where(function($q) use ($searchTerm) {
                     $q->where('s1.ten_sinhvien', 'LIKE', "%{$searchTerm}%")
                       ->orWhere('s1.id_sinhvien', 'LIKE', "%{$searchTerm}%")
@@ -289,12 +296,13 @@ class LopController extends Controller
                 ->select(
                     's1.id_sinhvien',
                     's1.ten_sinhvien',
-                    's1.lop',
+                    'l1.ten_lop',
                     'nguoidung.email',
                     DB::raw('(
                         SELECT COUNT(*)
                         FROM sinhvien as s2
-                        WHERE s2.lop = s1.lop
+                        join lop as l2 on s2.id_lop = l2.id_lop
+                        WHERE l1.ten_lop = l2.ten_lop
                         AND s2.id_sinhvien < s1.id_sinhvien
                     ) as position')
                 )
@@ -307,7 +315,7 @@ class LopController extends Controller
                         'type' => 'student',
                         'id_sinhvien' => $item->id_sinhvien,
                         'ten_sinhvien' => $item->ten_sinhvien,
-                        'lop' => $item->lop,
+                        'ten_lop' => $item->ten_lop,
                         'email' => $item->email,
                         'page' => ceil($position / 5)
                     ];
@@ -319,6 +327,7 @@ class LopController extends Controller
 
         // For direct search
         $student = DB::table('sinhvien as s1')
+            ->join('lop as l1', 'sinhvien.id_lop', '=', 'l1.id_lop')
             ->join('nguoidung', 'nguoidung.id_nguoidung', '=', 's1.id_nguoidung')
             ->where(function($q) use ($searchTerm) {
                 $q->where('s1.ten_sinhvien', 'LIKE', "%{$searchTerm}%")
@@ -331,7 +340,8 @@ class LopController extends Controller
                 DB::raw('(
                     SELECT COUNT(*)
                     FROM sinhvien as s2
-                    WHERE s2.lop = s1.lop
+                    join lop as l2 on s2.id_lop = l2.id_lop
+                    WHERE l2.ten_lop = l1.ten_lop
                     AND s2.id_sinhvien < s1.id_sinhvien
                 ) as position')
             )

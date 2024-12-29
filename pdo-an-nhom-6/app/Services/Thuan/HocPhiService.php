@@ -10,22 +10,34 @@ use Illuminate\Support\Facades\DB;
 class HocPhiService
 {
     protected $hocPhiRepository;
-    protected $mienGiamRepository;
 
-    public function __construct(HocPhiRepository $hocPhiRepository, MienGiamRepository $mienGiamRepository)
+    public function __construct(HocPhiRepository $hocPhiRepository)
     {
         $this->hocPhiRepository = $hocPhiRepository;
-        $this->mienGiamRepository = $mienGiamRepository;
     }
 
-    // Lấy danh sách học phí
     public function getAllHocPhi()
     {
         try {
-            $hocPhiList = $this->hocPhiRepository->getHocPhiWithDetails();
+            $hocPhiList = $this->hocPhiRepository->getAllHocPhi();
+
+            // Format dữ liệu
+            $formattedData = $hocPhiList->map(function($item) {
+                return [
+                    'id_hocphi' => $item->id_hocphi,
+                    'id_sinhvien' => $item->id_sinhvien,
+                    'ten_sinhvien' => $item->ten_sinhvien,
+                    'ten_lop' => $item->ten_lop,
+                    'tong_tien' => $item->tong_tien,
+                    'tong_mien_giam' => $item->tong_mien_giam,
+                    'tong_phai_dong' => $item->tong_tien - $item->tong_mien_giam,
+                    'trang_thai' => $item->trang_thai
+                ];
+            });
+
             return [
                 'success' => true,
-                'data' => $hocPhiList
+                'data' => $formattedData
             ];
         } catch (\Exception $e) {
             \Log::error('Lỗi trong HocPhiService::getAllHocPhi: ' . $e->getMessage());
@@ -36,43 +48,62 @@ class HocPhiService
         }
     }
 
-    // Lấy chi tiết học phí theo ID
     public function getHocPhiDetail($id)
     {
         try {
-            $hocphi = $this->hocPhiRepository->getHocPhiById($id);
+            $hocphi = $this->hocPhiRepository->getHocPhiDetail($id);
 
             if (!$hocphi) {
                 return [
                     'success' => false,
-                    'message' => 'Không tìm thấy thông tin học phí'
+                    'message' => 'Không tìm thấy học phí'
                 ];
             }
 
+            // Format data
+            $formattedData = [
+                'id_hocphi' => $hocphi->id_hocphi,
+                'sinh_vien' => [
+                    'id' => $hocphi->id_sinhvien,
+                    'ten' => $hocphi->ten_sinhvien,
+                    'lop' => $hocphi->ten_lop,
+                    'email' => $hocphi->email,
+                    'so_dien_thoai' => $hocphi->so_dien_thoai,
+                    'chuyen_nganh' => $hocphi->ten_chuyennganh
+                ],
+                'trang_thai' => $hocphi->trang_thai,
+                'tong_tien' => $hocphi->tong_tien,
+                'tong_mien_giam' => $hocphi->tong_mien_giam,
+                'tong_phai_dong' => $hocphi->tong_tien - $hocphi->tong_mien_giam,
+                'chi_tiet' => collect($hocphi->chi_tiet)->map(function($item) {
+                    return [
+                        'id' => $item->id_chitiethocphi,
+                        'ten_khoan_phi' => $item->ten_khoan_phi,
+                        'mon_hoc' => [
+                            'id' => $item->id_monhoc,
+                            'ten' => $item->ten_monhoc,
+                            'so_tin_chi' => $item->so_tin_chi
+                        ],
+                        'so_tien' => $item->so_tien,
+                        'mien_giam' => [
+                            'id' => $item->id_mien_giam,
+                            'ty_le' => $item->ty_le_mien_giam,
+                            'so_tien_co_dinh' => $item->so_tien_mien_giam,
+                            'mo_ta' => $item->mo_ta_mien_giam,
+                            'tong_mien_giam' => $item->tien_mien_giam ?? 0  // Changed from 'tong_tien' to 'tong_mien_giam'
+                        ],
+                        'thanh_tien' => $item->so_tien - ($item->tien_mien_giam ?? 0)
+                    ];
+                })->all()
+            ];
+
             return [
                 'success' => true,
-                'data' => $hocphi
+                'data' => $formattedData
             ];
+
         } catch (\Exception $e) {
             \Log::error('Lỗi trong HocPhiService::getHocPhiDetail: ' . $e->getMessage());
-            return [
-                'success' => false,
-                'message' => 'Có lỗi xảy ra khi lấy thông tin chi tiết học phí'
-            ];
-        }
-    }
-
-    // Lấy danh sách chi tiết học phí cho trang miễn giảm
-    public function getChiTietHocPhi()
-    {
-        try {
-            $chiTietList = $this->hocPhiRepository->getChiTietHocPhi();
-            return [
-                'success' => true,
-                'data' => $chiTietList
-            ];
-        } catch (\Exception $e) {
-            \Log::error('Lỗi trong HocPhiService::getChiTietHocPhi: ' . $e->getMessage());
             return [
                 'success' => false,
                 'message' => 'Có lỗi xảy ra khi lấy chi tiết học phí'
@@ -80,179 +111,91 @@ class HocPhiService
         }
     }
 
-
-    public function getAllMienGiam()
+    public function getHocPhiForEdit($id)
     {
         try {
-            $mienGiams = $this->mienGiamRepository->getAll();
+            $hocphi = $this->hocPhiRepository->getHocPhiForEdit($id);
 
-            // Format dates for display
-            foreach ($mienGiams as $mienGiam) {
-                $mienGiam->ngay_bat_dau = Carbon::parse($mienGiam->ngay_bat_dau)->format('d/m/Y');
-                if ($mienGiam->ngay_ket_thuc) {
-                    $mienGiam->ngay_ket_thuc = Carbon::parse($mienGiam->ngay_ket_thuc)->format('d/m/Y');
-                }
+            if (!$hocphi) {
+                return [
+                    'success' => false,
+                    'message' => 'Không tìm thấy học phí'
+                ];
             }
+
+            // Format data
+            $formattedData = [
+                'id_hocphi' => $hocphi->id_hocphi,
+                'sinh_vien' => [
+                    'id' => $hocphi->id_sinhvien,
+                    'ten' => $hocphi->ten_sinhvien,
+                    'lop' => $hocphi->ten_lop,
+                    'email' => $hocphi->email,
+                    'so_dien_thoai' => $hocphi->so_dien_thoai,
+                    'chuyen_nganh' => $hocphi->ten_chuyennganh
+                ],
+                'trang_thai' => $hocphi->trang_thai,
+                'tong_tien' => $hocphi->tong_tien,
+                'tong_mien_giam' => $hocphi->tong_mien_giam,
+                'tong_phai_dong' => $hocphi->tong_tien - $hocphi->tong_mien_giam,
+                'chi_tiet' => collect($hocphi->chi_tiet)->map(function($item) {
+                    return [
+                        'id' => $item->id_chitiethocphi,
+                        'id_hocphi' => $item->id_hocphi,
+                        'ten_khoan_phi' => $item->ten_khoan_phi,
+                        'mon_hoc' => [
+                            'id' => $item->id_monhoc,
+                            'ten' => $item->ten_monhoc,
+                            'so_tin_chi' => $item->so_tin_chi
+                        ],
+                        'so_tien' => $item->so_tien,
+                        'mien_giam' => [
+                            'id' => $item->id_mien_giam,
+                            'ty_le' => $item->ty_le_mien_giam,
+                            'so_tien_co_dinh' => $item->so_tien_mien_giam,
+                            'mo_ta' => $item->mo_ta_mien_giam,
+                            'tien_mien_giam' => $item->tien_mien_giam
+                        ],
+                        'thanh_tien' => $item->thanh_tien
+                    ];
+                })->all(),
+                'mien_giam_list' => collect($hocphi->mien_giam_list)->map(function($item) {
+                    return [
+                        'id_mien_giam' => $item->id_mien_giam,
+                        'id_monhoc' => $item->id_monhoc,
+                        'ty_le_mien_giam' => $item->ty_le_mien_giam,
+                        'so_tien_mien_giam' => $item->so_tien_mien_giam,
+                        'mo_ta' => $item->mo_ta
+                    ];
+                })->all()
+            ];
 
             return [
                 'success' => true,
-                'data' => $mienGiams
+                'data' => $formattedData
             ];
+
         } catch (\Exception $e) {
-            \Log::error('Lỗi trong HocPhiService::getAllMienGiam: ' . $e->getMessage());
+            \Log::error('Lỗi trong HocPhiService::getHocPhiForEdit: ' . $e->getMessage());
             return [
                 'success' => false,
-                'message' => 'Có lỗi xảy ra khi tải danh sách miễn giảm'
+                'message' => 'Có lỗi xảy ra khi lấy thông tin học phí'
             ];
         }
     }
 
-    public function getMienGiam($id)
+    public function updateMienGiamByMonHoc($idHocPhi, $idMonHoc, $idMienGiam)
     {
         try {
-            $mienGiam = $this->mienGiamRepository->find($id);
+            DB::beginTransaction();
 
-            if (!$mienGiam) {
-                return [
-                    'success' => false,
-                    'message' => 'Không tìm thấy thông tin miễn giảm'
-                ];
-            }
+            // Update all chi tiết học phí with matching môn học
+            $updated = DB::table('chitiethocphi')
+                ->where('id_hocphi', $idHocPhi)
+                ->where('id_monhoc', $idMonHoc)
+                ->update(['id_mien_giam' => $idMienGiam]);
 
-            // Format dates for display
-            $mienGiam->ngay_bat_dau = Carbon::parse($mienGiam->ngay_bat_dau)->format('d/m/Y');
-            if ($mienGiam->ngay_ket_thuc) {
-                $mienGiam->ngay_ket_thuc = Carbon::parse($mienGiam->ngay_ket_thuc)->format('d/m/Y');
-            }
-
-            return [
-                'success' => true,
-                'data' => $mienGiam
-            ];
-        } catch (\Exception $e) {
-            \Log::error('Lỗi trong HocPhiService::getMienGiam: ' . $e->getMessage());
-            return [
-                'success' => false,
-                'message' => 'Có lỗi xảy ra khi tải thông tin miễn giảm'
-            ];
-        }
-    }
-
-    public function createMienGiam(array $data)
-    {
-        DB::beginTransaction();
-        try {
-            // Chuyển đổi format ngày từ d/m/Y sang Y-m-d
-            $ngayBatDau = Carbon::createFromFormat('d/m/Y', $data['ngay_bat_dau'])->format('Y-m-d');
-            $ngayKetThuc = isset($data['ngay_ket_thuc']) ?
-                Carbon::createFromFormat('d/m/Y', $data['ngay_ket_thuc'])->format('Y-m-d') : null;
-
-            // Kiểm tra trùng lặp thời gian
-            if ($this->mienGiamRepository->checkExistingDiscount(
-                $data['id_monhoc'],
-                $ngayBatDau,
-                $ngayKetThuc ?? $ngayBatDau
-            )) {
-                return [
-                    'success' => false,
-                    'message' => 'Đã tồn tại miễn giảm trong khoảng thời gian này'
-                ];
-            }
-
-            // Chuẩn bị dữ liệu
-            $mienGiamData = [
-                'id_monhoc' => $data['id_monhoc'],
-                'ngay_bat_dau' => $ngayBatDau,
-                'ngay_ket_thuc' => $ngayKetThuc,
-                'mo_ta' => $data['mo_ta'] ?? null,
-            ];
-
-            // Thêm tỷ lệ hoặc số tiền miễn giảm
-            if ($data['discount_type'] === 'percent') {
-                $mienGiamData['ty_le_mien_giam'] = $data['ty_le_mien_giam'];
-                $mienGiamData['so_tien_mien_giam'] = null;
-            } else {
-                $mienGiamData['ty_le_mien_giam'] = null;
-                $mienGiamData['so_tien_mien_giam'] = $data['so_tien_mien_giam'];
-            }
-
-            $result = $this->mienGiamRepository->create($mienGiamData);
-
-            if (!$result) {
-                DB::rollBack();
-                return [
-                    'success' => false,
-                    'message' => 'Không thể thêm miễn giảm'
-                ];
-            }
-
-            DB::commit();
-            return [
-                'success' => true,
-                'message' => 'Thêm miễn giảm thành công'
-            ];
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            \Log::error('Lỗi trong HocPhiService::createMienGiam: ' . $e->getMessage());
-            return [
-                'success' => false,
-                'message' => 'Có lỗi xảy ra khi thêm miễn giảm'
-            ];
-        }
-    }
-
-    public function updateMienGiam($id, array $data)
-    {
-        DB::beginTransaction();
-        try {
-            // Kiểm tra tồn tại
-            if (!$this->mienGiamRepository->find($id)) {
-                return [
-                    'success' => false,
-                    'message' => 'Không tìm thấy thông tin miễn giảm'
-                ];
-            }
-
-            // Chuyển đổi format ngày
-            $ngayBatDau = Carbon::createFromFormat('d/m/Y', $data['ngay_bat_dau'])->format('Y-m-d');
-            $ngayKetThuc = isset($data['ngay_ket_thuc']) ?
-                Carbon::createFromFormat('d/m/Y', $data['ngay_ket_thuc'])->format('Y-m-d') : null;
-
-            // Kiểm tra trùng lặp thời gian
-            if ($this->mienGiamRepository->checkExistingDiscount(
-                $data['id_monhoc'],
-                $ngayBatDau,
-                $ngayKetThuc ?? $ngayBatDau,
-                $id
-            )) {
-                return [
-                    'success' => false,
-                    'message' => 'Đã tồn tại miễn giảm trong khoảng thời gian này'
-                ];
-            }
-
-            // Chuẩn bị dữ liệu
-            $mienGiamData = [
-                'id_monhoc' => $data['id_monhoc'],
-                'ngay_bat_dau' => $ngayBatDau,
-                'ngay_ket_thuc' => $ngayKetThuc,
-                'mo_ta' => $data['mo_ta'] ?? null,
-                'trang_thai' => 'active'
-            ];
-
-            // Cập nhật tỷ lệ hoặc số tiền miễn giảm
-            if ($data['discount_type'] === 'percent') {
-                $mienGiamData['ty_le_mien_giam'] = $data['ty_le_mien_giam'];
-                $mienGiamData['so_tien_mien_giam'] = null;
-            } else {
-                $mienGiamData['ty_le_mien_giam'] = null;
-                $mienGiamData['so_tien_mien_giam'] = $data['so_tien_mien_giam'];
-            }
-
-            $result = $this->mienGiamRepository->update($id, $mienGiamData);
-
-            if (!$result) {
+            if ($updated === false) {
                 DB::rollBack();
                 return [
                     'success' => false,
@@ -260,15 +203,24 @@ class HocPhiService
                 ];
             }
 
+            // Get updated totals
+            $newTotals = $this->calculateHocPhiTotals($idHocPhi);
+
             DB::commit();
+
             return [
                 'success' => true,
-                'message' => 'Cập nhật miễn giảm thành công'
+                'message' => 'Cập nhật miễn giảm thành công',
+                'data' => [
+                    'tong_tien' => $newTotals->tong_tien,
+                    'tong_mien_giam' => $newTotals->tong_mien_giam,
+                    'tong_phai_dong' => $newTotals->tong_tien - $newTotals->tong_mien_giam
+                ]
             ];
 
         } catch (\Exception $e) {
             DB::rollBack();
-            \Log::error('Lỗi trong HocPhiService::updateMienGiam: ' . $e->getMessage());
+            \Log::error('Lỗi trong HocPhiService::updateMienGiamByMonHoc: ' . $e->getMessage());
             return [
                 'success' => false,
                 'message' => 'Có lỗi xảy ra khi cập nhật miễn giảm'
@@ -276,41 +228,95 @@ class HocPhiService
         }
     }
 
-    public function deleteMienGiam($id)
+    public function updateHocPhi($idHocPhi, array $chiTietList)
     {
-        DB::beginTransaction();
         try {
-            // Kiểm tra tồn tại
-            if (!$this->mienGiamRepository->find($id)) {
-                return [
-                    'success' => false,
-                    'message' => 'Không tìm thấy thông tin miễn giảm'
-                ];
+            DB::beginTransaction();
+
+            foreach ($chiTietList as $chiTiet) {
+                $this->hocPhiRepository->updateChiTietHocPhi(
+                    $chiTiet['id_chitiethocphi'],
+                    $chiTiet['id_mien_giam']
+                );
             }
 
-            $result = $this->mienGiamRepository->delete($id);
-
-            if (!$result) {
-                DB::rollBack();
-                return [
-                    'success' => false,
-                    'message' => 'Không thể xóa miễn giảm'
-                ];
-            }
+            // Recalculate totals
+            $totals = $this->calculateHocPhiTotals($idHocPhi);
 
             DB::commit();
+
             return [
                 'success' => true,
-                'message' => 'Xóa miễn giảm thành công'
+                'message' => 'Cập nhật học phí thành công',
+                'data' => $totals
             ];
 
         } catch (\Exception $e) {
             DB::rollBack();
-            \Log::error('Lỗi trong HocPhiService::deleteMienGiam: ' . $e->getMessage());
+            \Log::error('Lỗi trong HocPhiService::updateHocPhi: ' . $e->getMessage());
             return [
                 'success' => false,
-                'message' => 'Có lỗi xảy ra khi xóa miễn giảm'
+                'message' => 'Có lỗi xảy ra khi cập nhật học phí'
             ];
+        }
+    }
+
+    private function calculateHocPhiTotals($idHocPhi)
+    {
+        $chiTiet = DB::table('chitiethocphi as ct')
+            ->leftJoin('mien_giam_hoc_phi as mg', 'ct.id_mien_giam', '=', 'mg.id_mien_giam')
+            ->where('ct.id_hocphi', $idHocPhi)
+            ->select([
+                'ct.so_tien',
+                'mg.ty_le_mien_giam',
+                'mg.so_tien_mien_giam'
+            ])
+            ->get();
+
+        $tongTien = 0;
+        $tongMienGiam = 0;
+
+        foreach ($chiTiet as $item) {
+            $tongTien += $item->so_tien;
+            if ($item->ty_le_mien_giam > 0) {
+                $tongMienGiam += ($item->so_tien * $item->ty_le_mien_giam / 100);
+            }
+            if ($item->so_tien_mien_giam > 0) {
+                $tongMienGiam += $item->so_tien_mien_giam;
+            }
+        }
+
+        return (object)[
+            'tong_tien' => $tongTien,
+            'tong_mien_giam' => $tongMienGiam
+        ];
+    }
+
+    public function getSalesOverview()
+    {
+        try {
+            $totalPaid = $this->hocPhiRepository->getTotalPaidAmount();
+            $classSummary = $this->hocPhiRepository->getClassSummary();
+            $totalClasses = $classSummary->count();
+
+            return [
+                'totalPaid' => $totalPaid,
+                'totalClasses' => $totalClasses,
+                'classSummary' => $classSummary
+            ];
+        } catch (\Exception $e) {
+            \Log::error('Lỗi trong HocPhiService::getSalesOverview: ' . $e->getMessage());
+            throw $e;
+        }
+    }
+
+    public function getSalesDetailByClass($lop)
+    {
+        try {
+            return $this->hocPhiRepository->getSalesDetailByClass($lop);
+        } catch (\Exception $e) {
+            \Log::error('Lỗi trong HocPhiService::getSalesDetailByClass: ' . $e->getMessage());
+            throw $e;
         }
     }
 }

@@ -87,7 +87,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('hocphi.discount') }}" class="tp-link">
+                                <a href="{{ route('miengiam.index') }}" class="tp-link">
                                     <i data-feather="percent"></i>
                                     <span>Quản lý miễn giảm</span>
                                 </a>

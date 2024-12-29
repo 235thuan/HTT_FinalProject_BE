@@ -1,10 +1,11 @@
 <div class="home1">
     <div class="home11">
         <div class="home111">
-            <a href="{{ route('home') }}" class="nav-link"> <img src="{{ Vite::asset('resources/image/thuan/homeIcon4.png') }}"></a>
-
+            <span class="logo-sm">
+                        <img src="/images/logo-sm.png" alt="" height="44">
+                    </span>
         </div>
-        <div class="home112">Đồ án nhóm 6</div>
+
     </div>
     <div class="home12">
         <div class="home121">

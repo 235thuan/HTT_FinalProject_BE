@@ -25,20 +25,20 @@
                         <td>{{ $teacher->so_dien_thoai }}</td>
                         <td>
                             <div class="btn-group">
-                                <a href="{{ route('qlnd.giaovien.detail', $teacher->id_giaovien) }}" 
-                                   class="btn btn-soft-primary btn-sm" 
+                                <a href="{{ route('qlnd.giaovien.detail', $teacher->id_giaovien) }}"
+                                   class="btn btn-soft-primary btn-sm"
                                    title="Xem chi tiết">
                                     <i class="mdi mdi-eye"></i>
                                 </a>
-                                <button type="button" 
-                                        class="btn btn-soft-info btn-sm edit-btn" 
-                                        data-bs-toggle="modal" 
+                                <button type="button"
+                                        class="btn btn-soft-info btn-sm edit-btn"
+                                        data-bs-toggle="modal"
                                         data-bs-target="#editGiaoVienModal"
                                         data-id="{{ $teacher->id_giaovien }}"
                                         data-name="{{ $teacher->ten_giaovien }}"
                                         data-email="{{ $teacher->email }}"
                                         data-phone="{{ $teacher->so_dien_thoai }}"
-                                        data-khoa="{{ $teacher->ma_khoa }}"
+                                        data-khoa="{{ $teacher->id_khoa }}"
                                         data-khoa-name="{{ $teacher->ten_khoa }}"
                                         title="Chỉnh sửa">
                                     <i class="mdi mdi-pencil"></i>
@@ -50,7 +50,7 @@
             </tbody>
         </table>
     </div>
-    
+
     <div class="mt-3">
         {{ $teachers->links('vendor.pagination.bootstrap-5') }}
     </div>
@@ -118,34 +118,34 @@ $(document).ready(function() {
     @foreach($khoas as $khoa)
     $('#pagination-{{ $khoa->id_khoa }}').on('click', '.pagination a', function(e) {
         e.preventDefault();
-        
+
         // Get the clicked pagination element
         var paginationElement = $(this);
         var card = paginationElement.closest('.card');
-        
+
         // Store the current viewport offset of the card
         var cardOffset = card.offset().top - $(window).scrollTop();
-        
+
         var url = $(this).attr('href');
-        
+
         $.ajax({
             url: url,
             success: function(response) {
                 // Only update the specific khoa's content
                 var newContent = $(response).find('#teacher-list-{{ $khoa->id_khoa }}').html();
                 $('#teacher-list-{{ $khoa->id_khoa }}').html(newContent);
-                
+
                 // Wait for content to be rendered
                 setTimeout(function() {
                     // Get the updated card position and maintain viewport offset
                     var newPosition = card.offset().top - cardOffset;
-                    
+
                     // Smooth scroll to the position
                     $('html, body').animate({
                         scrollTop: newPosition
                     }, 0);
                 }, 100);
-                
+
                 // Update URL without page reload
                 window.history.pushState({}, '', url);
             }
@@ -156,7 +156,7 @@ $(document).ready(function() {
     // Handle modal show event
     $('#editGiaoVienModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
-        
+
         // Get data from button data attributes
         var id = button.data('id');
         var name = button.data('name');
@@ -164,7 +164,7 @@ $(document).ready(function() {
         var phone = button.data('phone');
         var khoa = button.data('khoa');
         var khoaName = button.data('khoa-name');
-        
+
         console.log('Modal data:', {
             id: id,
             name: name,
@@ -192,7 +192,7 @@ $(document).ready(function() {
     // Handle form submit
     $('#editGiaoVienForm').on('submit', function(e) {
         e.preventDefault();
-        
+
         var id = $('#edit_id').val();
         var formData = new FormData(this);
 
@@ -207,7 +207,7 @@ $(document).ready(function() {
             },
             success: function(response) {
                 console.log('Success response:', response);
-                
+
                 if (response.success) {
                     // Find the button that was clicked
                     var editButton = $('button[data-id="' + id + '"]');
@@ -229,7 +229,7 @@ $(document).ready(function() {
                     $('.modal-backdrop').remove();
                     modal.hide();
 
-                    
+
                     // Optional: Reset form
                     $('#editGiaoVienForm')[0].reset();
                 }

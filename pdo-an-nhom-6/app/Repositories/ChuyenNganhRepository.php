@@ -16,7 +16,7 @@ class ChuyenNganhRepository
     {
         try {
             $result = DB::table('chuyennganh')
-                ->join('khoa', 'chuyennganh.ma_khoa', '=', 'khoa.id_khoa')
+                ->join('khoa', 'chuyennganh.id_khoa', '=', 'khoa.id_khoa')
                 ->leftJoin('file_upload', function($join) {
                     $join->on('chuyennganh.id_chuyennganh', '=', 'file_upload.id_chuyennganh')
                         ->where('file_upload.loai_file', '=', 'image');

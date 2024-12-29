@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 25, 2024 at 06:16 PM
+-- Generation Time: Dec 29, 2024 at 12:42 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -39,6 +39,13 @@ CREATE TABLE `mien_giam_hoc_phi` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
+-- Dumping data for table `mien_giam_hoc_phi`
+--
+
+INSERT INTO `mien_giam_hoc_phi` (`id_mien_giam`, `id_monhoc`, `ty_le_mien_giam`, `so_tien_mien_giam`, `ngay_bat_dau`, `ngay_ket_thuc`, `mo_ta`, `trang_thai`) VALUES
+(2, 6, 1.00, NULL, '2024-12-26', '2024-12-27', '2', 'active');
+
+--
 -- Indexes for dumped tables
 --
 
@@ -57,7 +64,7 @@ ALTER TABLE `mien_giam_hoc_phi`
 -- AUTO_INCREMENT for table `mien_giam_hoc_phi`
 --
 ALTER TABLE `mien_giam_hoc_phi`
-  MODIFY `id_mien_giam` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_mien_giam` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables

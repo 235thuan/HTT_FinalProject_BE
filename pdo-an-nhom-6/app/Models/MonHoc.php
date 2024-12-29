@@ -13,13 +13,13 @@ class MonHoc extends Model
     protected $fillable = [
         'ten_monhoc',
         'so_tin_chi',
-        'ma_chuyen_nganh'
+        'id_chuyennganh'
     ];
 
 
     public function chiTietChuyenNganh()
     {
-        return $this->hasMany(ChiTietChuyenNganh::class, 'ma_monhoc', 'id_monhoc');
+        return $this->hasMany(ChiTietChuyenNganh::class, 'id_monhoc', 'id_monhoc');
     }
 
     public function chuyenNganhs()
@@ -27,8 +27,8 @@ class MonHoc extends Model
         return $this->belongsToMany(
             ChuyenNganh::class,
             'chitietchuyennganh',
-            'ma_monhoc',
-            'ma_chuyennganh'
+            'id_monhoc',
+            'id_chuyennganh'
         );
     }
 

@@ -12,7 +12,11 @@ class HocPhiSalesRepository
     public function getTotalPaid()
     {
         try {
-            return DB::table('hocphi')->sum('so_tien');
+            return DB::table('hocphi as hp')
+                ->join('chitiethocphi as cthp', 'hp.id_hocphi', '=', 'cthp.id_hocphi')
+                ->select(DB::raw('SUM(cthp.so_tien) as total_paid'))
+                ->first()
+                ->total_paid ?? 0;
         } catch (\Exception $e) {
             \Log::error('Lỗi trong HocPhiSalesRepository::getTotalPaid: ' . $e->getMessage());
             throw $e;
@@ -27,13 +31,15 @@ class HocPhiSalesRepository
         try {
             return DB::table('hocphi as hp')
                 ->join('sinhvien as sv', 'hp.id_sinhvien', '=', 'sv.id_sinhvien')
+                ->join('lop as l', 'sv.id_lop', '=', 'l.id_lop')
+                ->join('chitiethocphi as cthp', 'hp.id_hocphi', '=', 'cthp.id_hocphi')
                 ->select(
-                    'sv.lop',
+                    'l.ten_lop',
                     DB::raw('COUNT(DISTINCT hp.id_sinhvien) as total_students'),
-                    DB::raw('SUM(hp.so_tien) as total_paid')
+                    DB::raw('SUM(cthp.so_tien) as total_paid')
                 )
-                ->groupBy('sv.lop')
-                ->orderBy('sv.lop')
+                ->groupBy('l.ten_lop')
+                ->orderBy('l.ten_lop')
                 ->get();
         } catch (\Exception $e) {
             \Log::error('Lỗi trong HocPhiSalesRepository::getClassSummary: ' . $e->getMessage());
@@ -49,14 +55,17 @@ class HocPhiSalesRepository
         try {
             return DB::table('hocphi as hp')
                 ->join('sinhvien as sv', 'hp.id_sinhvien', '=', 'sv.id_sinhvien')
+                ->join('lop as l', 'sv.id_lop', '=', 'l.id_lop')
+                ->join('chitiethocphi as cthp', 'hp.id_hocphi', '=', 'cthp.id_hocphi')
                 ->select(
                     'sv.id_sinhvien',
-                    'sv.ten_sinhvien',
-                    'hp.so_tien'
-
+                    'sv.ten_sinhvien', 
+                    'cthp.ten_khoan_phi',
+                    'cthp.so_tien'
                 )
-                ->where('sv.lop', $lop)
+                ->where('l.ten_lop', $lop)
                 ->orderBy('sv.ten_sinhvien')
+                ->orderBy('cthp.ngay_ap_dung')
                 ->get();
         } catch (\Exception $e) {
             \Log::error('Lỗi trong HocPhiSalesRepository::getClassDetail: ' . $e->getMessage());

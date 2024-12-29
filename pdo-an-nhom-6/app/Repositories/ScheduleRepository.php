@@ -18,7 +18,7 @@ class ScheduleRepository
                 ->join('giaovien as gv', 'tkb.id_giaovien', '=', 'gv.id_giaovien')
                 ->join('phonghoc as ph', 'tkb.id_phonghoc', '=', 'ph.id_phonghoc')
                 ->join('lop as l', 'tkb.id_lop', '=', 'l.id_lop')
-                ->leftJoin('sinhvien as sv', 'l.ten_lop', '=', 'sv.lop') // Thêm join với bảng sinhvien
+                ->leftJoin('sinhvien as sv', 'l.id_lop', '=', 'sv.id_lop') // Thêm join với bảng sinhvien
                 ->select(
                     'tkb.*',
                     'mh.ten_monhoc',
@@ -29,8 +29,7 @@ class ScheduleRepository
                     'l.ten_lop'
                 )
                 ->where(function($query) use ($tenLop) {
-                    $query->where('l.ten_lop', $tenLop)
-                        ->orWhere('sv.lop', $tenLop);
+                    $query->where('l.ten_lop', $tenLop);
                 })
                 ->whereBetween('tkb.ngay_hoc', [$startDate, $endDate])
                 ->orderBy('tkb.ngay_hoc')
@@ -50,12 +49,13 @@ class ScheduleRepository
         try {
             return DB::table('sinhvien as sv')
                 ->select(
-                    'sv.lop as ten_lop',
+                    'l.ten_lop as ten_lop',
                     DB::raw('COUNT(DISTINCT sv.id_sinhvien) as si_so')
                 )
-                ->where('sv.ma_chuyen_nganh', $id)
-                ->groupBy('sv.lop')
-                ->orderBy('sv.lop')
+                ->join('lop as l', 'sv.id_lop', '=', 'l.id_lop')
+                ->where('l.id_chuyennganh', $id)
+                ->groupBy('l.ten_lop')
+                ->orderBy('l.ten_lop')
                 ->get();
         } catch (\Exception $e) {
             \Log::error('Lỗi trong ScheduleRepository::getLopsByChuyenNganh: ' . $e->getMessage());

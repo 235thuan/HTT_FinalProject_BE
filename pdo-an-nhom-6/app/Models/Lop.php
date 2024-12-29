@@ -12,11 +12,13 @@ class Lop extends Model
 
     protected $fillable = [
         'ten_lop',
-        'mo_ta'
+        'mo_ta',
+        'id_chuyennganh',
+        'nam_vao_hoc'
     ];
 
     public function sinhViens()
     {
-        return $this->hasMany(SinhVien::class, 'lop', 'id_lop');
+        return $this->hasMany(SinhVien::class, 'id_lop', 'id_lop');
     }
-} 
+}

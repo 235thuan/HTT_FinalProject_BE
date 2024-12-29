@@ -9,8 +9,8 @@
                 <div class="card-header">
                     <h5 class="card-title mb-0">
                         Lớp {{ $lop->ten_lop }}
-                        @if($lop->ma_phong_hoc)
-                            - Phòng {{ $lop->ma_phong_hoc }}
+                        @if($lop->id_phonghoc)
+                            - Phòng {{ $lop->id_phonghoc }}
                         @endif
                         <span class="badge bg-primary ms-2">
                             {{ $lop->sinhviens->count() }} sinh viên
@@ -41,13 +41,13 @@
                                         <td>{{ $sv->nam_vao_hoc }}</td>
                                         <td>
                                             <div class="btn-group">
-                                                <a href="{{ route('sinhvien.show', $sv->id_sinhvien) }}" 
-                                                   class="btn btn-sm btn-primary" 
+                                                <a href="{{ route('sinhvien.show', $sv->id_sinhvien) }}"
+                                                   class="btn btn-sm btn-primary"
                                                    title="Xem chi tiết">
                                                     <i class="mdi mdi-eye"></i>
                                                 </a>
-                                                <a href="{{ route('sinhvien.edit', $sv->id_sinhvien) }}" 
-                                                   class="btn btn-sm btn-info" 
+                                                <a href="{{ route('sinhvien.edit', $sv->id_sinhvien) }}"
+                                                   class="btn btn-sm btn-info"
                                                    title="Chỉnh sửa">
                                                     <i class="mdi mdi-pencil"></i>
                                                 </a>
@@ -88,4 +88,4 @@ $(document).ready(function() {
     });
 });
 </script>
-@endsection 
+@endsection

@@ -12,10 +12,8 @@ class GiaoVien extends Model
 
     protected $fillable = [
         'id_nguoidung',
-        'ma_khoa',
-        'ten_giaovien',
-        'email',
-        'so_dien_thoai'
+        'id_khoa',
+        'ten_giaovien'
     ];
 
     /**
@@ -23,7 +21,7 @@ class GiaoVien extends Model
      */
     public function khoa()
     {
-        return $this->belongsTo(Khoa::class, 'ma_khoa', 'id_khoa');
+        return $this->belongsTo(Khoa::class, 'id_khoa', 'id_khoa');
     }
 
     /**

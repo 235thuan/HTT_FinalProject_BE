@@ -12,14 +12,12 @@ class SinhVien extends Model
 
     protected $fillable = [
         'ten_sinhvien',
-        'lop',
-        'email',
-        'so_dien_thoai'
-        // Add other fields as needed
+        'id_lop',
+
     ];
 
     public function lop()
     {
-        return $this->belongsTo(Lop::class, 'lop', 'id_lop');
+        return $this->belongsTo(Lop::class, 'id_lop', 'id_lop');
     }
-} 
+}

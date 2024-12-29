@@ -60,30 +60,22 @@
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label">Chuyên ngành</label>
-                                <select class="form-select" name="ma_chuyen_nganh" id="select_chuyennganh" required>
-                                    <option value="">Chọn chuyên ngành</option>
-                                    @foreach($chuyenNganhs as $cn)
-                                        <option value="{{ $cn->id_chuyennganh }}">{{ $cn->ten_chuyennganh }}</option>
-                                    @endforeach
-                                </select>
+                                <label class="form-label">Số điện thoại</label>
+                                <input type="text" class="form-control" name="so_dien_thoai" required>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-12">
                             <div class="mb-3">
                                 <label class="form-label">Lớp</label>
-                                <select class="form-select" name="lop" id="select_lop" required disabled>
+                                <select class="form-select" name="id_lop" id="select_lop" required>
                                     <option value="">Chọn lớp</option>
                                 </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label">Năm vào học</label>
-                                <input type="number" class="form-control" name="nam_vao_hoc" 
-                                       min="2000" max="{{ date('Y') }}" required>
+                                <small class="text-muted">
+                                    Chuyên ngành: <span id="chuyennganh_info">-</span> |
+                                    Năm vào học: <span id="namvaohoc_info">-</span>
+                                </small>
                             </div>
                         </div>
                     </div>
@@ -106,14 +98,14 @@ $(document).ready(function() {
         var rowTop = studentRow.offset().top;
         var windowTop = $(window).scrollTop();
         var windowBottom = windowTop + $(window).height();
-        
+
         // Only scroll if the student is not already visible
         if (rowTop < windowTop || rowTop > windowBottom) {
             $('html, body').animate({
                 scrollTop: rowTop - 100
             }, 500);
         }
-        
+
         studentRow.addClass('highlight-row');
         setTimeout(() => studentRow.removeClass('highlight-row'), 3000);
     }
@@ -123,33 +115,76 @@ $(document).ready(function() {
 
 @push('scripts')
 <script>
+
 $(document).ready(function() {
+    // Gọi lại khi mở modal
+    $('#addSinhVienModal').on('show.bs.modal', function() {
+        loadLopList();
+    });
+
+// Hàm lấy danh sách lớp
+    function loadLopList() {
+        console.log('run load lop');
+        $.ajax({
+            url: '{{ route("sinhvien.getLopList") }}',
+            type: 'GET',
+            success: function(response) {
+                if (response.success) {
+                    let selectLop = $('#select_lop');
+                    selectLop.empty().append('<option value="">Chọn lớp</option>');
+
+                    response.data.forEach(function(lop) {
+                        selectLop.append(`<option value="${lop.id_lop}"
+                        data-chuyennganh="${lop.ten_chuyennganh}"
+                        data-namvaohoc="${lop.nam_vao_hoc}">
+                        ${lop.ten_lop}
+                    </option>`);
+                    });
+                }
+            },
+            error: function(xhr) {
+                console.error('Lỗi khi lấy danh sách lớp:', xhr);
+            }
+        });
+    }
+
+// Cập nhật thông tin chuyên ngành và năm vào học khi chọn lớp
+    $('#select_lop').on('change', function() {
+        let selectedOption = $(this).find('option:selected');
+        $('#chuyennganh_info').text(selectedOption.data('chuyennganh') || '-');
+        $('#namvaohoc_info').text(selectedOption.data('namvaohoc') || '-');
+    });
+
+
+
+
+
     // Store all lops grouped by chuyenNganh
     var lopsByChuyenNganh = @json($lopsByChuyenNganh);
     var chuyenNganhs = @json($chuyenNganhs);
-    
+
     // Handle chuyenNganh selection change
     $('#select_chuyennganh').on('change', function() {
         var chuyenNganhId = $(this).val();
         var lopSelect = $('#select_lop');
-        
+
         // Clear and disable lop select
         lopSelect.empty().append('<option value="">Chọn lớp</option>');
-        
+
         if (chuyenNganhId) {
             // Enable lop select
             lopSelect.prop('disabled', false);
-            
+
             // Get lops for selected chuyenNganh
             var lops = lopsByChuyenNganh[chuyenNganhId] || [];
-            
+
             // Get the selected chuyenNganh info
             var selectedChuyenNganh = chuyenNganhs.find(cn => cn.id_chuyennganh == chuyenNganhId);
-            
+
             if (selectedChuyenNganh) {
                 // Sort lops by name
                 lops.sort((a, b) => a.ten_lop.localeCompare(b.ten_lop));
-                
+
                 // Add all matching lops
                 lops.forEach(function(lop) {
                     lopSelect.append(`<option value="${lop.ten_lop}">${lop.ten_lop}</option>`);
@@ -167,12 +202,12 @@ $(document).ready(function() {
         clearTimeout(emailTimeout);
         var email = $(this).val();
         var statusElement = $('#email_status');
-        
+
         if (email && email.includes('@')) {
             statusElement.html('<i class="mdi mdi-loading mdi-spin"></i> Đang kiểm tra...')
                 .removeClass('text-success text-danger text-warning')
                 .addClass('text-muted');
-            
+
             emailTimeout = setTimeout(function() {
                 $.ajax({
                     url: '{{ route("check.email") }}',
@@ -217,38 +252,68 @@ $(document).ready(function() {
     // Handle form submission
     $('#addSinhVienForm').on('submit', function(e) {
         e.preventDefault();
-        
+
+        // Disable submit button to prevent double submission
+        const submitBtn = $(this).find('button[type="submit"]');
+        submitBtn.prop('disabled', true);
+
+        // Get form data
+        const formData = $(this).serialize();
+
         $.ajax({
             url: '{{ route("sinhvien.store") }}',
             method: 'POST',
-            data: $(this).serialize(),
+            data: formData,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
             success: function(response) {
                 if (response.success) {
-                    // Properly close modal and clean up
-                    var modal = bootstrap.Modal.getInstance(document.getElementById('addSinhVienModal'));
-                    modal.hide();
-                    
-                    // Remove modal backdrop and reset body
-                    $('.modal-backdrop').remove();
-                    $('body').removeClass('modal-open');
-                    $('body').css('padding-right', '');
-                    
                     // Show success message
-                    toastr.success('Thêm sinh viên thành công!');
-                    
-                    // Wait a short moment then redirect
+                    toastr.success(response.message || 'Thêm sinh viên thành công');
+
+                    // Close modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('addSinhVienModal'));
+                    modal.hide();
+
+                    // Clean up modal
+                    $('.modal-backdrop').remove();
+                    $('body').removeClass('modal-open').css('padding-right', '');
+
+                    // Reload page after short delay
                     setTimeout(function() {
-                        window.location = '/qlnd/listSinhvien';
+                        window.location.reload();
                     }, 1000);
+                } else {
+                    toastr.error(response.message || 'Có lỗi xảy ra');
                 }
             },
             error: function(xhr) {
-                var errors = xhr.responseJSON.errors;
-                Object.keys(errors).forEach(function(key) {
-                    toastr.error(errors[key][0]);
-                });
+                // Enable submit button again
+                submitBtn.prop('disabled', false);
+
+                if (xhr.status === 422) {
+                    // Validation errors
+                    const errors = xhr.responseJSON.errors;
+                    Object.keys(errors).forEach(function(key) {
+                        toastr.error(errors[key][0]);
+                        $(`[name="${key}"]`).addClass('is-invalid');
+                    });
+                } else {
+                    // General error
+                    toastr.error('Có lỗi xảy ra khi thêm sinh viên');
+                }
+            },
+            complete: function() {
+                // Enable submit button in any case
+                submitBtn.prop('disabled', false);
             }
         });
+    });
+
+// Clear validation errors when input changes
+    $('#addSinhVienForm input, #addSinhVienForm select').on('input change', function() {
+        $(this).removeClass('is-invalid');
     });
 
     // Reset form when modal is closed
@@ -257,6 +322,8 @@ $(document).ready(function() {
         $('#select_lop').prop('disabled', true).empty().append('<option value="">Chọn lớp</option>');
     });
 });
+
+
 </script>
 @endpush
 @endsection

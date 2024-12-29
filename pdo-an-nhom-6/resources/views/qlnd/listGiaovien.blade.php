@@ -41,9 +41,9 @@
 
 <div class="row mb-3">
     <div class="col-12">
-        <button type="button" 
-                class="btn btn-primary float-end" 
-                data-bs-toggle="modal" 
+        <button type="button"
+                class="btn btn-primary float-end"
+                data-bs-toggle="modal"
                 data-bs-target="#addTeacherModal"
                 data-khoa="{{ $khoas->first()->id_khoa }}"
                 data-khoa-name="{{ $khoas->first()->ten_khoa }}">
@@ -60,7 +60,7 @@
                     <h4 class="header-title">{{ $khoa->ten_khoa }}  <span class="badge bg-primary ms-2">
                         {{ $khoa->total_teachers }} giáo viên
                     </span></h4>
-                   
+
                 </div>
 
                 <div class="card-body" id="teacher-list-{{ $khoa->id_khoa }}">
@@ -94,7 +94,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="form-label">Khoa</label>
-                                <select class="form-select" name="ma_khoa" id="add_ma_khoa" required>
+                                <select class="form-select" name="id_khoa" id="add_ma_khoa" required>
                                     <option value="">Chọn khoa</option>
                                     @foreach($khoas as $khoa)
                                         <option value="{{ $khoa->id_khoa }}">{{ $khoa->ten_khoa }}</option>
@@ -107,7 +107,8 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="form-label">Email</label>
-                                <input type="email" class="form-control" name="email" required>
+                                <input type="email" class="form-control" name="email" id="email_teacher_input" required>
+                                <small id="email_teacher_status" class="form-text"></small>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -119,7 +120,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Môn học phụ trách</label>
-                        <select class="form-select" name="ma_monhoc[]" id="add_ma_monhoc" multiple required>
+                        <select class="form-select" name="id_monhoc[]" id="add_ma_monhoc" multiple required>
                             <option value="">Chọn môn học</option>
                         </select>
                         <small class="text-muted">Vui lòng chọn khoa trước</small>
@@ -153,67 +154,72 @@ $.ajaxSetup({
 
 $(document).ready(function() {
     let emailTimeout;
-    
-    // Function to check email
-    function checkEmail(email) {
-        $.ajax({
-            url: '/admin/qlnd/check-email-giaovien',
-            method: 'GET',
-            data: { email: email },
-            success: function(response) {
-                if (response.exists && !response.canUse) {
-                    $('#email-error').text(response.message).show();
-                    $('#add_email').addClass('is-invalid');
-                } else {
-                    $('#email-error').text(response.message).show();
-                    $('#add_email').removeClass('is-invalid');
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('Error:', error);
-                $('#email-error').text('Có lỗi xảy ra khi kiểm tra email').show();
-                $('#add_email').addClass('is-invalid');
-            }
-        });
-    }
 
-    // Check on input with debounce
-    $('#add_email').on('input', function() {
+    $('#email_teacher_input').on('input', function() {
         clearTimeout(emailTimeout);
-        const email = $(this).val().trim();
-        
-        if (email) {
-            emailTimeout = setTimeout(function() {
-                checkEmail(email);
-            }, 500); // Wait 500ms after user stops typing
-        } else {
-            $('#email-error').hide();
-            $('#add_email').removeClass('is-invalid');
-        }
-    });
+        var email = $(this).val();
+        var statusElement = $('#email_teacher_status');
 
-    // Also check on blur
-    $('#add_email').on('blur', function() {
-        const email = $(this).val().trim();
-        if (email) {
-            checkEmail(email);
+        if (email && email.includes('@')) {
+            statusElement.html('<i class="mdi mdi-loading mdi-spin"></i> Đang kiểm tra...')
+                .removeClass('text-success text-danger text-warning')
+                .addClass('text-muted');
+
+            emailTimeout = setTimeout(function() {
+                $.ajax({
+                    url: '{{ route("check.email") }}',
+                    type: 'GET',
+                    data: { email: email },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        if (response.exists) {
+                            if (response.canUse) {
+                                statusElement.html(`<i class="mdi mdi-check-circle"></i> ${response.message}`)
+                                    .removeClass('text-muted text-danger')
+                                    .addClass('text-success');
+                            } else {
+                                statusElement.html(`<i class="mdi mdi-alert"></i> ${response.message}`)
+                                    .removeClass('text-muted text-success')
+                                    .addClass('text-danger');
+                                $('#email_teacher_input').addClass('is-invalid');
+                            }
+                        } else {
+                            statusElement.html(`<i class="mdi mdi-information"></i> ${response.message}`)
+                                .removeClass('text-muted text-danger')
+                                .addClass('text-success');
+                            $('#email_teacher_input').removeClass('is-invalid');
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error('Error:', xhr);
+                        statusElement.html('<i class="mdi mdi-alert"></i> Lỗi kiểm tra email')
+                            .removeClass('text-muted text-success')
+                            .addClass('text-danger');
+                    }
+                });
+            }, 500);
+        } else {
+            statusElement.empty();
+            $('#email_teacher_input').removeClass('is-invalid');
         }
     });
 
     // Handle khoa change in modal
-   
+
     $('#add_ma_khoa').on('change', function() {
         const khoaId = $(this).val();
         console.log('Selected khoa_id:', khoaId); // Debug log
-        
+
         const monhocSelect = $('#add_ma_monhoc');
-        
+
         if (!khoaId) {
             monhocSelect.prop('disabled', true);
             monhocSelect.html('<option value="">Vui lòng chọn khoa trước</option>');
             return;
         }
-        
+
         monhocSelect.prop('disabled', true);
         monhocSelect.html('<option>Đang tải...</option>');
 
@@ -223,7 +229,7 @@ $(document).ready(function() {
             dataType: 'json',
             success: function(data) {
                 console.log('Received data:', data); // Debug log
-                
+
                 let options = '';
                 if (data && data.length > 0) {
                     data.forEach(function(monhoc) {
@@ -250,14 +256,14 @@ $(document).ready(function() {
     $('#addTeacherForm').on('submit', function(e) {
         e.preventDefault();
         console.log('Form submitted'); // Debug log
-        
+
         const formData = new FormData(this);
-        
+
         // Debug: Log form data
         for (let pair of formData.entries()) {
             console.log(pair[0] + ': ' + pair[1]);
         }
-        
+
         $.ajax({
             url: '/admin/qlnd/giaovien/store',
             method: 'POST',

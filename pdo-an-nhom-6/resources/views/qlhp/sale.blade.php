@@ -68,11 +68,11 @@
                                 <tbody>
                                 @foreach($classSummary as $class)
                                     <tr>
-                                        <td>{{ $class->lop }}</td>
+                                        <td>{{ $class->ten_lop }}</td>
                                         <td>{{ $class->total_students }}</td>
                                         <td>{{ number_format($class->total_paid, 0, ',', '.') }}đ</td>
                                         <td>
-                                            <a href="{{ route('hocphi.sales.detail', $class->lop) }}"
+                                            <a href="{{ route('hocphi.sales.detail', $class->ten_lop) }}"
                                                class="btn btn-info btn-sm">
                                                 <i class="mdi mdi-eye"></i>
                                             </a>

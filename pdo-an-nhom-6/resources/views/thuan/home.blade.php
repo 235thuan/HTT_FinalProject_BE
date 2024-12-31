@@ -552,6 +552,70 @@
             width: 100%;
         }
     </style>
+    <style>
+        .home2321 {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
+            max-height: 300px; /* Chỉ hiển thị 2 dòng ban đầu */
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .home2321.expanded {
+            max-height: none; /* Hiển thị tất cả khi expanded */
+        }
+
+        .expand-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .expand-icon.rotated {
+            transform: rotate(180deg);
+        }
+    </style>
+    <style>
+        .home2321 {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            max-height: 90px; /* Chiều cao cho 2 dòng button */
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding: 15px;
+        }
+
+        .home2321.expanded {
+            max-height: none;
+        }
+
+        .subject-button {
+            width: 100%;
+            height: 35px; /* Chiều cao cố định cho mỗi button */
+            padding: 8px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-weight: 500;
+            transition: color 0.2s;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .subject-button:hover {
+            color: #f57f17;
+        }
+
+        .expand-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .expand-icon.rotated {
+            transform: rotate(180deg);
+        }
+    </style>
+
     <div class="home1-2">
         <div class="video-slider">
             <a class="slider-prev" onclick="window.prevVideo()">❮</a>
@@ -585,7 +649,7 @@
 
 
         <div class="home22">
-
+            <div class="home221">Chuyên ngành đào tạo</div>
             @if(isset($error))
                 <div class="alert alert-danger">
                     {{ $error }}
@@ -636,31 +700,31 @@
 
 
         <div class="home23">
-            <div class="home231">Danh mục môn học</div>
-            <div class="home232">
-                <div class="home2321" id="subjectList">
-                    @if(isset($monHocs) && $monHocs->isNotEmpty())
-                        @foreach($monHocs as $monHoc)
-                            <button>{{ $monHoc->ten_monhoc }}</button>
-                        @endforeach
-                    @else
-                        <div class="alert alert-info">
-                            Không có dữ liệu môn học
-                        </div>
-                    @endif
+    <div class="home231">Danh mục môn học</div>
+    <div class="home232">
+        <div class="home2321" id="subjectList">
+            @if(isset($monHocs) && $monHocs->isNotEmpty())
+                @foreach($monHocs as $monHoc)
+                    <button class="subject-button">{{ $monHoc->ten_monhoc }}</button>
+                @endforeach
+            @else
+                <div class="alert alert-info">
+                    Không có dữ liệu môn học
                 </div>
-                <div class="expand-section">
-                    <button class="expand-toggle" id="expandButton">
-                        <span class="expand-text">Xem thêm môn học</span>
-                        <img src="{{ asset('storage/thuan/expand-arrow.png') }}"
-                             alt="expand"
-                             class="expand-icon"
-                             onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjZjU3ZjE3Ij48cGF0aCBkPSJNNy40MSA4LjU5TDEyIDEzLjE3bDQuNTktNC41OEwxOCAxMGwtNiA2LTYtNiAxLjQxLTEuNDF6Ii8+PC9zdmc+'" />
-                    </button>
-                </div>
-            </div>
-            <div class="homeLineBreak"></div>
+            @endif
         </div>
+        <div class="expand-section">
+            <button class="expand-toggle" id="expandButton">
+                <span class="expand-text">Xem thêm môn học</span>
+                <img src="{{ asset('storage/thuan/expand-arrow.png') }}"
+                     alt="expand"
+                     class="expand-icon"
+                     onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjZjU3ZjE3Ij48cGF0aCBkPSJNNy40MSA4LjU5TDEyIDEzLjE3bDQuNTktNC41OEwxOCAxMGwtNiA2LTYtNiAxLjQxLTEuNDF6Ii8+PC9zdmc+'" />
+            </button>
+        </div>
+    </div>
+    <div class="homeLineBreak"></div>
+</div>
 
 
 
@@ -787,6 +851,8 @@
         </div>
     </div>
 
+@endsection
+@section('scripts')
     <script>
         // Make variables and functions global
         window.videos = [
@@ -959,7 +1025,22 @@
         });
     </script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const subjectList = document.getElementById('subjectList');
+            const expandButton = document.getElementById('expandButton');
+            const expandIcon = expandButton.querySelector('.expand-icon');
+            const expandText = expandButton.querySelector('.expand-text');
 
+            let isExpanded = false;
 
+            expandButton.addEventListener('click', function() {
+                isExpanded = !isExpanded;
+                subjectList.classList.toggle('expanded');
+                expandIcon.classList.toggle('rotated');
+                expandText.textContent = isExpanded ? 'Thu gọn' : 'Xem thêm môn học';
+            });
+        });
+    </script>
 @endsection
 

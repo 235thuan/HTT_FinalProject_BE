@@ -134,7 +134,7 @@ class ClientHocphiController extends Controller
                 'id' => $id,
                 'error' => $e->getMessage()
             ]);
-            
+
             return redirect()->back()->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());
         }
     }
@@ -243,6 +243,138 @@ class ClientHocphiController extends Controller
                 'request_data' => $request->all()
             ]);
             return redirect()->back()->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());
+        }
+    }
+
+    public function processPayment(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $userId = Auth::id();
+
+            // Get JSON data
+            $data = $request->json()->all();
+
+            // Log the input values
+            \Log::info('Payment request data:', [
+                'id_cardnumber' => $data['id_cardnumber'] ?? null,
+                'id_cvv' => $data['id_cvv'] ?? null,
+                'id_expirydate' => $data['id_expirydate'] ?? null,
+                'id_billingaddress' => $data['id_billingaddress'] ?? null
+            ]);
+
+            // Get cart and log it
+            $cart = Session::get('cart.' . $userId, []);
+            $selectedSemester = Session::get("user_selection.$userId");
+
+            \Log::info('Cart data:', [
+                'cart' => $cart,
+                'selectedSemester' => $selectedSemester
+            ]);
+
+            // Validate card information
+            $soduTaiKhoan = DB::table('sodutaikhoan')
+                ->where('id_cardnumber', $data['id_cardnumber'])
+                ->where('id_cvv', $data['id_cvv'])
+                ->where('id_expirydate', $data['id_expirydate'])
+                ->where('id_billingaddress', $data['id_billingaddress'])
+                ->first();
+
+            if (!$soduTaiKhoan) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Thông tin thẻ không hợp lệ'
+                ], 400);
+            }
+
+            // Calculate total amount from cart
+            $totalAmount = collect($cart)->sum('price');
+
+            // Check sufficient balance
+            if ($soduTaiKhoan->amount < $totalAmount) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Số dư không đủ để thanh toán'
+                ], 400);
+            }
+
+            // Get or create sinhvien record
+            $sinhvien = DB::table('sinhvien')->where('id_nguoidung', $userId)->first();
+            if (!$sinhvien) {
+                $nguoidung = DB::table('nguoidung')->where('id_nguoidung', $userId)->first();
+                $sinhvienId = DB::table('sinhvien')->insertGetId([
+                    'id_nguoidung' => $userId,
+                    'ten_sinhvien' => $nguoidung->ten_dang_nhap,
+
+                ]);
+            } else {
+                $sinhvienId = $sinhvien->id_sinhvien;
+            }
+
+            // Create hocphi record
+            $hocphiId = DB::table('hocphi')->insertGetId([
+                'id_sinhvien' => $sinhvienId,
+                'so_tien' => $totalAmount,
+                'trang_thai' => 'Đang xử lý',
+            ]);
+
+            // Create chitiethocphi records for each monhoc in the cart
+            foreach ($cart as $chuyenNganh) {
+                foreach ($chuyenNganh['monhoc_list'] as $monhoc) {
+                    DB::table('chitiethocphi')->insert([
+                        'id_hocphi' => $hocphiId,
+                        'id_monhoc' => $monhoc->id_monhoc,
+                        'ten_khoan_phi' => $monhoc->ten_monhoc,
+                        'so_tien' => $monhoc->gia,
+                        'ngay_ap_dung' => now()
+                    ]);
+                }
+            }
+
+            // Update account balance
+            DB::table('sodutaikhoan')
+                ->where('id_sodutaikhoan', $soduTaiKhoan->id_sodutaikhoan)
+                ->update([
+                    'amount' => $soduTaiKhoan->amount - $totalAmount,
+                    'updated_at' => now()
+                ]);
+
+            // Create payment record
+            $thanhtoanId = DB::table('thanhtoan')->insertGetId([
+                'id_hocphi' => $hocphiId,
+                'so_tien_da_tra' => $totalAmount,
+                'phuong_thuc' => 'Thẻ tín dụng',
+                'ngay_thanhtoan' => now(),
+                'trang_thai' => 'Thành công'
+            ]);
+
+            // Update hocphi status
+            DB::table('hocphi')
+                ->where('id_hocphi', $hocphiId)
+                ->update([
+                    'trang_thai' => 'Đã thanh toán'
+                ]);
+
+            // Clear cart and semester selection
+            Session::forget('cart.' . $userId);
+            Session::forget("user_selection.$userId");
+
+            DB::commit();
+            return response()->json(['success' => true]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            \Log::error('Payment processing error:', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'cart' => Session::get('cart.' . Auth::id()),
+                'semester' => Session::get('user_selection.' . Auth::id())
+            ]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Có lỗi xảy ra: ' . $e->getMessage()
+            ], 500);
         }
     }
 }

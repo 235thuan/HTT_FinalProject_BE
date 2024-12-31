@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
@@ -85,7 +86,7 @@ class CustomAuthController extends Controller
             'email' => $user->email ?? null,
             'avatar' => $user->avatar ?? null
         ];
-        
+
         session(['locked_user' => $userData]);
         Auth::logout();
 
@@ -102,7 +103,7 @@ class CustomAuthController extends Controller
         ]);
 
         $lockedUser = session('locked_user');
-        
+
         if (!$lockedUser) {
             return redirect('/admin/login');
         }
@@ -114,7 +115,7 @@ class CustomAuthController extends Controller
             'trang_thai' => 'hoạt động'
         ])) {
             session()->forget('locked_user');
-            
+
             // Redirect to admin index directly
             return redirect('/admin/index');
         }

@@ -169,14 +169,15 @@ Route::prefix('hoa')->group( function () {
         ->name('hoa.hocphi.remove')
         ->middleware('auth');
 
-    Route::post('/hocphi/payment', [ClientHocphiController::class, 'processPayment'])
-        ->name('hoa.hocphi.payment');
+    Route::post('/hocphi/process-payment', [ClientHocphiController::class, 'processPayment'])
+        ->name('hoa.hocphi.processPayment')
+        ->middleware('auth');
 
-    Route::post('/hoa/hocphi/update-session', [ClientHocphiController::class, 'updateSession'])
+    Route::post('/hocphi/update-session', [ClientHocphiController::class, 'updateSession'])
         ->name('hoa.hocphi.updateSession')
         ->middleware('auth');
 
-    Route::post('/hoa/hocphi/save-selection', [ClientHocphiController::class, 'saveSelection'])
+    Route::post('/hocphi/save-selection', [ClientHocphiController::class, 'saveSelection'])
         ->name('hoa.hocphi.saveSelection')
         ->middleware('auth');
 

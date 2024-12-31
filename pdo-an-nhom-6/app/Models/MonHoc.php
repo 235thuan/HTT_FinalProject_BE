@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class MonHoc extends Model
 {
@@ -35,5 +36,15 @@ class MonHoc extends Model
     public function files()
     {
         return $this->hasMany(FileUpload::class, 'id_monhoc', 'id_monhoc');
+    }
+
+    public function getImageUrlAttribute()
+    {
+        $file = DB::table('file_upload')
+            ->where('id_monhoc', $this->id_monhoc)
+            ->where('loai_file', 'image')
+            ->first();
+
+            return $file ? '/hoa/' . $file->ten_file : '/storage/thuan/default.png';
     }
 }

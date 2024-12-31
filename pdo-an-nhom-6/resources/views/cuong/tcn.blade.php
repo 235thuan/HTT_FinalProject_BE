@@ -1492,8 +1492,8 @@ textarea.form-input {
                        onchange="changeAvatar(this)">
             </div>
             <div class="profile-info">
-                <h1 class="profile-name" id="profileName">John Doe</h1>
-                <p class="profile-subtitle" id="profileJob">Science Educator</p>
+                <h1 class="profile-name" id="profileName">{{ $profileName }}</h1>
+                <p class="profile-subtitle" id="profileJob">{{ $profileJob }}</p>
             </div>
             <div class="profile-actions">
                 <button class="btn btn-primary" onclick="editProfileInfo()">

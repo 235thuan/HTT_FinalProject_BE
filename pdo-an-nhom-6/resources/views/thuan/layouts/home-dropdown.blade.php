@@ -23,7 +23,7 @@
     </div>
     <div id="homeDropdownMenu" class="home-dropdown-content">
         <div class="dropdown-item">
-            <a href="../cuong/Trang%20cá%20nhân.html">
+            <a href="{{ route('cuong.profile') }}">
                 <img src="{{ Vite::asset('resources/image/thuan/homeIcon1.png') }}" alt="">
                 <span>Hồ sơ cá nhân</span>
             </a>
@@ -35,10 +35,37 @@
             </a>
         </div>
         <div class="dropdown-item">
-            <a href="#logout">
+            <a href="javascript:void(0)" onclick="handleLogout()">
                 <img src="{{ Vite::asset('resources/image/thuan/homeIcon3.png') }}" alt="">
                 <span>Đăng xuất</span>
             </a>
         </div>
     </div>
 </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            window.handleLogout = function() {
+                fetch('/client/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        'Accept': 'application/json'
+                    },
+                    credentials: 'same-origin'
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            window.location.href = '/';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Lỗi đăng xuất:', error);
+                    });
+            }
+        });
+    </script>
+

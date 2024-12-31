@@ -330,12 +330,48 @@
             background: #e6e6e6;
         }
     </style>
+    <style>
+        .confirm-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+            justify-content: flex-end;
+            padding-right: 15px;
+        }
+
+        .confirm-button {
+            border: none;
+            padding: 5px 15px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .confirm-yes {
+            background: #ff3333;
+            color: white;
+        }
+
+        .confirm-no {
+            background: #f2f2f2;
+            color: #333;
+        }
+
+        .confirm-yes:hover {
+            background: #ff0000;
+        }
+
+        .confirm-no:hover {
+            background: #e6e6e6;
+        }
+    </style>
 
     <div class="container d-flex justify-items-center align-middle" style="margin:auto">
         <div class="row" style="margin:auto">
             <!-- Left Column - Cart Items -->
             <div class="col-left">
-                <h2 class="cart-title">Your Cart</h2>
+                <h2 class="cart-title">Thông tin thanh toán</h2>
                 <div class="cart-items">
                     @forelse($cart as $id => $item)
                         <div class="cart-item">
@@ -370,32 +406,58 @@
                         @if(count($cart) > 0)
                             <div class="cart-total">
                                 <span class="total-label">Tổng cộng:</span>
-                                <span class="total-price" id="displayTotal" data-default-price="{{ $totalPrice }}">
-                                    {{ number_format($totalPrice) }} VND
-                                </span>
+                                <span class="total-price" id="displayTotal">{{ number_format($totalPrice) }} VND</span>
                             </div>
 
                             <div class="semester-select">
                                 <label class="semester-label">Chọn kỳ học thanh toán:</label>
-                                <select name="ky_hoc" class="semester-input" id="semesterSelect" onchange="updateSemesterPrice(this)">
-                                    <option value="">-- Chọn kỳ học --</option>
-                                    @foreach($kyHocData as $chuyenNganhId => $data)
-                                        <optgroup label="{{ $data['ten_chuyennganh'] }}">
-                                            @foreach($data['ky_hoc'] as $kyHoc)
-                                                <option 
-                                                    value="{{ $kyHoc->ky_hoc }}" 
-                                                    data-price="{{ $kyHoc->total_price }}"
-                                                    data-chuyennganh="{{ $chuyenNganhId }}"
-                                                    {{ isset($selectedSemester) && $selectedSemester['ky_hoc'] == $kyHoc->ky_hoc ? 'selected' : '' }}>
-                                                    Kỳ {{ $kyHoc->ky_hoc }} - {{ number_format($kyHoc->total_price) }} VND
-                                                </option>
-                                            @endforeach
-                                        </optgroup>
-                                    @endforeach
-                                </select>
+                                <form action="{{ route('hoa.hocphi.updateSession') }}" method="POST" id="semesterForm">
+                                    @csrf
+                                    <select name="ky_hoc" class="semester-input" id="semesterSelect" onchange="updateAndSubmit(this)" required>
+                                        <option value="">-- Chọn kỳ học --</option>
+                                        @foreach($kyHocData as $chuyenNganhId => $data)
+                                            <optgroup label="{{ $data['ten_chuyennganh'] }}">
+                                                @foreach($data['ky_hoc'] as $kyHoc)
+                                                    <option
+                                                        value="{{ $kyHoc->ky_hoc }}"
+                                                        data-price="{{ $kyHoc->total_price }}"
+                                                        data-chuyennganh="{{ $chuyenNganhId }}"
+                                                        {{ isset($selectedSemester) && $selectedSemester['ky_hoc'] == $kyHoc->ky_hoc ? 'selected' : '' }}>
+                                                        Kỳ {{ $kyHoc->ky_hoc }} - {{ number_format($kyHoc->total_price) }} VND
+                                                        <small>({{ $kyHoc->subjects }})</small>
+                                                    </option>
+                                                @endforeach
+                                            </optgroup>
+                                        @endforeach
+                                    </select>
+                                    <input type="hidden" name="price" id="selectedPrice">
+                                    <input type="hidden" name="chuyennganh_id" id="selectedChuyenNganh">
+                                </form>
                             </div>
 
+                            <script>
+                                function updateAndSubmit(select) {
+                                    const selectedOption = select.options[select.selectedIndex];
+                                    if (selectedOption.value) {
+                                        // Update hidden fields
+                                        document.getElementById('selectedPrice').value = selectedOption.getAttribute('data-price');
+                                        document.getElementById('selectedChuyenNganh').value = selectedOption.getAttribute('data-chuyennganh');
 
+                                        // Submit form
+                                        document.getElementById('semesterForm').submit();
+                                    }
+                                }
+
+                                // Set initial values if semester is selected
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    const select = document.getElementById('semesterSelect');
+                                    if (select.value) {
+                                        const selectedOption = select.options[select.selectedIndex];
+                                        document.getElementById('selectedPrice').value = selectedOption.getAttribute('data-price');
+                                        document.getElementById('selectedChuyenNganh').value = selectedOption.getAttribute('data-chuyennganh');
+                                    }
+                                });
+                            </script>
 
                         @endif
                     @else
@@ -410,58 +472,66 @@
             <!-- Right Column - Billing Form -->
             @if(count($cart) > 0)
                 <div class="col-right">
-                    <h2 class="payment-title">Billing Information</h2>
-                    <form action="{{ route('hoa.hocphi.payment') }}" method="POST" class="payment-form">
+                    <h2 class="payment-title">Thông tin thanh toán</h2>
+                    <form id="paymentForm" action="{{ route('hoa.hocphi.processPayment') }}" method="POST">
                         @csrf
 
                         <div class="form-group">
-                            <label class="form-label">Card Number</label>
+                            <label class="form-label">Mã thẻ</label>
                             <input type="text"
-                                   name="card_number"
+                                   name="id_cardnumber"
                                    class="form-input"
-                                   placeholder="1234567812345678"
-                                   value="{{ old('card_number') }}"
+                                   placeholder="4111111111111111"
+                                   value="{{ old('id_cardnumber') }}"
                                    pattern="\d{16}"
                                    maxlength="16"
+                                   oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                    required>
                         </div>
 
                         <div class="form-row">
                             <div class="form-group">
-                                <label class="form-label">Expiry Date</label>
+                                <label class="form-label">Ngày hết hạn</label>
                                 <input type="text"
-                                       name="expiry_date"
+                                       name="id_expirydate"
                                        class="form-input"
-                                       placeholder="MM/YY"
-                                       value="{{ old('expiry_date') }}"
+                                       placeholder="12/25"
+                                       value="{{ old('id_expirydate') }}"
                                        pattern="\d{2}/\d{2}"
                                        maxlength="5"
+                                       oninput="formatExpiryDate(this)"
                                        required>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">CVV</label>
                                 <input type="text"
-                                       name="cvv"
+                                       name="id_cvv"
                                        class="form-input"
                                        placeholder="123"
-                                       value="{{ old('cvv') }}"
+                                       value="{{ old('id_cvv') }}"
                                        pattern="\d{3}"
                                        maxlength="3"
+                                       oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                        required>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="form-label">Billing Address</label>
+                            <label class="form-label">Địa chỉ thanh toán</label>
                             <input type="text"
-                                   name="billing_address"
+                                   name="id_billingaddress"
                                    class="form-input"
-                                   placeholder="123 Main Street, City A"
-                                   value="{{ old('billing_address') }}"
+                                   placeholder="123 Main St, City"
+                                   value="{{ old('id_billingaddress') }}"
                                    required>
                         </div>
 
-                        <button type="submit" class="submit-button">Submit Payment</button>
+                        <button type="button"
+                                class="submit-button"
+                                {{ empty($cart) ? 'disabled' : '' }}
+                                onclick="confirmPayment()">
+                            Xác nhận thanh toán
+                        </button>
                     </form>
                 </div>
             @endif
@@ -502,6 +572,160 @@
 
     @section('scripts')
         <script>
+            function formatExpiryDate(input) {
+                let value = input.value.replace(/\D/g, '');
+                if (value.length >= 2) {
+                    value = value.substring(0, 2) + '/' + value.substring(2);
+                }
+                input.value = value.substring(0, 5);
+            }
+
+            function confirmPayment() {
+                try {
+                    // Use ID selector instead
+                    const form = document.getElementById('paymentForm');
+                    if (!form) {
+                        console.error('Payment form not found');
+                        return;
+                    }
+
+                    // Debug - log entire form
+                    console.log('Form found:', form);
+                    console.log('Form HTML:', form.innerHTML);
+
+                    // Get form values directly from named form elements
+                    const formValues = {
+                        id_cardnumber: document.getElementById('paymentForm').elements['id_cardnumber'].value,
+                        id_cvv: document.getElementById('paymentForm').elements['id_cvv'].value,
+                        id_expirydate: document.getElementById('paymentForm').elements['id_expirydate'].value,
+                        id_billingaddress: document.getElementById('paymentForm').elements['id_billingaddress'].value,
+                        _token: '{{ csrf_token() }}'
+                    };
+
+                    // Validate required fields
+                    if (!formValues.id_cardnumber || !formValues.id_cvv || 
+                        !formValues.id_expirydate || !formValues.id_billingaddress) {
+                        throw new Error('Vui lòng điền đầy đủ thông tin');
+                    }
+
+                    // Log the data being sent
+                    console.log('Form values:', formValues);
+
+                    // Create confirmation toast
+                    const toastContainer = document.querySelector('.toast-container');
+                    const confirmToast = document.createElement('div');
+                    confirmToast.className = 'toast toast-warning';
+                    confirmToast.innerHTML = `
+                        <div class="toast-content">
+                            <i class="fas fa-question-circle"></i>
+                            <div class="message">
+                                <span class="text text-1">Xác nhận</span>
+                                <span class="text text-2">Bạn có chắc muốn thanh toán?</span>
+                            </div>
+                        </div>
+                        <div class="confirm-buttons">
+                            <button class="confirm-button confirm-yes">Có</button>
+                            <button class="confirm-button confirm-no">Không</button>
+                        </div>
+                        <div class="progress"></div>
+                    `;
+                    
+                    toastContainer.appendChild(confirmToast);
+
+                    // Handle confirmation
+                    confirmToast.querySelector('.confirm-yes').addEventListener('click', function() {
+                        toastContainer.removeChild(confirmToast);
+                        
+                        // Submit payment
+                        fetch('{{ route("hoa.hocphi.processPayment") }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify(formValues)
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                return response.json().then(data => Promise.reject(data));
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log('Success:', data);
+                            
+                            // Show success toast
+                            const successToast = document.createElement('div');
+                            successToast.className = 'toast toast-success';
+                            successToast.innerHTML = `
+                                <div class="toast-content">
+                                    <i class="fas fa-check-circle"></i>
+                                    <div class="message">
+                                        <span class="text text-1">Thành công</span>
+                                        <span class="text text-2">Thanh toán học phí thành công</span>
+                                    </div>
+                                </div>
+                                <i class="fa-solid fa-xmark close"></i>
+                                <div class="progress"></div>
+                            `;
+                            
+                            toastContainer.appendChild(successToast);
+
+                            setTimeout(() => {
+                                successToast.style.opacity = '0';
+                                setTimeout(() => {
+                                    if (successToast.parentElement) {
+                                        successToast.parentElement.removeChild(successToast);
+                                        window.location.reload();
+                                    }
+                                }, 300);
+                            }, 5000);
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            
+                            // Show error toast
+                            const errorToast = document.createElement('div');
+                            errorToast.className = 'toast toast-error';
+                            errorToast.innerHTML = `
+                                <div class="toast-content">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    <div class="message">
+                                        <span class="text text-1">Lỗi</span>
+                                        <span class="text text-2">${error.message || 'Có lỗi xảy ra khi xử lý thanh toán'}</span>
+                                    </div>
+                                </div>
+                                <i class="fa-solid fa-xmark close"></i>
+                                <div class="progress"></div>
+                            `;
+                            
+                            toastContainer.appendChild(errorToast);
+                        });
+                    });
+
+                    // Handle cancel
+                    confirmToast.querySelector('.confirm-no').addEventListener('click', function() {
+                        toastContainer.removeChild(confirmToast);
+                    });
+
+                } catch (error) {
+                    console.error('Form error:', error);
+                    alert(error.message);
+                }
+            }
+
+            // Make sure DOM is loaded
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log('Form elements loaded:', {
+                    form: document.getElementById('paymentForm'),
+                    cardInput: document.querySelector('[name="id_cardnumber"]'),
+                    cvvInput: document.querySelector('[name="id_cvv"]'),
+                    expiryInput: document.querySelector('[name="id_expirydate"]'),
+                    addressInput: document.querySelector('[name="id_billingaddress"]')
+                });
+            });
+
             function removeCartItem(id) {
                 // Create temporary toast for confirmation
                 const toastContainer = document.querySelector('.toast-container');
@@ -554,11 +778,11 @@
                 const displayTotal = document.getElementById('displayTotal');
                 const defaultPrice = displayTotal.getAttribute('data-default-price');
                 const selectedOption = select.options[select.selectedIndex];
-                
+
                 if (selectedOption.value) {
                     const semesterPrice = selectedOption.getAttribute('data-price');
                     displayTotal.textContent = new Intl.NumberFormat('vi-VN').format(semesterPrice) + ' VND';
-                    
+
                     // Save selection to session
                     const formData = new FormData();
                     formData.append('_token', '{{ csrf_token() }}');
@@ -576,7 +800,7 @@
                 } else {
                     // Reset to default price if no semester selected
                     displayTotal.textContent = new Intl.NumberFormat('vi-VN').format(defaultPrice) + ' VND';
-                    
+
                     // Clear session selection
                     fetch('{{ route("hoa.hocphi.updateSession") }}', {
                         method: 'POST',
@@ -747,17 +971,7 @@
         </script>
     @endsection
 
-    @if(session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
 
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
 
     @if(session('showAlert'))
         <script>

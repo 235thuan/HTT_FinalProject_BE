@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Thuan;
 
+use App\Http\Controllers\Controller;
 use App\Models\ThongBao;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,7 @@ class NotificationController extends Controller
         $notifications = auth()->user()->notifications()
             ->orderBy('thoi_gian', 'desc')
             ->paginate(10);
-            
+
         return view('notifications.index', compact('notifications'));
     }
 
@@ -21,14 +22,14 @@ class NotificationController extends Controller
         try {
             // Debug log
             \Log::info('Marking all notifications as read for user: ' . auth()->id());
-            
+
             // Direct DB update to ensure it works
             $updated = \DB::table('thong_bao')
                 ->where('id_nguoidung', auth()->id())
                 ->update(['da_doc' => 1]);
-                
+
             \Log::info('Updated notifications count: ' . $updated);
-                
+
             return response()->json([
                 'success' => true,
                 'message' => 'Đã đánh dấu tất cả là đã đọc',
@@ -47,10 +48,10 @@ class NotificationController extends Controller
     {
         $notification = ThongBao::findOrFail($request->id);
         $notification->update(['da_doc' => 1]);  // Use 1 instead of true
-        
+
         return response()->json([
             'success' => true,
             'message' => 'Đã đánh dấu là đã đọc'
         ]);
     }
-} 
+}

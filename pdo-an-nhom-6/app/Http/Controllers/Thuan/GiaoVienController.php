@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Thuan;
 
+use App\Http\Controllers\Controller;
+use App\Models\GiaoVien;
 use App\Models\Khoa;
 use App\Services\Thuan\KhoaService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\GiaoVien;
 
 class GiaoVienController extends Controller
 {

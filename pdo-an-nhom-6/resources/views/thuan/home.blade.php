@@ -42,7 +42,7 @@
             box-sizing: border-box;
             margin-left: auto;
             margin-right: auto;
-           
+
         }
 
         /* Optional: Grid layout for better organization */
@@ -603,12 +603,12 @@
                                         @foreach($nhom as $chuyenNganh)
                                             <div class="home2221">
                                                 <a href="{{ route('chuyennganh.show', $chuyenNganh->id_chuyennganh) }}" class="chuyennganh-link">
-                                                <div class="home22211">
-                                                    <img src="{{ asset($chuyenNganh->image_url) }}"
-                                                         alt="{{ $chuyenNganh->ten_chuyennganh }}"
-                                                         onerror="this.onerror=null; this.src='{{ asset('storage/thuan/default.png') }}'"
-                                                         loading="lazy">
-                                                </div>
+                                                    <div class="home22211">
+                                                        <img src="{{ $chuyenNganh->image_url }}"
+                                                             alt="{{ $chuyenNganh->ten_chuyennganh }}"
+                                                             onerror="this.onerror=null; this.src='/hoa/default.png'"
+                                                             loading="lazy">
+                                                    </div>
                                                 <div class="home22212">{{ $chuyenNganh->ten_khoa }}</div>
                                                 <div class="home22212">{{ $chuyenNganh->ten_chuyennganh }}</div>
                                                 </a>
@@ -700,7 +700,10 @@
                     <div class="home242132">Liên kết học tập sau tốt nghiệp với đối tác nước ngoài</div>
                 </div>
                 <div class="{{ $index === 0 ? 'home24214' : 'home24215' }}">
-                    <button>Đăng ký ngay</button>
+                    <form action="{{ route('hoa.hocphi.add', ['id_chuyennganh' => $chuyenNganh->id_chuyennganh]) }}" method="POST">
+                        @csrf
+                        <button type="submit">Đăng ký ngay</button>
+                    </form>
                 </div>
             </div>
         @endforeach

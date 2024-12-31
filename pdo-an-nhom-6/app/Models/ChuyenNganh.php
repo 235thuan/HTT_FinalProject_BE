@@ -72,8 +72,12 @@ class ChuyenNganh extends Model
      */
     public function getImageUrlAttribute()
     {
-        $file = $this->latest_image;
-        return $file ? asset($file->duong_dan) : asset('path/to/default/image.jpg');
+        $file = DB::table('file_upload')
+            ->where('id_chuyennganh', $this->id)
+            ->where('loai_file', 'image')
+            ->first();
+
+        return '/hoa/' . ($file ? $file->ten_file : 'default.png');
     }
 
 

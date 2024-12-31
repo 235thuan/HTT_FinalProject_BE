@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Thuan;
 
+use App\Http\Controllers\Controller;
 use App\Services\Thuan\KhoaService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

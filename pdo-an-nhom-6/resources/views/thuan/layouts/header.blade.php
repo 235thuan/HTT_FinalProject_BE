@@ -1,9 +1,12 @@
 <div class="home1">
     <div class="home11">
         <div class="home111">
-            <span class="logo-sm">
+            <a href="{{ route('home') }}">
+                <span class="logo-sm">
                         <img src="/images/logo-sm.png" alt="" height="44">
                     </span>
+            </a>
+
         </div>
 
     </div>

@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Thuan;
 
-use App\Models\Lop;
-use App\Models\SinhVien;
+use App\Http\Controllers\Controller;
 use App\Services\Thuan\KhoaService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

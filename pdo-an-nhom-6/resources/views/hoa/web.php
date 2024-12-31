@@ -1,23 +1,25 @@
 <?php
 
 use App\Http\Controllers\Auth\CustomAuthController;
-use App\Http\Controllers\Cuong\ProfileController;
-use App\Http\Controllers\Hoa\ClientHocphiController;
 use App\Http\Controllers\Thuan\CartController;
 use App\Http\Controllers\Thuan\ClientAuthController;
 use App\Http\Controllers\Thuan\GiaoVienController;
-use App\Http\Controllers\Thuan\HocPhiController;
 use App\Http\Controllers\Thuan\HomeController;
 use App\Http\Controllers\Thuan\LopController;
-use App\Http\Controllers\Thuan\MienGiamController;
 use App\Http\Controllers\Thuan\RoutingController;
-use App\Http\Controllers\Thuan\ScheduleController;
 use App\Http\Controllers\Thuan\SinhVienController;
 use Illuminate\Support\Facades\Route;
 
 // Trang chủ - không cần prefix
 Route::get('/', [App\Http\Controllers\Thuan\HomeController::class, 'index'])->name('home');
-
+Route::get('/test', [App\Http\Controllers\Thuan\TestController::class, 'testCart'])->name('cart.test');
+// Test route to add a sample item
+Route::get('/test-add-item', function() {
+    $cartController = new \App\Http\Controllers\Thuan\CartController();
+    // Assuming ID 1 exists in your chuyennganh table
+    $result = $cartController->addToCart(1);
+    return redirect('/test');
+});
 // Admin routes group
 Route::prefix('admin')->group(function () {
     // Guest middleware group
@@ -36,7 +38,7 @@ Route::prefix('admin')->group(function () {
         })->name('root');
 
         // Dashboard
-        Route::get('/index', [ScheduleController::class, 'index'])->name('index');
+        Route::get('/index', fn() => view('index'))->name('index');
 
         // QLND routes
         Route::prefix('qlnd')->name('qlnd.')->group(function () {
@@ -60,12 +62,10 @@ Route::prefix('admin')->group(function () {
 
         // Sinhvien routes
         Route::prefix('sinhvien')->name('sinhvien.')->group(function () {
-            Route::get('/getLopList', [SinhVienController::class, 'getLopList'])->name('getLopList');
-            Route::put('/{id}', [SinhVienController::class, 'update'])->name('update');
             Route::get('/{id}/edit', [SinhVienController::class, 'edit'])->name('edit');
             Route::get('/{id}', [SinhVienController::class, 'show'])->name('show');
+            Route::put('/{id}', [SinhVienController::class, 'update'])->name('update');
             Route::post('/', [SinhVienController::class, 'store'])->name('store');
-
         });
 
         // Giaovien routes
@@ -86,31 +86,11 @@ Route::prefix('admin')->group(function () {
 
         Route::get('/check-email', [SinhVienController::class, 'checkEmail'])->name('check.email');
 
-        Route::prefix('hocphi')->group(function () {
-            Route::get('/', [HocPhiController::class, 'index'])->name('hocphi.index');
-            Route::get('/detail/{id}', [HocPhiController::class, 'detail'])->name('hocphi.detail');
-            Route::post('/update-mien-giam', [HocPhiController::class, 'updateMienGiam'])->name('hocphi.updateMienGiam');
-            Route::get('/{id}/edit', [HocPhiController::class, 'edit'])->name('hocphi.edit');
-            Route::put('/{id}', [HocPhiController::class, 'update'])->name('hocphi.update');
-            Route::get('/get-mien-giam/{monhocId}', [HocPhiController::class, 'getMienGiamByMonHoc'])->name('hocphi.getMienGiam');
-
-
-            Route::get('sales', [HocPhiController::class, 'sales'])->name('hocphi.sales');
-            Route::get('sales/{lop}', [HocPhiController::class, 'salesDetail'])->name('hocphi.sales.detail');
-
-
-        });
-
-
         // Catch-all routes
         Route::get('{first}/{second}/{third}', [RoutingController::class, 'thirdLevel'])->name('third');
         Route::get('{first}/{second}', [RoutingController::class, 'secondLevel'])->name('second');
         Route::get('{any}', [RoutingController::class, 'root'])->name('any');
     });
-
-    // Lock screen routes
-    Route::get('/auth/lockscreen', [CustomAuthController::class, 'lockScreen'])->name('second');
-    Route::post('/auth/unlock', [CustomAuthController::class, 'unlock'])->name('unlock');
 });
 
 // Thuan routes
@@ -121,32 +101,6 @@ Route::prefix('thuan')->group(function () {
     Route::post('/cart/add/{id_chuyennganh}', [CartController::class, 'addToCart'])->name('cart.add');
     Route::delete('/cart/remove/{id_chuyennganh}', [CartController::class, 'removeFromCart'])->name('cart.remove');
     Route::get('/cart', [CartController::class, 'viewCart'])->name('cart.view');
-
-
-    Route::prefix('miengiam')->group(function () {
-        Route::get('/',  [MienGiamController::class, 'index'])->name('miengiam.index');
-        Route::get('/create', [MienGiamController::class, 'create'])->name('miengiam.create');
-        Route::post('/', [MienGiamController::class, 'store'])->name('miengiam.store');
-        Route::get('/{id}/edit', [MienGiamController::class, 'edit'])->name('miengiam.edit');
-        Route::put('/{id}', [MienGiamController::class, 'update'])->name('miengiam.update');
-        Route::delete('/{id}', [MienGiamController::class, 'destroy'])->name('miengiam.destroy');
-        Route::post('/check-overlap', [MienGiamController::class, 'checkOverlap'])->name('miengiam.checkOverlap');
-    });
-
-    Route::prefix('schedule')->controller(ScheduleController::class)->group(function () {
-        Route::get('chuyennganh/{id}', 'chuyenNganh')->name('schedule.chuyennganh');
-        Route::get('lop/{ten_lop}/{week?}', 'lopSchedule')->name('schedule.lop');
-
-         // Quản lý thời khóa biểu
-         Route::get('/create', 'create')->name('schedule.create');
-         Route::post('/store', 'store')->name('schedule.store');
-         Route::get('/edit/{id}', 'edit')->name('schedule.edit');
-         Route::put('/update/{id}', 'update')->name('schedule.update');
-         Route::delete('/delete/{id}', 'destroy')->name('schedule.destroy');
-
-         // API kiểm tra xung đột
-         Route::post('/check-conflicts', 'checkConflicts')->name('schedule.checkConflicts');
-    });
 });
 
 // Client auth routes
@@ -156,31 +110,21 @@ Route::prefix('client')->group(function () {
     Route::post('/logout', [ClientAuthController::class, 'logout'])->name('client.logout');
 });
 
-//
-Route::prefix('cuong')->group(function () {
-    Route::get('/tcn', [ProfileController::class, 'index'])->name('cuong.profile');
-});
-Route::prefix('hoa')->group( function () {
-    Route::get('/hocphi', [ClientHocphiController::class, 'viewCart'])
+
+//hoa
+Route::group(['prefix' => 'hoa'], function () {
+    Route::get('/hocphi', [App\Http\Controllers\Hoa\ClientHocphiController::class, 'viewCart'])
         ->name('hoa.hocphi');
-    Route::post('/hocphi/add/{id_chuyennganh}', [ClientHocphiController::class, 'addToCart'])
+    Route::post('/hocphi/add/{id_chuyennganh}', [App\Http\Controllers\Hoa\ClientHocphiController::class, 'addToCart'])
         ->name('hoa.hocphi.add');
-    Route::post('/hocphi/remove/{id}', [ClientHocphiController::class, 'removeFromCart'])
-        ->name('hoa.hocphi.remove')
-        ->middleware('auth');
-
-    Route::post('/hocphi/payment', [ClientHocphiController::class, 'processPayment'])
+    Route::delete('/hocphi/remove/{id_chuyennganh}', [App\Http\Controllers\Hoa\ClientHocphiController::class, 'removeFromCart'])
+        ->name('hoa.hocphi.remove');
+    Route::get('/sample-cart', [App\Http\Controllers\Hoa\ClientHocphiController::class, 'sampleCart'])
+        ->name('hoa.sample-cart');
+    Route::post('/hocphi/payment', [App\Http\Controllers\Hoa\ClientHocphiController::class, 'processPayment'])
         ->name('hoa.hocphi.payment');
-
-    Route::post('/hoa/hocphi/update-session', [ClientHocphiController::class, 'updateSession'])
-        ->name('hoa.hocphi.updateSession')
-        ->middleware('auth');
-
-    Route::post('/hoa/hocphi/save-selection', [ClientHocphiController::class, 'saveSelection'])
-        ->name('hoa.hocphi.saveSelection')
-        ->middleware('auth');
-
 });
+
 
 
 

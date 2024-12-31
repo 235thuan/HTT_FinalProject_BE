@@ -43,17 +43,6 @@
             z-index: 1;
         }
 
-        /* Nếu muốn thêm overlay mờ để text dễ đọc hơn */
-        .home0::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 35px;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(255, 255, 255, 0.7); /* Điều chỉnh độ mờ tại đây */
-            z-index: -1;
-        }
     </style>
 </head>
 <body>
@@ -65,5 +54,6 @@
 
     <!-- Back to top button -->
     <button id="backToTop" class="back-to-top">↑</button>
+    @yield('scripts')
 </body>
 </html>

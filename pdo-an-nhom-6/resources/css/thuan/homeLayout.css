@@ -969,86 +969,41 @@
             grid-area: home3;
             box-shadow: 2px 2px 4px rgba(3, 3, 3, 0.1);
 
+
             .home30 {
-                color: black;
-                text-align: center;
-                padding: 20px 30px;
-                margin-left: 20px;
-                margin-right: 20px;
-                margin-top: 10px;
-                display: flex;
-                flex: 1 1 auto;
-                justify-content: space-between;
-                align-items: flex-start;
-                /*height: 235px;*/
-                background-color: #ffffff;
-
-                .home31 {
-                    display: flex;
-                    flex-direction: column;
-                    text-align: left;
-                    width: 100%;
-                    max-height: 200px;
-                    overflow-y: hidden;
-
-                    .home311 {
-                        display: flex;
-                        flex-direction: column;
-
-                        color: #2b2c2b;
-                        font-size: 20px;
-                        font-weight: 800;
-                        line-height: 26px;
-
-
-                    }
-
-                    .home312 {
-                        margin-top: 10%;
-                        color: #2b2c2b;
-                        font-size: 16px;
-
-                        font-weight: 700;
-                        line-height: 24px;
-                    }
-
-                    .home313 {
-                        display: flex;
-
-                        .home3131 {
-                            img {
-                                color: #2b2c2b;
-                                fill: #2b2c2b;
-                                font-size: 32px;
-                                width: 32px;
-                                height: 32px;
-                            }
-                        }
-
-                    }
-                }
-
-                .home32 {
+                .home300{
+                    color: black;
+                    text-align: center;
+                    background-color: #ffffff;
+                    padding: 20px 30px;
+                    margin-top: 10px;
                     display: flex;
                     flex: 1 1 auto;
-                    flex-direction: row;
-                    flex-wrap: wrap; /* This allows the items to wrap to the next line */
-                    text-align: right;
-                    justify-content: flex-end; /* Aligns items to the start of the flex container */
-                    gap: 20px; /* Optional: adds space between columns */
-                    width: 100%;
+                    justify-content: space-between;
+                    align-items: flex-start;
 
-                    .home321 {
+                    .home31 {
                         display: flex;
                         flex-direction: column;
+                        text-align: left;
+                        width: 100%;
                         max-height: 200px;
                         overflow-y: hidden;
-                        flex-basis: calc(25% - 20px); /* Adjusts to 4 columns */
-                        max-width: calc(25% - 20px);
-                        gap: 10px;
-                        text-align: left;
 
-                        .home3211 {
+                        .home311 {
+                            display: flex;
+                            flex-direction: column;
+
+                            color: #2b2c2b;
+                            font-size: 20px;
+                            font-weight: 800;
+                            line-height: 26px;
+
+
+                        }
+
+                        .home312 {
+                            margin-top: 10%;
                             color: #2b2c2b;
                             font-size: 16px;
 
@@ -1056,15 +1011,61 @@
                             line-height: 24px;
                         }
 
-                        .home3212 {
-                            color: #2b2c2b;
-                            font-size: 16px;
+                        .home313 {
+                            display: flex;
 
-                            line-height: 32px;
+                            .home3131 {
+                                img {
+                                    color: #2b2c2b;
+                                    fill: #2b2c2b;
+                                    font-size: 32px;
+                                    width: 32px;
+                                    height: 32px;
+                                }
+                            }
 
                         }
                     }
+
+                    .home32 {
+                        display: flex;
+                        flex: 1 1 auto;
+                        flex-direction: row;
+                        flex-wrap: wrap; /* This allows the items to wrap to the next line */
+                        text-align: right;
+                        justify-content: flex-end; /* Aligns items to the start of the flex container */
+                        gap: 20px; /* Optional: adds space between columns */
+                        width: 100%;
+
+                        .home321 {
+                            display: flex;
+                            flex-direction: column;
+                            max-height: 200px;
+                            overflow-y: hidden;
+                            flex-basis: calc(25% - 20px); /* Adjusts to 4 columns */
+                            max-width: calc(25% - 20px);
+                            gap: 10px;
+                            text-align: left;
+
+                            .home3211 {
+                                color: #2b2c2b;
+                                font-size: 16px;
+
+                                font-weight: 700;
+                                line-height: 24px;
+                            }
+
+                            .home3212 {
+                                color: #2b2c2b;
+                                font-size: 16px;
+
+                                line-height: 32px;
+
+                            }
+                        }
+                    }
                 }
+
             }
 
 

@@ -1,0 +1,235 @@
+.main-content {
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  flex: 1;
+}
+
+.subjects-detail-container {
+  display: flex;
+  flex-direction: column;
+  margin-right: 1rem;
+  gap: 2rem;
+}
+.video-container {
+  flex: 1;
+}
+.video-container iframe {
+  width: 100%;
+  height: 450px;
+}
+.content-container {
+  flex: 1;
+}
+.content-container h2,
+.content-container h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  width: 100%;
+  background-color: #e7f1ff;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+}
+.content-container p {
+  margin-bottom: 1rem;
+}
+.content-container ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+}
+
+.add-subject-btn {
+  display: block;
+  padding: 0.75rem 1rem;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.page-wrapper {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+}
+.sidebar {
+  grid-column: span 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: start;
+  align-items: center;
+  background-color: #f4f4f4;
+  padding: 1rem;
+  width: 200px;
+  border-right: 1px solid #ddd;
+}
+.sidebar-item {
+  background-color: #e7f1ff;
+  padding: 1rem;
+  cursor: pointer;
+  border-radius: 12px;
+}
+.sidebar-item.checked {
+  font-weight: bold;
+}
+.body-main-content {
+  grid-column: span 3;
+}
+.aside-main-content {
+  grid-column: span 2;
+}
+
+.aside-main-content {
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid #ddd;
+  padding: 2rem;
+}
+.head-aside {
+  margin-bottom: 2rem;
+}
+.head-aside > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.head-aside h3 {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+.view-all-btn {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.student-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+.student-list li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.student-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 1rem;
+}
+.student-name {
+  font-weight: bold;
+}
+.bottom-aside {
+  border-top: 1px solid #ddd;
+  padding-top: 2rem;
+}
+.bottom-aside h2 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+.chat-container {
+  background-color: #f4f4f4;
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.chat-header span {
+  font-size: 0.9rem;
+  color: #666;
+}
+.open-chat-btn {
+  width: 100%;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-left: 10px;
+}
+.chat-messages {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+}
+.chat-input {
+  display: flex;
+  align-items: center;
+}
+.chat-input input {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+.send-message-btn {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-left: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .page-wrapper {
+    grid-template-columns: repeat(1, 1fr);
+  }
+  .subjects-detail-container {
+    margin-right: 0;
+  }
+  .aside-main-content {
+    border-left: 0;
+  }
+  .add-subject-btn {
+    margin-top: 10px;
+  }
+
+  .sidebar {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: start;
+    align-items: center;
+    background-color: #f4f4f4;
+    padding: 1rem;
+    width: 100%;
+    border-right: none;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .sidebar-item {
+    background-color: #e7f1ff;
+    padding: 1rem;
+    cursor: pointer;
+    border-radius: 12px;
+    flex-shrink: 0;
+  }
+  .sidebar-item.checked {
+    font-weight: bold;
+  }
+}
+
+@media (max-width: 480px) {
+}

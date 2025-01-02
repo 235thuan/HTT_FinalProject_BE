@@ -1,3 +1,9 @@
+<style>
+    a {
+        color: black;
+    }
+</style>
+
 <div class="home1">
     <div class="home11">
         <div class="home111">
@@ -17,10 +23,15 @@
     </div>
     <div class="home13">
         <div class="home131">
-            <div class="home1311">Khoa</div>
-            <div class="home1311">Chuyên ngành</div>
-            <div class="home1311">Lớp học</div>
-            <div class="home1311">Môn học</div>
+            <div class="home1311">
+                <a href="{{route('client.chuyennganh')}}"> Chuyên ngành</a>
+            </div>
+            <div class="home1311">
+                <a href="{{route('client.lophoc')}}"> Lớp học</a>
+            </div>
+            <div class="home1311">
+                <a href="{{route('client.monhoc')}}"> Môn học</a>
+            </div>
         </div>
         <div class="home132">
             <div class="home1321">

@@ -232,6 +232,7 @@ class HocPhiRepository
     public function getTotalPaidAmount()
     {
         return DB::table('hocphi')
+            ->where('trang_thai', 'Đã thanh toán')
             ->sum('so_tien');
     }
 
@@ -244,7 +245,12 @@ class HocPhiRepository
             ->select(
                 'l.ten_lop',
                 DB::raw('COUNT(DISTINCT hp.id_sinhvien) as total_students'),
-                DB::raw('SUM(hp.so_tien) as total_paid')
+                DB::raw('SUM(CASE WHEN hp.trang_thai = "Đã thanh toán" THEN hp.so_tien ELSE 0 END) as total_paid'),
+                DB::raw('SUM(CASE WHEN hp.trang_thai = "Chưa thanh toán" THEN hp.so_tien ELSE 0 END) as total_unpaid'),
+                DB::raw('SUM(CASE WHEN hp.trang_thai = "Đang xử lý" THEN hp.so_tien ELSE 0 END) as total_processing'),
+                DB::raw('COUNT(CASE WHEN hp.trang_thai = "Đã thanh toán" THEN 1 END) as paid_students'),
+                DB::raw('COUNT(CASE WHEN hp.trang_thai = "Chưa thanh toán" THEN 1 END) as unpaid_students'),
+                DB::raw('COUNT(CASE WHEN hp.trang_thai = "Đang xử lý" THEN 1 END) as processing_students')
             )
             ->get();
     }
@@ -254,13 +260,31 @@ class HocPhiRepository
         return DB::table('hocphi as hp')
             ->join('sinhvien as sv', 'hp.id_sinhvien', '=', 'sv.id_sinhvien')
             ->join('lop as l', 'sv.id_lop', '=', 'l.id_lop')
+            ->leftJoin('thanhtoan as tt', function($join) {
+                $join->on('hp.id_hocphi', '=', 'tt.id_hocphi')
+                    ->where('tt.trang_thai', '=', 'Thành công');
+            })
             ->where('l.ten_lop', $lop)
             ->select(
                 'sv.id_sinhvien',
                 'sv.ten_sinhvien',
-                DB::raw('SUM(hp.so_tien) as so_tien')
+                'hp.so_tien',
+                'hp.trang_thai as trang_thai_hocphi',
+                'tt.ngay_thanhtoan',
+                'tt.phuong_thuc',
+                DB::raw('CASE
+                WHEN hp.trang_thai = "Đã thanh toán" THEN hp.so_tien
+                ELSE 0
+            END as da_thu'),
+                DB::raw('CASE
+                WHEN hp.trang_thai = "Chưa thanh toán" THEN hp.so_tien
+                ELSE 0
+            END as chua_thu'),
+                DB::raw('CASE
+                WHEN hp.trang_thai = "Đang xử lý" THEN hp.so_tien
+                ELSE 0
+            END as dang_xu_ly')
             )
-            ->groupBy('sv.id_sinhvien', 'sv.ten_sinhvien')
             ->get();
     }
 }

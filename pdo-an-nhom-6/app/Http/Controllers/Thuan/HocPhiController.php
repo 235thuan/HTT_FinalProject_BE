@@ -159,6 +159,7 @@ class HocPhiController extends Controller
                 'totalPaid' => $data['totalPaid'],
                 'totalClasses' => $data['totalClasses'],
                 'classSummary' => $data['classSummary'],
+                'totals' => $data['totals'],
                 'khoas' => $khoaResult['success'] ? $khoaResult['data'] : collect([])
             ]);
         } catch (\Exception $e) {

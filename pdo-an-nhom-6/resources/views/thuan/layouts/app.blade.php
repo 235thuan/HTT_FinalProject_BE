@@ -6,6 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Home')</title>
 
+    @yield('css')
     <!-- Vite Assets -->
     @viteReactRefresh
     @vite([
@@ -44,6 +45,7 @@
         }
 
     </style>
+
 </head>
 <body>
     <div class="home0">

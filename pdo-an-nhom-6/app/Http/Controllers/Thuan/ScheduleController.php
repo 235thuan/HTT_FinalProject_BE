@@ -4,25 +4,29 @@ namespace App\Http\Controllers\Thuan;
 
 use App\Http\Controllers\Controller;
 use App\Models\Khoa;
+use App\Services\Thuan\HocPhiService;
 use App\Services\Thuan\KhoaService;
 use App\Services\Thuan\ScheduleService;
 use App\Models\ChuyenNganh;
 use App\Models\Lop;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
 
 class ScheduleController extends Controller
 {
     protected $scheduleService;
     protected $khoaService;
-
+    protected $hocPhiService;
     public function __construct(
         ScheduleService $scheduleService,
-        KhoaService $khoaService
+        KhoaService $khoaService,
+        HocPhiService $hocPhiService
     ) {
         $this->scheduleService = $scheduleService;
         $this->khoaService = $khoaService;
+        $this->hocPhiService = $hocPhiService;
 
         // Lấy danh sách khoa và share cho tất cả view
         try {
@@ -43,13 +47,51 @@ class ScheduleController extends Controller
         try {
             // Lấy danh sách khoa và chuyên ngành cho sidebar
             $khoaResult = $this->khoaService->getKhoasWithChuyenNganh();
+            $salesData = $this->hocPhiService->getSalesOverview();
+            $revenue = $salesData['totals']['paid'];
 
+            // Đếm số lớp
+            $totalClasses = DB::table('lop')->count();
+
+            // Đếm số giáo viên
+            $totalTeachers = DB::table('giaovien')->count();
+
+            // Đếm số sinh viên
+            $totalStudents = DB::table('sinhvien')->count();
+
+            // Tính phần trăm tăng trưởng (có thể thêm logic tính % sau)
+            $stats = [
+                [
+                    'title' => 'Doanh thu',
+                    'value' => number_format($salesData['totals']['paid'], 0, ',', '.') . 'đ',
+                    'percent' => '15%',
+                    'trend' => 'up'
+                ],
+                [
+                    'title' => 'Tổng số lớp học',
+                    'value' => $totalClasses,
+                    'percent' => '0%',
+                    'trend' => '-'
+                ],
+                [
+                    'title' => 'Tổng số giáo viên',
+                    'value' => $totalTeachers,
+                    'percent' => '25%',
+                    'trend' => 'up'
+                ],
+                [
+                    'title' => 'Tổng số sinh viên',
+                    'value' => $totalStudents,
+                    'percent' => '4%',
+                    'trend' => 'up'
+                ]
+            ];
             if (!$khoaResult['success']) {
                 return back()->with('error', $khoaResult['message']);
             }
 
             // Share khoas với view
-            View::share('khoas', $khoaResult['data']);
+            return view('index', compact('stats'));
 
             return view('index');
         } catch (\Exception $e) {

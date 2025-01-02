@@ -59,7 +59,7 @@
                                 <a href="{{ route('qlnd.listSinhvien') }}"
                                    class="tp-link {{ request()->routeIs('qlnd.listSinhvien') ? 'active' : '' }}">
                                     <i class="mdi mdi-account-multiple"></i>
-                                    <span>Danh sách lớp</span>
+                                    <span>Danh sách học sinh</span>
                                 </a>
                             </li>
                             <li>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 31, 2024 at 01:01 PM
+-- Generation Time: Jan 02, 2025 at 01:08 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -32,6 +32,41 @@ CREATE TABLE `admin` (
   `id_nguoidung` int(11) NOT NULL,
   `ten_admin` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `baihoc`
+--
+
+CREATE TABLE `baihoc` (
+  `id_baihoc` int(11) NOT NULL,
+  `id_monhoc` int(11) NOT NULL,
+  `ten_baihoc` varchar(255) NOT NULL,
+  `mo_ta` text DEFAULT NULL,
+  `thoi_luong` int(11) DEFAULT 0,
+  `id_file` int(11) DEFAULT NULL,
+  `thu_tu` int(11) DEFAULT 1,
+  `trang_thai` enum('draft','published') DEFAULT 'published'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `baihoc`
+--
+
+INSERT INTO `baihoc` (`id_baihoc`, `id_monhoc`, `ten_baihoc`, `mo_ta`, `thoi_luong`, `id_file`, `thu_tu`, `trang_thai`) VALUES
+(1, 11, 'Cung và Cầu', 'Giới thiệu về quy luật cung cầu trong kinh tế', 3600, 70, 1, 'published'),
+(2, 11, 'Hành vi người tiêu dùng', 'Phân tích hành vi người tiêu dùng', 3600, 71, 2, 'published'),
+(3, 11, 'Lý thuyết sản xuất', 'Các nguyên lý cơ bản về sản xuất', 3600, 72, 3, 'published'),
+(4, 12, 'Quản trị nhân sự', 'Nguyên tắc quản lý nguồn nhân lực', 3600, 73, 1, 'published'),
+(5, 12, 'Chiến lược kinh doanh', 'Xây dựng và phát triển chiến lược', 3600, 74, 2, 'published'),
+(6, 12, 'Quản trị tài chính', 'Quản lý tài chính doanh nghiệp', 3600, 75, 3, 'published'),
+(7, 14, 'Marketing căn bản', 'Các khái niệm cơ bản về marketing', 3600, 76, 1, 'published'),
+(8, 14, 'Nghiên cứu thị trường', 'Phương pháp nghiên cứu thị trường', 3600, 77, 2, 'published'),
+(9, 14, 'Chiến lược marketing', 'Xây dựng chiến lược marketing', 3600, 78, 3, 'published'),
+(10, 15, 'Hệ thống ngân hàng', 'Cấu trúc hệ thống ngân hàng', 3600, 79, 1, 'published'),
+(11, 15, 'Nghiệp vụ ngân hàng', 'Các nghiệp vụ cơ bản', 3600, 80, 2, 'published'),
+(12, 15, 'Quản trị rủi ro', 'Quản lý rủi ro trong ngân hàng', 3600, 81, 3, 'published');
 
 -- --------------------------------------------------------
 
@@ -2163,7 +2198,45 @@ INSERT INTO `file_upload` (`id_file`, `ten_file`, `loai_file`, `duong_dan`, `nga
 (48, 'khoadientuvienthong.jpg', 'image', 'hoa/khoadientuvienthong.jpg', '2024-12-31 10:56:09', NULL, 5, NULL, NULL, 0),
 (49, 'khoakinhte.jpg', 'image', 'hoa/khoakinhte.jpg', '2024-12-31 10:56:09', NULL, 2, NULL, NULL, 0),
 (50, 'khoaxaydung.jpg', 'image', 'hoa/khoaxaydung.jpg', '2024-12-31 10:56:09', NULL, 4, NULL, NULL, 0),
-(51, 'khoayduoc.jpg', 'image', 'hoa/khoayduoc.jpg', '2024-12-31 10:56:09', NULL, 3, NULL, NULL, 0);
+(51, 'khoayduoc.jpg', 'image', 'hoa/khoayduoc.jpg', '2024-12-31 10:56:09', NULL, 3, NULL, NULL, 0),
+(52, 'lap-trinh-c-bai-1.mp4', 'video', '/uploads/videos/', '2024-01-01 10:00:00', NULL, NULL, 1, NULL, 3600),
+(53, 'lap-trinh-c-bai-2.mp4', 'video', '/uploads/videos/', '2024-01-01 10:30:00', NULL, NULL, 1, NULL, 3600),
+(54, 'cau-truc-du-lieu-bai-1.mp4', 'video', '/uploads/videos/', '2024-01-01 11:00:00', NULL, NULL, 2, NULL, 3600),
+(55, 'cau-truc-du-lieu-bai-2.mp4', 'video', '/uploads/videos/', '2024-01-01 11:30:00', NULL, NULL, 2, NULL, 3600),
+(56, 'he-dieu-hanh-bai-1.mp4', 'video', '/uploads/videos/', '2024-01-01 12:00:00', NULL, NULL, 3, NULL, 3600),
+(57, 'mang-may-tinh-bai-1.mp4', 'video', '/uploads/videos/', '2024-01-01 12:30:00', NULL, NULL, 4, NULL, 3600),
+(58, 'ky-thuat-phan-mem-bai-1.mp4', 'video', '/uploads/videos/', '2024-01-01 13:00:00', NULL, NULL, 5, NULL, 3600),
+(59, 'an-toan-thong-tin-bai-1.mp4', 'video', '/uploads/videos/', '2024-01-01 13:30:00', NULL, NULL, 6, NULL, 3600),
+(60, 'giai-thuat-bai-1.mp4', 'video', '/uploads/videos/', '2024-01-01 14:00:00', NULL, NULL, 7, NULL, 3600),
+(61, 'khoa-hoc-du-lieu-bai-1.mp4', 'video', '/uploads/videos/', '2024-01-01 14:30:00', NULL, NULL, 8, NULL, 3600),
+(62, 'lap-trinh-c-thumb.jpg', 'image', '/uploads/images/', '2024-01-01 09:00:00', NULL, NULL, 1, NULL, 0),
+(63, 'ctdl-thumb.jpg', 'image', '/uploads/images/', '2024-01-01 09:01:00', NULL, NULL, 2, NULL, 0),
+(64, 'hdh-thumb.jpg', 'image', '/uploads/images/', '2024-01-01 09:02:00', NULL, NULL, 3, NULL, 0),
+(65, 'mmt-thumb.jpg', 'image', '/uploads/images/', '2024-01-01 09:03:00', NULL, NULL, 4, NULL, 0),
+(66, 'ktpm-thumb.jpg', 'image', '/uploads/images/', '2024-01-01 09:04:00', NULL, NULL, 5, NULL, 0),
+(67, 'attt-thumb.jpg', 'image', '/uploads/images/', '2024-01-01 09:05:00', NULL, NULL, 6, NULL, 0),
+(68, 'giai-thuat-thumb.jpg', 'image', '/uploads/images/', '2024-01-01 09:06:00', NULL, NULL, 7, NULL, 0),
+(69, 'khdl-thumb.jpg', 'image', '/uploads/images/', '2024-01-01 09:07:00', NULL, NULL, 8, NULL, 0),
+(70, 'kinh-te-vi-mo-bai-1.mp4', 'video', '/uploads/videos/', '2024-01-01 10:00:00', NULL, NULL, 11, NULL, 3600),
+(71, 'quan-tri-kinh-doanh-bai-1.mp4', 'video', '/uploads/videos/', '2024-01-01 10:30:00', NULL, NULL, 12, NULL, 3600),
+(72, 'ke-toan-quan-tri-bai-1.mp4', 'video', '/uploads/videos/', '2024-01-01 11:00:00', NULL, NULL, 13, NULL, 3600),
+(73, 'marketing-bai-1.mp4', 'video', '/uploads/videos/', '2024-01-01 11:30:00', NULL, NULL, 14, NULL, 3600),
+(74, 'tai-chinh-ngan-hang-bai-1.mp4', 'video', '/uploads/videos/', '2024-01-01 12:00:00', NULL, NULL, 15, NULL, 3600),
+(75, 'kinh-te-luong-bai-1.mp4', 'video', '/uploads/videos/', '2024-01-01 12:30:00', NULL, NULL, 16, NULL, 3600),
+(76, 'kinh-te-hoc-bai-1.mp4', 'video', '/uploads/videos/', '2024-01-01 13:00:00', NULL, NULL, 17, NULL, 3600),
+(77, 'ly-thuyet-tai-chinh-bai-1.mp4', 'video', '/uploads/videos/', '2024-01-01 13:30:00', NULL, NULL, 18, NULL, 3600),
+(78, 'dau-tu-tai-chinh-bai-1.mp4', 'video', '/uploads/videos/', '2024-01-01 14:00:00', NULL, NULL, 19, NULL, 3600),
+(79, 'phap-luat-kinh-te-bai-1.mp4', 'video', '/uploads/videos/', '2024-01-01 14:30:00', NULL, NULL, 20, NULL, 3600),
+(80, 'kinh-te-vi-mo-thumb.jpg', 'image', '/uploads/images/', '2024-01-01 09:00:00', NULL, NULL, 11, NULL, 0),
+(81, 'qtkinhdoanh-thumb.jpg', 'image', '/uploads/images/', '2024-01-01 09:01:00', NULL, NULL, 12, NULL, 0),
+(82, 'ketoan-thumb.jpg', 'image', '/uploads/images/', '2024-01-01 09:02:00', NULL, NULL, 13, NULL, 0),
+(83, 'marketing-thumb.jpg', 'image', '/uploads/images/', '2024-01-01 09:03:00', NULL, NULL, 14, NULL, 0),
+(84, 'tcnganhang-thumb.jpg', 'image', '/uploads/images/', '2024-01-01 09:04:00', NULL, NULL, 15, NULL, 0),
+(85, 'kinhteluong-thumb.jpg', 'image', '/uploads/images/', '2024-01-01 09:05:00', NULL, NULL, 16, NULL, 0),
+(86, 'kinhtehoc-thumb.jpg', 'image', '/uploads/images/', '2024-01-01 09:06:00', NULL, NULL, 17, NULL, 0),
+(87, 'lttaichinh-thumb.jpg', 'image', '/uploads/images/', '2024-01-01 09:07:00', NULL, NULL, 18, NULL, 0),
+(88, 'daututc-thumb.jpg', 'image', '/uploads/images/', '2024-01-01 09:08:00', NULL, NULL, 19, NULL, 0),
+(89, 'phaplykt-thumb.jpg', 'image', '/uploads/images/', '2024-01-01 09:09:00', NULL, NULL, 20, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -2811,6 +2884,32 @@ CREATE TABLE `noidungmonhoc` (
   `ten_bai_giang` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `noidungmonhoc`
+--
+
+INSERT INTO `noidungmonhoc` (`id_noidung`, `id_monhoc`, `id_file`, `ten_bai_giang`) VALUES
+(1, 1, 52, 'Giới thiệu về ngôn ngữ lập trình C'),
+(2, 1, 53, 'Biến và kiểu dữ liệu trong C'),
+(3, 2, 54, 'Giới thiệu về cấu trúc dữ liệu'),
+(4, 2, 55, 'Danh sách liên kết đơn'),
+(5, 3, 56, 'Tổng quan về hệ điều hành'),
+(6, 4, 57, 'Cơ bản về mạng máy tính'),
+(7, 5, 58, 'Quy trình phát triển phần mềm'),
+(8, 6, 59, 'Bảo mật thông tin cơ bản'),
+(9, 7, 60, 'Giới thiệu về giải thuật'),
+(10, 8, 61, 'Nhập môn khoa học dữ liệu'),
+(11, 11, 70, 'Nhập môn Kinh tế vi mô'),
+(12, 12, 71, 'Cơ bản về Quản trị kinh doanh'),
+(13, 13, 72, 'Giới thiệu Kế toán quản trị'),
+(14, 14, 73, 'Nguyên lý Marketing'),
+(15, 15, 74, 'Tổng quan về Tài chính ngân hàng'),
+(16, 16, 75, 'Cơ sở Kinh tế lượng'),
+(17, 17, 76, 'Đại cương Kinh tế học'),
+(18, 18, 77, 'Nền tảng Lý thuyết tài chính'),
+(19, 19, 78, 'Cơ bản về Đầu tư tài chính'),
+(20, 20, 79, 'Giới thiệu Pháp luật kinh tế');
+
 -- --------------------------------------------------------
 
 --
@@ -3210,7 +3309,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('mtc7OD8hle8ykmjcqr1VIyE085Gn5g9c2kzTi2h6', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiMmF5UFlVaW92SWpNWVdrbmxFOGtRTzBteXNJSFN1RUtPbE5ZZWhteCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMCI7fX0=', 1735646405);
+('JwOtUNxmjQDxSRmUnmva0zIB14rm6MtXAoKnain2', 114, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoidllCdnJuQWlEZHdyYXFHaVhSWld0Z0xCY0RvVmdkYzdjRFQwaHZSdCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMCI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjExNDt9', 1735776445);
 
 -- --------------------------------------------------------
 
@@ -3281,6 +3380,7 @@ INSERT INTO `sinhvien` (`id_sinhvien`, `id_nguoidung`, `ten_sinhvien`, `id_lop`)
 (110, 110, 'Khổng Tử', 23),
 (111, 111, 'Nguyễn Chí Cường', 12),
 (112, 116, 'Xavier', 12),
+(114, 114, 'abc', 5),
 (115, 1, 'user01', NULL);
 
 -- --------------------------------------------------------
@@ -3343,7 +3443,24 @@ CREATE TABLE `thanhtoan` (
 
 INSERT INTO `thanhtoan` (`id_thanhtoan`, `id_hocphi`, `so_tien_da_tra`, `phuong_thuc`, `ngay_thanhtoan`, `trang_thai`) VALUES
 (1, 248, 9900000.00, 'Thẻ tín dụng', '2024-12-31 10:34:28', 'Thành công'),
-(2, 249, 9900000.00, 'Thẻ tín dụng', '2024-12-31 10:37:42', 'Thành công');
+(2, 249, 9900000.00, 'Thẻ tín dụng', '2024-12-31 10:37:42', 'Thành công'),
+(3, 191, 80400000.00, 'Thẻ tín dụng', '2025-01-01 19:12:20', 'Thành công'),
+(4, 194, 80400000.00, 'Thẻ tín dụng', '2025-01-01 19:12:20', 'Thành công'),
+(5, 197, 80400000.00, 'Thẻ tín dụng', '2025-01-01 19:12:20', 'Thành công'),
+(6, 200, 80400000.00, 'Thẻ tín dụng', '2025-01-01 19:12:20', 'Thành công'),
+(7, 203, 80400000.00, 'Thẻ tín dụng', '2025-01-01 19:12:20', 'Thành công'),
+(8, 206, 80400000.00, 'Thẻ tín dụng', '2025-01-01 19:12:20', 'Thành công'),
+(9, 209, 80400000.00, 'Thẻ tín dụng', '2025-01-01 19:12:20', 'Thành công'),
+(10, 212, 80400000.00, 'Thẻ tín dụng', '2025-01-01 19:12:20', 'Thành công'),
+(11, 215, 80400000.00, 'Thẻ tín dụng', '2025-01-01 19:12:20', 'Thành công'),
+(12, 218, 80400000.00, 'Thẻ tín dụng', '2025-01-01 19:12:20', 'Thành công'),
+(13, 221, 33300000.00, 'Thẻ tín dụng', '2025-01-01 19:12:20', 'Thành công'),
+(14, 224, 33300000.00, 'Thẻ tín dụng', '2025-01-01 19:12:20', 'Thành công'),
+(15, 227, 33300000.00, 'Thẻ tín dụng', '2025-01-01 19:12:20', 'Thành công'),
+(16, 230, 13500000.00, 'Thẻ tín dụng', '2025-01-01 19:12:20', 'Thành công'),
+(17, 233, 13500000.00, 'Thẻ tín dụng', '2025-01-01 19:12:20', 'Thành công'),
+(18, 236, 13500000.00, 'Thẻ tín dụng', '2025-01-01 19:12:20', 'Thành công'),
+(19, 239, 13500000.00, 'Thẻ tín dụng', '2025-01-01 19:12:20', 'Thành công');
 
 -- --------------------------------------------------------
 
@@ -3511,6 +3628,14 @@ INSERT INTO `vaitro` (`id_vaitro`, `ten_vaitro`, `mo_ta_vaitro`) VALUES
 ALTER TABLE `admin`
   ADD PRIMARY KEY (`id_admin`),
   ADD KEY `id_nguoidung` (`id_nguoidung`);
+
+--
+-- Indexes for table `baihoc`
+--
+ALTER TABLE `baihoc`
+  ADD PRIMARY KEY (`id_baihoc`),
+  ADD KEY `id_monhoc` (`id_monhoc`),
+  ADD KEY `id_file` (`id_file`);
 
 --
 -- Indexes for table `cache`
@@ -3816,6 +3941,12 @@ ALTER TABLE `admin`
   MODIFY `id_admin` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `baihoc`
+--
+ALTER TABLE `baihoc`
+  MODIFY `id_baihoc` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
 -- AUTO_INCREMENT for table `chitietchuyennganh`
 --
 ALTER TABLE `chitietchuyennganh`
@@ -3873,7 +4004,7 @@ ALTER TABLE `file_nguoidung`
 -- AUTO_INCREMENT for table `file_upload`
 --
 ALTER TABLE `file_upload`
-  MODIFY `id_file` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `id_file` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
 
 --
 -- AUTO_INCREMENT for table `giaovien`
@@ -3963,7 +4094,7 @@ ALTER TABLE `nguoidung`
 -- AUTO_INCREMENT for table `noidungmonhoc`
 --
 ALTER TABLE `noidungmonhoc`
-  MODIFY `id_noidung` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_noidung` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `phanquyen`
@@ -3999,7 +4130,7 @@ ALTER TABLE `thanhtich`
 -- AUTO_INCREMENT for table `thanhtoan`
 --
 ALTER TABLE `thanhtoan`
-  MODIFY `id_thanhtoan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_thanhtoan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `thoikhoabieu`
@@ -4034,6 +4165,13 @@ ALTER TABLE `vaitro`
 --
 ALTER TABLE `admin`
   ADD CONSTRAINT `admin_ibfk_1` FOREIGN KEY (`id_nguoidung`) REFERENCES `nguoidung` (`id_nguoidung`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `baihoc`
+--
+ALTER TABLE `baihoc`
+  ADD CONSTRAINT `fk_baihoc_file` FOREIGN KEY (`id_file`) REFERENCES `file_upload` (`id_file`),
+  ADD CONSTRAINT `fk_baihoc_monhoc` FOREIGN KEY (`id_monhoc`) REFERENCES `monhoc` (`id_monhoc`);
 
 --
 -- Constraints for table `chitietchuyennganh`

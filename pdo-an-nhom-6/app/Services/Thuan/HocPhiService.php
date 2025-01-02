@@ -299,10 +299,17 @@ class HocPhiService
             $classSummary = $this->hocPhiRepository->getClassSummary();
             $totalClasses = $classSummary->count();
 
+            $totals = [
+                'paid' => $classSummary->sum('total_paid'),
+                'unpaid' => $classSummary->sum('total_unpaid'),
+                'processing' => $classSummary->sum('total_processing')
+            ];
+
             return [
                 'totalPaid' => $totalPaid,
                 'totalClasses' => $totalClasses,
-                'classSummary' => $classSummary
+                'classSummary' => $classSummary,
+                'totals' => $totals
             ];
         } catch (\Exception $e) {
             \Log::error('Lỗi trong HocPhiService::getSalesOverview: ' . $e->getMessage());

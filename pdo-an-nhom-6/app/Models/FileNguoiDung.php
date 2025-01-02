@@ -18,7 +18,11 @@ class FileNguoiDung extends Model
         'ngay_upload'
     ];
 
-    public function user()
+    protected $dates = [
+        'ngay_upload'
+    ];
+
+    public function nguoiDung()
     {
         return $this->belongsTo(NguoiDung::class, 'id_nguoidung', 'id_nguoidung');
     }

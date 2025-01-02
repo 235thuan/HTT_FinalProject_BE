@@ -3,17 +3,23 @@
 namespace App\Http\Controllers\Cuong;
 
 use App\Http\Controllers\Controller;
+use App\Services\Thuan\KhoaService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
-    public function index() 
+    protected $khoaService;
+    public function __construct( KhoaService $khoaService)
+    {
+        $this->khoaService = $khoaService;
+    }
+    public function index()
     {
         try {
             // Lấy thông tin người dùng đang đăng nhập
             $userId = Auth::id();
-            
+
             // Query để lấy thông tin profile
             $profileInfo = DB::table('nguoidung')
                 ->join('phanquyen', 'nguoidung.id_nguoidung', '=', 'phanquyen.id_nguoidung')
@@ -46,6 +52,29 @@ class ProfileController extends Controller
         } catch (\Exception $e) {
             \Log::error('Lỗi trong ProfileController@index: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Có lỗi xảy ra khi tải thông tin profile');
+        }
+    }
+
+    public function admin()
+    {
+        try {
+            // Lấy thông tin user hiện tại
+            $user = Auth::user();
+            $khoaResult = $this->khoaService->getKhoasWithChuyenNganh();
+            // Lấy thông tin chi tiết từ bảng users hoặc bảng liên quan
+            $userDetails = DB::table('nguoidung')
+                ->where('id_nguoidung', $user->id_nguoidung)
+                ->first();
+
+            return view('utility.profile', [
+                'userDetails' => $userDetails,
+                'khoas' => $khoaResult['success'] ? $khoaResult['data'] : collect([])
+            ]);
+
+
+        } catch (\Exception $e) {
+            \Log::error('Lỗi trong ProfileController::index: ' . $e->getMessage());
+            return back()->with('error', 'Có lỗi xảy ra khi tải trang profile');
         }
     }
 }

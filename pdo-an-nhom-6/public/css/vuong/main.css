@@ -1,0 +1,215 @@
+.main-content {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.filter-bar {
+  grid-column: span 2;
+  width: 100%;
+  height: fit-content;
+  background-color: #e7f1ff;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+.filter-more {
+  margin-top: 20px;
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  gap: 10px;
+}
+
+.filter-bar h3 {
+  margin-top: 1rem;
+}
+
+.search-suggestions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.search-suggestions img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.categories button {
+  margin: 0.5rem 0.5rem 0 0;
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: #fff;
+  color: #000;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.categories button:hover {
+  background-color: #0056b3;
+}
+
+.history {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.history li {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  border-bottom: 1px solid #ddd;
+  padding: 5px 0;
+}
+
+.history li img {
+  width: 50px;
+  height: 50px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.history li span {
+  flex-grow: 1;
+}
+
+/* Tổng thể nội dung */
+.content {
+  grid-column: span 2;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  justify-content: center;
+  align-items: start;
+  gap: 20px;
+  width: 100%;
+  height: fit-content;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.card {
+  width: 100%;
+  background-color: #e7f1ff;
+  border-radius: 10px;
+  overflow: hidden;
+  text-align: center;
+  padding: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card .more {
+  display: flex;
+  justify-content: end;
+  align-items: end;
+  margin-right: 5px;
+  margin-bottom: 10px;
+}
+
+.card img {
+  width: 100%;
+  min-height: 200px;
+  height: auto;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  object-fit: cover;
+}
+
+.card-description {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+}
+
+.card h4 {
+  font-size: 1.2em;
+}
+
+.card p {
+  color: #555;
+  font-size: 0.9em;
+}
+
+.card-more {
+  padding: 0px;
+}
+
+.card-more .more {
+  display: none !important;
+}
+
+.card-more img {
+  border-radius: 0px !important;
+}
+
+.price-likes {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.price-likes .price {
+  font-weight: bold;
+  font-size: medium;
+}
+
+.price-likes .heart {
+  font-size: 0.9rem;
+  background: #fff;
+  padding: 12px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.price-likes .heart:hover {
+  color: #c2183d;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.card-more:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .main-content {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  .filter-bar {
+    grid-column: span 1;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  .categories {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .content {
+    grid-column: span 1;
+    grid-template-columns: repeat(1, 1fr);
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card h4 {
+    font-size: 1rem;
+  }
+}

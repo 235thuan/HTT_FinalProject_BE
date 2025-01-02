@@ -5,6 +5,9 @@ use App\Http\Controllers\Cuong\ProfileController;
 use App\Http\Controllers\Hoa\ClientHocphiController;
 use App\Http\Controllers\Thuan\CartController;
 use App\Http\Controllers\Thuan\ClientAuthController;
+use App\Http\Controllers\Thuan\ClientChuyennganhController;
+use App\Http\Controllers\Thuan\ClientLophocController;
+use App\Http\Controllers\Thuan\ClientMonhocController;
 use App\Http\Controllers\Thuan\GiaoVienController;
 use App\Http\Controllers\Thuan\HocPhiController;
 use App\Http\Controllers\Thuan\HomeController;
@@ -101,6 +104,8 @@ Route::prefix('admin')->group(function () {
 
         });
 
+        // Add this route
+        Route::get('/profile', [App\Http\Controllers\Cuong\ProfileController::class, 'admin'])->name('cuong.admin.profile');
 
         // Catch-all routes
         Route::get('{first}/{second}/{third}', [RoutingController::class, 'thirdLevel'])->name('third');
@@ -154,6 +159,19 @@ Route::prefix('client')->group(function () {
     Route::post('/login', [ClientAuthController::class, 'login'])->name('client.login');
     Route::post('/register', [ClientAuthController::class, 'register'])->name('client.register');
     Route::post('/logout', [ClientAuthController::class, 'logout'])->name('client.logout');
+
+    Route::get('/chuyennganh',[ClientChuyenNganhController::class, 'index'])->name('client.chuyennganh');
+
+
+    Route::get('/lophoc', [ClientLophocController::class, 'index'])->name('client.lophoc');
+    Route::get('/monhoc', [ClientMonhocController::class, 'index'])->name('client.monhoc');
+    Route::get('/monhoc/{id}', [ClientLophocController::class, 'detail'])->name('client.chitietmonhoc');
+
+    // Add these new routes for AJAX calls
+    Route::get('/lessons/{id_monhoc}', [ClientLophocController::class, 'getLessons'])->name('client.lessons');
+    Route::get('/lesson/{id_noidung}', [ClientLophocController::class, 'getLesson'])->name('client.lesson.detail');
+
+
 });
 
 //

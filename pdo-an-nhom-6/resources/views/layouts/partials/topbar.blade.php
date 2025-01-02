@@ -132,7 +132,7 @@
                                         </a>
                                     @empty
                                         <div class="text-center p-2">
-                                            <p class="text-muted">Không có th��ng báo</p>
+                                            <p class="text-muted">Không có thông báo</p>
                                         </div>
                                     @endforelse
                                 </div>
@@ -162,7 +162,7 @@
                             </div>
 
                             <!-- item-->
-                            <a href="{{ route('second', ['utility', 'profile']) }}" class="dropdown-item notify-item">
+                            <a href="{{ route('cuong.admin.profile') }}" class="dropdown-item notify-item">
                                 <i class="mdi mdi-account-circle-outline fs-16 align-middle"></i>
                                 <span>Tài khoản của tôi</span>
                             </a>

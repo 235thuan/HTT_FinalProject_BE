@@ -3,38 +3,55 @@
 namespace App\Repositories;
 
 use App\Models\MonHoc;
+use App\Models\SinhVien;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class MonHocRepository
 {
-    public function getAllMonHoc()
+    protected $monHoc;
+    protected $sinhVien;
+
+    public function __construct(MonHoc $monHoc, SinhVien $sinhVien)
     {
-        try {
-            $monHocs = MonHoc::select('id_monhoc', 'ten_monhoc')
-                ->distinct('ten_monhoc')
-                ->orderBy('ten_monhoc')
-                ->get();
-
-            Log::info('Lấy danh sách môn học thành công. Số lượng: ' . $monHocs->count());
-            return $monHocs;
-
-        } catch (\Exception $e) {
-            Log::error('Lỗi khi lấy danh sách môn học: ' . $e->getMessage());
-            throw $e;
-        }
+        $this->monHoc = $monHoc;
+        $this->sinhVien = $sinhVien;
     }
 
-    public function getAll()
-    {
-        try {
-            return DB::table('monhoc')
-                ->select('id_monhoc', 'ten_monhoc', 'so_tin_chi')
-                ->orderBy('ten_monhoc')
-                ->get();
-        } catch (\Exception $e) {
 
-            throw $e;
-        }
+    public function getCurrentStudent($userId)
+    {
+        return $this->sinhVien->with(['lop', 'avatar'])
+            ->where('id_nguoidung', $userId)
+            ->first();
+    }
+
+    public function getMonHocByLop($lopId)
+    {
+        return $this->monHoc->select([
+            'monhoc.id_monhoc',
+            'monhoc.ten_monhoc',
+            'monhoc.so_tin_chi',
+            'monhoc.id_chuyennganh',
+            'monhoc.gia',
+            'monhoc.ky_hoc',
+            DB::raw('MAX(file_upload.duong_dan) as image_url')
+        ])
+            ->leftJoin('file_upload', function($join) {
+                $join->on('monhoc.id_monhoc', '=', 'file_upload.id_monhoc')
+                    ->where('file_upload.loai_file', 'image');
+            })
+            ->join('chuyennganh', 'monhoc.id_chuyennganh', '=', 'chuyennganh.id_chuyennganh')
+            ->join('lop', 'chuyennganh.id_chuyennganh', '=', 'lop.id_chuyennganh')
+            ->where('lop.id_lop', $lopId)
+            ->groupBy([
+                'monhoc.id_monhoc',
+                'monhoc.ten_monhoc',
+                'monhoc.so_tin_chi',
+                'monhoc.id_chuyennganh',
+                'monhoc.gia',
+                'monhoc.ky_hoc'
+            ])
+            ->get();
     }
 }

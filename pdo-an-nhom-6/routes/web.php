@@ -3,7 +3,6 @@
 use App\Http\Controllers\Auth\CustomAuthController;
 use App\Http\Controllers\Cuong\ProfileController;
 use App\Http\Controllers\Hoa\ClientHocphiController;
-use App\Http\Controllers\Thuan\CartController;
 use App\Http\Controllers\Thuan\ClientAuthController;
 use App\Http\Controllers\Thuan\ClientChuyennganhController;
 use App\Http\Controllers\Thuan\ClientLophocController;
@@ -16,6 +15,7 @@ use App\Http\Controllers\Thuan\MienGiamController;
 use App\Http\Controllers\Thuan\RoutingController;
 use App\Http\Controllers\Thuan\ScheduleController;
 use App\Http\Controllers\Thuan\SinhVienController;
+use App\Http\Middleware\AdminMiddleware as AdminMiddlewareAlias;
 use Illuminate\Support\Facades\Route;
 
 // Trang chủ - không cần prefix
@@ -32,7 +32,7 @@ Route::prefix('admin')->group(function () {
     Route::post('/logout', [CustomAuthController::class, 'logout'])->name('logout');
 
     // Admin middleware group
-    Route::middleware(['auth', \App\Http\Middleware\AdminMiddleware::class])->group(function () {
+    Route::middleware(['auth', AdminMiddlewareAlias::class])->group(function () {
         // Root route
         Route::get('/', function() {
             return redirect('/admin/index');
@@ -51,6 +51,9 @@ Route::prefix('admin')->group(function () {
             Route::get('/listGiaovien', [GiaoVienController::class, 'listAll'])->name('listGiaovien');
 
             Route::get('/sinhvien/{id}', [SinhVienController::class, 'detail'])->name('sinhvien.detail');
+
+
+
             Route::get('/giaovien/{id}', [GiaoVienController::class, 'detail'])->name('giaovien.detail');
             Route::post('/giaovien/store', [GiaoVienController::class, 'store'])->name('giaovien.store');
             Route::get('/check-email-giaovien', [GiaoVienController::class, 'checkEmailExists'])->name('checkEmailGiaovien');
@@ -63,12 +66,19 @@ Route::prefix('admin')->group(function () {
 
         // Sinhvien routes
         Route::prefix('sinhvien')->name('sinhvien.')->group(function () {
-            Route::get('/getLopList', [SinhVienController::class, 'getLopList'])->name('getLopList');
+//            Route::get('/getLopList', [SinhVienController::class, 'getLopList'])->name('getLopList');
+            Route::get('/dangkylop', [SinhVienController::class, 'dangKyLop'])
+                ->name('dangky');
             Route::put('/{id}', [SinhVienController::class, 'update'])->name('update');
             Route::get('/{id}/edit', [SinhVienController::class, 'edit'])->name('edit');
             Route::get('/{id}', [SinhVienController::class, 'show'])->name('show');
             Route::post('/', [SinhVienController::class, 'store'])->name('store');
 
+            Route::get('get-lop-list', [SinhVienController::class, 'getLopList'])
+                ->name('getLopList')
+                ->middleware('web');
+            Route::post('/assign', [SinhVienController::class, 'assignStudent'])
+                ->name('assign');
         });
 
         // Giaovien routes
@@ -123,10 +133,6 @@ Route::prefix('thuan')->group(function () {
     Route::get('/chuyennganh', [HomeController::class, 'chuyenNganh'])->name('chuyennganh.index');
     Route::get('/chuyennganh/{id}', [HomeController::class, 'showChuyenNganh'])->name('chuyennganh.show');
 
-    Route::post('/cart/add/{id_chuyennganh}', [CartController::class, 'addToCart'])->name('cart.add');
-    Route::delete('/cart/remove/{id_chuyennganh}', [CartController::class, 'removeFromCart'])->name('cart.remove');
-    Route::get('/cart', [CartController::class, 'viewCart'])->name('cart.view');
-
 
     Route::prefix('miengiam')->group(function () {
         Route::get('/',  [MienGiamController::class, 'index'])->name('miengiam.index');
@@ -177,6 +183,14 @@ Route::prefix('client')->group(function () {
 //
 Route::prefix('cuong')->group(function () {
     Route::get('/tcn', [ProfileController::class, 'index'])->name('cuong.profile');
+
+    Route::middleware(['auth'])->group(function () {
+        Route::post('/nguoidung/update-info', [ProfileController::class, 'updateInfo'])
+            ->name('nguoidung.updateInfo');
+        Route::post('/nguoidung/update-security', [ProfileController::class, 'updateSecurity'])
+            ->name('nguoidung.updateSecurity');
+    });
+    Route::get('/payment-details/{paymentId}', [ProfileController::class, 'getPaymentDetails']) ->name('cuong.getPaymentDetails');
 });
 Route::prefix('hoa')->group( function () {
     Route::get('/hocphi', [ClientHocphiController::class, 'viewCart'])

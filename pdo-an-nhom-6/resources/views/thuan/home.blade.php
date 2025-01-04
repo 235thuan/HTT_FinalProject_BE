@@ -148,7 +148,7 @@
             border-radius: 15px;
             margin: 2rem 0;
             min-height: 400px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
 
@@ -170,7 +170,7 @@
 
         .home212:hover {
             transform: scale(1.02);
-            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
         }
 
         .content-wrapper {
@@ -228,7 +228,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(to right, rgba(255,255,255,0.1), transparent);
+            background: linear-gradient(to right, rgba(255, 255, 255, 0.1), transparent);
             transform: translateX(-100%);
             transition: transform 0.5s ease;
         }
@@ -259,7 +259,7 @@
             left: 0;
             right: 0;
             padding: 1rem;
-            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
             color: white;
             font-size: 1.1rem;
             transform: translateY(100%);
@@ -276,7 +276,7 @@
             display: flex;
             justify-content: center;
             padding: 15px 0;
-            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1));
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
         }
 
         .expand-toggle {
@@ -326,6 +326,7 @@
         .home2321.expanded {
             max-height: 1000px;
         }
+
         /*end button monhoc*/
 
 
@@ -339,8 +340,9 @@
 
         .chuyennganh-link:hover {
             transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
+
         /*end chuyen ngah slide*/
 
 
@@ -390,7 +392,7 @@
             transition: 0.6s ease;
             border-radius: 0 3px 3px 0;
             user-select: none;
-            background-color: rgba(0,0,0,0.8);
+            background-color: rgba(0, 0, 0, 0.8);
             z-index: 2;
             text-decoration: none;
         }
@@ -405,7 +407,7 @@
         }
 
         .slider-prev:hover, .slider-next:hover {
-            background-color: rgba(0,0,0,0.9);
+            background-color: rgba(0, 0, 0, 0.9);
         }
 
         .home1-2 {
@@ -442,7 +444,7 @@
             transition: 0.6s ease;
             border-radius: 0 3px 3px 0;
             user-select: none;
-            background-color: rgba(0,0,0,0.5);
+            background-color: rgba(0, 0, 0, 0.5);
             z-index: 2;
             text-decoration: none;
         }
@@ -457,7 +459,7 @@
         }
 
         .slider-prev:hover, .slider-next:hover {
-            background-color: rgba(0,0,0,0.8);
+            background-color: rgba(0, 0, 0, 0.8);
         }
 
         /* Responsive adjustments */
@@ -507,7 +509,7 @@
             transition: 0.6s ease;
             border-radius: 0 3px 3px 0;
             user-select: none;
-            background-color: rgba(0,0,0,0.5);
+            background-color: rgba(0, 0, 0, 0.5);
             z-index: 2;
             text-decoration: none;
         }
@@ -522,7 +524,7 @@
         }
 
         .slider-prev:hover, .slider-next:hover {
-            background-color: rgba(0,0,0,0.8);
+            background-color: rgba(0, 0, 0, 0.8);
         }
 
         /* Responsive adjustments */
@@ -615,241 +617,703 @@
             transform: rotate(180deg);
         }
     </style>
+    <style>
+        .home-partners {
+            padding: 40px 0;
+            background: #fff;
+        }
 
-    <div class="home1-2">
-        <div class="video-slider">
-            <a class="slider-prev" onclick="window.prevVideo()">❮</a>
-            <video id="mainVideo" autoplay muted playsinline preload="auto">
-                <source src="{{ Vite::asset('resources/video/thuan/ab.mp4') }}" type="video/mp4">
-            </video>
-            <a class="slider-next" onclick="window.nextVideo()">❯</a>
+        .home-partners h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+            font-size: 28px;
+            background: linear-gradient(to right, black, black);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .partner-slider {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .partner-logo {
+            flex: 0 0 200px;
+            height: 100px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .partner-logo:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .partner-logo img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            filter: grayscale(100%);
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+
+        .partner-logo:hover img {
+            filter: grayscale(0%);
+            opacity: 1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .partner-slider {
+                gap: 20px;
+            }
+
+            .partner-logo {
+                flex: 0 0 150px;
+                height: 80px;
+            }
+        }
+
+        /* Animation */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .partner-logo {
+            animation: slideIn 0.5s ease forwards;
+            animation-delay: calc(var(--i) * 0.1s);
+        }
+    </style>
+    <style>
+        .news-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+
+        .title-wrapper {
+            position: absolute;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            pointer-events: none; /* Allows clicking through to elements behind */
+        }
+
+        .news-header h2 {
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+            margin: 0;
+            background: linear-gradient(to right,black, black);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            pointer-events: auto; /* Restores clickability to the title */
+        }
+
+        .view-all {
+            position: relative;
+            z-index: 2; /* Ensures the link stays clickable */
+            color: #f9a825;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .view-all:hover {
+            background: linear-gradient(to right, #f9a825, #ff8f00);
+            color: white;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .news-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .title-wrapper {
+                position: relative;
+                margin-bottom: 10px;
+            }
+
+            .news-header h2 {
+                font-size: 24px;
+            }
+        }
+    </style>
+    <style>
+        .home2321 {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 15px;
+        }
+
+        .subject-button {
+            display: inline-flex;  /* Changed to inline-flex for better centering */
+            align-items: center;   /* Vertical center */
+            width: 250px;
+            justify-content: center; /* Horizontal center */
+            min-width: 120px;     /* Minimum width */
+            height: 40px;         /* Fixed height */
+            padding: 8px 16px;
+            margin: 5px;
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;  /* Rounded corners */
+            background: white;
+            color: #333;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            white-space: nowrap;  /* Prevent text wrapping */
+            overflow: hidden;     /* Hide overflow text */
+            text-overflow: ellipsis; /* Show ... for overflow text */
+        }
+
+        .subject-button:hover {
+            background: linear-gradient(to right, #f9a825, #ff8f00);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            border-color: transparent;
+        }
+
+        .subject-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Remove focus outline but keep it accessible */
+        .subject-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(249, 168, 37, 0.3);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .subject-button {
+                min-width: calc(50% - 20px); /* Two buttons per row on mobile */
+                margin: 5px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .subject-button {
+                min-width: calc(100% - 20px); /* Full width on smaller screens */
+            }
+        }
+    </style>
+    @auth
+        <div class="home1-2">
+            <div class="video-slider">
+                <a class="slider-prev" onclick="window.prevVideo()">❮</a>
+                <video id="mainVideo" autoplay muted playsinline preload="auto">
+                    <source src="{{ Vite::asset('resources/video/thuan/ab.mp4') }}" type="video/mp4">
+                </video>
+                <a class="slider-next" onclick="window.nextVideo()">❯</a>
+            </div>
         </div>
-    </div>
 
-    <div class="home2">
-        <div class="home21">
-            <div class="home211">
-                <div class="content-wrapper">
-                    <h2>Nền tảng vững chắc</h2>
-                    <p class="subtitle">Hội nhập quốc tế - Vươn tới tương lai</p>
-                    <div class="action-button">
-                        <button class="hover-effect">Tìm hiểu thêm</button>
+        <div class="home2">
+            <div class="home21">
+                <div class="home211">
+                    <div class="content-wrapper">
+                        <h2>Nền tảng vững chắc</h2>
+                        <p class="subtitle">Hội nhập quốc tế - Vươn tới tương lai</p>
+                        <div class="action-button">
+                            <button class="hover-effect">Tìm hiểu thêm</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="home212">
+                    <div class="image-wrapper">
+                        <img src="{{ asset('storage/thuan/homeImage1.png') }}"
+                             alt="University Image"
+                             onerror="this.src='{{ asset('storage/thuan/default.png') }}'">
+                        <div class="image-caption">Môi trường học tập hiện đại</div>
                     </div>
                 </div>
             </div>
-            <div class="home212">
-                <div class="image-wrapper">
-                    <img src="{{ asset('storage/thuan/homeImage1.png') }}"
-                         alt="University Image"
-                         onerror="this.src='{{ asset('storage/thuan/default.png') }}'">
-                    <div class="image-caption">Môi trường học tập hiện đại</div>
-                </div>
+
+
+            <div class="home22">
+                <div class="home221">Chuyên ngành đào tạo</div>
+                @if(isset($error))
+                    <div class="alert alert-danger">
+                        {{ $error }}
+                    </div>
+                @else
+                    <div class="home222-wrapper">
+                        <div class="home222">
+                            @if($chuyenNganhs->isNotEmpty())
+                                <a class="slider-prev" onclick="changeCategory(-1)">❮</a>
+                                <a class="slider-next" onclick="changeCategory(1)">❯</a>
+
+                                <div class="home222-track">
+                                    @foreach($chuyenNganhs->chunk(4) as $nhom)
+                                        <div class="home222-group">
+                                            @foreach($nhom as $chuyenNganh)
+                                                <div class="home2221">
+                                                    <a href="{{ route('chuyennganh.show', $chuyenNganh->id_chuyennganh) }}"
+                                                       class="chuyennganh-link">
+                                                        <div class="home22211">
+                                                            <img src="{{ $chuyenNganh->image_url }}"
+                                                                 alt="{{ $chuyenNganh->ten_chuyennganh }}"
+                                                                 onerror="this.onerror=null; this.src='/hoa/default.png'"
+                                                                 loading="lazy">
+                                                        </div>
+                                                        <div class="home22212">{{ $chuyenNganh->ten_khoa }}</div>
+                                                        <div class="home22212">{{ $chuyenNganh->ten_chuyennganh }}</div>
+                                                    </a>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endforeach
+                                </div>
+
+                                <div class="slider-navigation">
+                                    @for($i = 0; $i < $soNhom; $i++)
+                                        <span class="nav-dot {{ $i === 0 ? 'active' : '' }}"
+                                              onclick="goToCategory({{ $i }})"></span>
+                                    @endfor
+                                </div>
+                            @else
+                                <div class="alert alert-info">
+                                    Không có dữ liệu chuyên ngành
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                @endif
             </div>
-        </div>
 
 
-        <div class="home22">
-            <div class="home221">Chuyên ngành đào tạo</div>
-            @if(isset($error))
-                <div class="alert alert-danger">
-                    {{ $error }}
-                </div>
-            @else
-                <div class="home222-wrapper">
-                    <div class="home222">
-                        @if($chuyenNganhs->isNotEmpty())
-                            <a class="slider-prev" onclick="changeCategory(-1)">❮</a>
-                            <a class="slider-next" onclick="changeCategory(1)">❯</a>
-
-                            <div class="home222-track">
-                                @foreach($chuyenNganhs->chunk(4) as $nhom)
-                                    <div class="home222-group">
-                                        @foreach($nhom as $chuyenNganh)
-                                            <div class="home2221">
-                                                <a href="{{ route('chuyennganh.show', $chuyenNganh->id_chuyennganh) }}" class="chuyennganh-link">
-                                                    <div class="home22211">
-                                                        <img src="{{ $chuyenNganh->image_url }}"
-                                                             alt="{{ $chuyenNganh->ten_chuyennganh }}"
-                                                             onerror="this.onerror=null; this.src='/hoa/default.png'"
-                                                             loading="lazy">
-                                                    </div>
-                                                <div class="home22212">{{ $chuyenNganh->ten_khoa }}</div>
-                                                <div class="home22212">{{ $chuyenNganh->ten_chuyennganh }}</div>
-                                                </a>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                @endforeach
-                            </div>
-
-                            <div class="slider-navigation">
-                                @for($i = 0; $i < $soNhom; $i++)
-                                    <span class="nav-dot {{ $i === 0 ? 'active' : '' }}"
-                                          onclick="goToCategory({{ $i }})"></span>
-                                @endfor
-                            </div>
+            <div class="home23">
+                <div class="home231">Danh mục môn học</div>
+                <div class="home232">
+                    <div class="home2321" id="subjectList">
+                        @if(isset($monHocs) && $monHocs->isNotEmpty())
+                            @foreach($monHocs as $monHoc)
+                                <a href="{{ route('client.lophoc') }}" class="subject-button">
+                                    {{ $monHoc->ten_monhoc }}
+                                </a>
+                            @endforeach
                         @else
                             <div class="alert alert-info">
-                                Không có dữ liệu chuyên ngành
+                                Không có dữ liệu môn học
                             </div>
                         @endif
                     </div>
-                </div>
-            @endif
-        </div>
-
-
-        <div class="home23">
-    <div class="home231">Danh mục môn học</div>
-    <div class="home232">
-        <div class="home2321" id="subjectList">
-            @if(isset($monHocs) && $monHocs->isNotEmpty())
-                @foreach($monHocs as $monHoc)
-                    <button class="subject-button">{{ $monHoc->ten_monhoc }}</button>
-                @endforeach
-            @else
-                <div class="alert alert-info">
-                    Không có dữ liệu môn học
-                </div>
-            @endif
-        </div>
-        <div class="expand-section">
-            <button class="expand-toggle" id="expandButton">
-                <span class="expand-text">Xem thêm môn học</span>
-                <img src="{{ asset('storage/thuan/expand-arrow.png') }}"
-                     alt="expand"
-                     class="expand-icon"
-                     onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjZjU3ZjE3Ij48cGF0aCBkPSJNNy40MSA4LjU5TDEyIDEzLjE3bDQuNTktNC41OEwxOCAxMGwtNiA2LTYtNiAxLjQxLTEuNDF6Ii8+PC9zdmc+'" />
-            </button>
-        </div>
-    </div>
-    <div class="homeLineBreak"></div>
-</div>
-
-
-
-
-        <div class="home24">
-
-
-
-    <div class="home241">Đăng ký chuyên ngành</div>
-    <div class="home242">
-        @foreach($topChuyenNganhs as $index => $chuyenNganh)
-            <div class="home2421">
-                <div class="home24211">{{ $chuyenNganh->ten_khoa }}</div>
-                <div class="home24212">{{ $chuyenNganh->ten_chuyennganh }}</div>
-                <div class="home24213">
-                    <div class="home242131">
-                        <button type="button" class="icon-button">
-                            <img src="{{ Vite::asset('resources/image/thuan/homeButtonIcon' . ($index + 1) . '.png') }}" alt="">
+                    <div class="expand-section">
+                        <button class="expand-toggle" id="expandButton">
+                            <span class="expand-text">Xem thêm môn học</span>
+                            <img src="{{ asset('storage/thuan/expand-arrow.png') }}"
+                                 alt="expand"
+                                 class="expand-icon"
+                                 onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjZjU3ZjE3Ij48cGF0aCBkPSJNNy40MSA4LjU5TDEyIDEzLjE3bDQuNTktNC41OEwxOCAxMGwtNiA2LTYtNiAxLjQxLTEuNDF6Ii8+PC9zdmc+'"/>
                         </button>
                     </div>
-                    <div class="home242132">Chương trình đào tạo kỹ sư bằng chính qui, hệ 4 năm</div>
                 </div>
-                <div class="home24213">
-                    <div class="home242131">
-                        <button type="button" class="icon-button">
-                            <img src="{{ Vite::asset('resources/image/thuan/homeButtonIcon' . ($index + 1) . '.png') }}" alt="">
-                        </button>
-                    </div>
-                    <div class="home242132">Hỗ trợ việc làm sau tốt nghiệp</div>
-                </div>
-                <div class="home24213">
-                    <div class="home242131">
-                        <button type="button" class="icon-button">
-                            <img src="{{ Vite::asset('resources/image/thuan/homeButtonIcon' . ($index + 1) . '.png') }}" alt="">
-                        </button>
-                    </div>
-                    <div class="home242132">Liên kết học tập sau tốt nghiệp với đối tác nước ngoài</div>
-                </div>
-                <div class="{{ $index === 0 ? 'home24214' : 'home24215' }}">
-                    <form action="{{ route('hoa.hocphi.add', ['id_chuyennganh' => $chuyenNganh->id_chuyennganh]) }}" method="POST">
-                        @csrf
-                        <button type="submit">Đăng ký ngay</button>
-                    </form>
+                <div class="homeLineBreak"></div>
+            </div>
+
+
+            <div class="home24">
+
+
+                <div class="home241">Đăng ký chuyên ngành</div>
+                <div class="home242">
+                    @foreach($topChuyenNganhs as $index => $chuyenNganh)
+                        <div class="home2421">
+                            <div class="home24211">{{ $chuyenNganh->ten_khoa }}</div>
+                            <div class="home24212">{{ $chuyenNganh->ten_chuyennganh }}</div>
+                            <div class="home24213">
+                                <div class="home242131">
+                                    <button type="button" class="icon-button">
+                                        <img
+                                            src="{{ Vite::asset('resources/image/thuan/homeButtonIcon' . ($index + 1) . '.png') }}"
+                                            alt="">
+                                    </button>
+                                </div>
+                                <div class="home242132">Chương trình đào tạo kỹ sư bằng chính qui, hệ 4 năm</div>
+                            </div>
+                            <div class="home24213">
+                                <div class="home242131">
+                                    <button type="button" class="icon-button">
+                                        <img
+                                            src="{{ Vite::asset('resources/image/thuan/homeButtonIcon' . ($index + 1) . '.png') }}"
+                                            alt="">
+                                    </button>
+                                </div>
+                                <div class="home242132">Hỗ trợ việc làm sau tốt nghiệp</div>
+                            </div>
+                            <div class="home24213">
+                                <div class="home242131">
+                                    <button type="button" class="icon-button">
+                                        <img
+                                            src="{{ Vite::asset('resources/image/thuan/homeButtonIcon' . ($index + 1) . '.png') }}"
+                                            alt="">
+                                    </button>
+                                </div>
+                                <div class="home242132">Liên kết học tập sau tốt nghiệp với đối tác nước ngoài</div>
+                            </div>
+                            <div class="{{ $index === 0 ? 'home24214' : 'home24215' }}">
+                                <form
+                                    action="{{ route('hoa.hocphi.add', ['id_chuyennganh' => $chuyenNganh->id_chuyennganh]) }}"
+                                    method="POST">
+                                    @csrf
+                                    <button type="submit">Đăng ký ngay</button>
+                                </form>
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
             </div>
-        @endforeach
-    </div>
-</div>
 
 
-
-
-        <div class="home-events">
-            <div class="event-header">
-                <h2>Sự Kiện Sắp Diễn Ra</h2>
-                <p>Các hoạt động và sự kiện nổi bật của trường</p>
-            </div>
-            <div class="event-grid">
-                <div class="event-card">
-                    <div class="event-date">
-                        <span class="day">15</span>
-                        <span class="month">Tháng 8</span>
+            <div class="home-events">
+                <div class="event-header">
+                    <h2>Sự Kiện Sắp Diễn Ra</h2>
+                    <p>Các hoạt động và sự kiện nổi bật của trường</p>
+                </div>
+                <div class="event-grid">
+                    <div class="event-card">
+                        <div class="event-date">
+                            <span class="day">15</span>
+                            <span class="month">Tháng 8</span>
+                        </div>
+                        <div class="event-content">
+                            <h3>Hội Thảo Công Nghệ AI</h3>
+                            <p class="event-time"><i class="far fa-clock"></i> 09:00 - 16:00</p>
+                            <p class="event-location"><i class="fas fa-map-marker-alt"></i> Hội trường A</p>
+                            <p class="event-desc">Tìm hiểu về ứng dụng AI trong giáo dục và nghiên cứu</p>
+                            <button class="event-register">Đăng ký tham gia</button>
+                        </div>
                     </div>
-                    <div class="event-content">
-                        <h3>Hội Thảo Công Nghệ AI</h3>
-                        <p class="event-time"><i class="far fa-clock"></i> 09:00 - 16:00</p>
-                        <p class="event-location"><i class="fas fa-map-marker-alt"></i> Hội trường A</p>
-                        <p class="event-desc">Tìm hiểu về ứng dụng AI trong giáo dục và nghiên cứu</p>
-                        <button class="event-register">Đăng ký tham gia</button>
+                    <!-- More event cards -->
+                </div>
+            </div>
+
+            <div class="home-achievements">
+                <div class="achievement-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">15,000+</span>
+                        <span class="stat-label">Sinh viên</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">500+</span>
+                        <span class="stat-label">Giảng viên</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">50+</span>
+                        <span class="stat-label">Đối tác doanh nghiệp</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">95%</span>
+                        <span class="stat-label">Tỷ lệ việc làm</span>
                     </div>
                 </div>
-                <!-- More event cards -->
+            </div>
+
+            <div class="home-news">
+                <div class="news-header">
+                    <div></div>
+                    <h2 >Tin Tức & Thông Báo</h2>
+                    <a href="#" class="view-all">Xem tất cả</a>
+                </div>
+                <div class="news-grid">
+                    <div class="news-card">
+                        <img src="{{ Vite::asset('resources/image/thuan/news1.jpg') }}" alt="News">
+                        <div class="news-content">
+                            <span class="news-date">12 Tháng 8, 2023</span>
+                            <h3>Lễ tốt nghiệp khóa 2023</h3>
+                            <p>Hơn 3000 sinh viên đã tốt nghiệp trong năm học 2022-2023...</p>
+                            <a href="#" class="read-more">Đọc thêm</a>
+                        </div>
+                    </div>
+                    <!-- More news cards -->
+                </div>
+            </div>
+
+            <div class="home-partners">
+                <h2 >Đối Tác Của Chúng Tôi</h2>
+                <div class="partner-slider">
+                    <div class="partner-logo">
+                        <img src="{{ Vite::asset('resources/image/thuan/partner1.png') }}" alt="Partner 1">
+                    </div>
+                    <div class="partner-logo">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/2560px-Google_2015_logo.svg.png" alt="Google">
+                    </div>
+                    <div class="partner-logo">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IBM_logo.svg/2560px-IBM_logo.svg.png" alt="IBM">
+                    </div>
+                    <div class="partner-logo">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/2560px-Netflix_2015_logo.svg.png" alt="Netflix">
+                    </div>
+                    <div class="partner-logo">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/2560px-Amazon_logo.svg.png" alt="Amazon">
+                    </div>
+
+                </div>
             </div>
         </div>
-
-        <div class="home-achievements">
-            <div class="achievement-stats">
-                <div class="stat-item">
-                    <span class="stat-number">15,000+</span>
-                    <span class="stat-label">Sinh viên</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">500+</span>
-                    <span class="stat-label">Giảng viên</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">50+</span>
-                    <span class="stat-label">Đối tác doanh nghiệp</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">95%</span>
-                    <span class="stat-label">Tỷ lệ việc làm</span>
-                </div>
+    @else
+        <div class="home1-2">
+            <div class="video-slider">
+                <a class="slider-prev" onclick="window.prevVideo()">❮</a>
+                <video id="mainVideo" autoplay muted playsinline preload="auto">
+                    <source src="{{ Vite::asset('resources/video/thuan/ab.mp4') }}" type="video/mp4">
+                </video>
+                <a class="slider-next" onclick="window.nextVideo()">❯</a>
             </div>
         </div>
-
-        <div class="home-news">
-            <div class="news-header">
-                <h2>Tin Tức & Thông Báo</h2>
-                <a href="#" class="view-all">Xem tất cả</a>
-            </div>
-            <div class="news-grid">
-                <div class="news-card">
-                    <img src="{{ Vite::asset('resources/image/thuan/news1.jpg') }}" alt="News">
-                    <div class="news-content">
-                        <span class="news-date">12 Tháng 8, 2023</span>
-                        <h3>Lễ tốt nghiệp khóa 2023</h3>
-                        <p>Hơn 3000 sinh viên đã tốt nghiệp trong năm học 2022-2023...</p>
-                        <a href="#" class="read-more">Đọc thêm</a>
+        <div class="home2">
+            <div class="home21">
+                <div class="home211">
+                    <div class="content-wrapper">
+                        <h2>Nền tảng vững chắc</h2>
+                        <p class="subtitle">Hội nhập quốc tế - Vươn tới tương lai</p>
+                        <div class="action-button">
+                            <button class="hover-effect">Tìm hiểu thêm</button>
+                        </div>
                     </div>
                 </div>
-                <!-- More news cards -->
-            </div>
-        </div>
-
-        <div class="home-partners">
-            <h2>Đối Tác Của Chúng Tôi</h2>
-            <div class="partner-slider">
-                <div class="partner-logo">
-                    <img src="{{ Vite::asset('resources/image/thuan/partner1.png') }}" alt="Partner 1">
+                <div class="home212">
+                    <div class="image-wrapper">
+                        <img src="{{ asset('storage/thuan/homeImage1.png') }}"
+                             alt="University Image"
+                             onerror="this.src='{{ asset('storage/thuan/default.png') }}'">
+                        <div class="image-caption">Môi trường học tập hiện đại</div>
+                    </div>
                 </div>
-                <!-- More partner logos -->
+            </div>
+
+
+            <div class="home22">
+                <div class="home221">Chuyên ngành đào tạo</div>
+                @if(isset($error))
+                    <div class="alert alert-danger">
+                        {{ $error }}
+                    </div>
+                @else
+                    <div class="home222-wrapper">
+                        <div class="home222">
+                            @if($chuyenNganhs->isNotEmpty())
+                                <a class="slider-prev" onclick="changeCategory(-1)">❮</a>
+                                <a class="slider-next" onclick="changeCategory(1)">❯</a>
+
+                                <div class="home222-track">
+                                    @foreach($chuyenNganhs->chunk(4) as $nhom)
+                                        <div class="home222-group">
+                                            @foreach($nhom as $chuyenNganh)
+                                                <div class="home2221">
+                                                    <a href="{{ route('chuyennganh.show', $chuyenNganh->id_chuyennganh) }}"
+                                                       class="chuyennganh-link">
+                                                        <div class="home22211">
+                                                            <img src="{{ $chuyenNganh->image_url }}"
+                                                                 alt="{{ $chuyenNganh->ten_chuyennganh }}"
+                                                                 onerror="this.onerror=null; this.src='/hoa/default.png'"
+                                                                 loading="lazy">
+                                                        </div>
+                                                        <div class="home22212">{{ $chuyenNganh->ten_khoa }}</div>
+                                                        <div class="home22212">{{ $chuyenNganh->ten_chuyennganh }}</div>
+                                                    </a>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endforeach
+                                </div>
+
+                                <div class="slider-navigation">
+                                    @for($i = 0; $i < $soNhom; $i++)
+                                        <span class="nav-dot {{ $i === 0 ? 'active' : '' }}"
+                                              onclick="goToCategory({{ $i }})"></span>
+                                    @endfor
+                                </div>
+                            @else
+                                <div class="alert alert-info">
+                                    Không có dữ liệu chuyên ngành
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                @endif
+            </div>
+
+
+
+
+
+            <div class="home24">
+
+
+                <div class="home241">Đăng ký chuyên ngành</div>
+                <div class="home242">
+                    @foreach($topChuyenNganhs as $index => $chuyenNganh)
+                        <div class="home2421">
+                            <div class="home24211">{{ $chuyenNganh->ten_khoa }}</div>
+                            <div class="home24212">{{ $chuyenNganh->ten_chuyennganh }}</div>
+                            <div class="home24213">
+                                <div class="home242131">
+                                    <button type="button" class="icon-button">
+                                        <img
+                                            src="{{ Vite::asset('resources/image/thuan/homeButtonIcon' . ($index + 1) . '.png') }}"
+                                            alt="">
+                                    </button>
+                                </div>
+                                <div class="home242132">Chương trình đào tạo kỹ sư bằng chính qui, hệ 4 năm</div>
+                            </div>
+                            <div class="home24213">
+                                <div class="home242131">
+                                    <button type="button" class="icon-button">
+                                        <img
+                                            src="{{ Vite::asset('resources/image/thuan/homeButtonIcon' . ($index + 1) . '.png') }}"
+                                            alt="">
+                                    </button>
+                                </div>
+                                <div class="home242132">Hỗ trợ việc làm sau tốt nghiệp</div>
+                            </div>
+                            <div class="home24213">
+                                <div class="home242131">
+                                    <button type="button" class="icon-button">
+                                        <img
+                                            src="{{ Vite::asset('resources/image/thuan/homeButtonIcon' . ($index + 1) . '.png') }}"
+                                            alt="">
+                                    </button>
+                                </div>
+                                <div class="home242132">Liên kết học tập sau tốt nghiệp với đối tác nước ngoài</div>
+                            </div>
+                            <div class="{{ $index === 0 ? 'home24214' : 'home24215' }}">
+                                <form
+                                    action="{{ route('hoa.hocphi.add', ['id_chuyennganh' => $chuyenNganh->id_chuyennganh]) }}"
+                                    method="POST">
+                                    @csrf
+                                    <button type="submit">Đăng ký ngay</button>
+                                </form>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+
+
+            <div class="home-events">
+                <div class="event-header">
+                    <h2>Sự Kiện Sắp Diễn Ra</h2>
+                    <p>Các hoạt động và sự kiện nổi bật của trường</p>
+                </div>
+                <div class="event-grid">
+                    <div class="event-card">
+                        <div class="event-date">
+                            <span class="day">15</span>
+                            <span class="month">Tháng 8</span>
+                        </div>
+                        <div class="event-content">
+                            <h3>Hội Thảo Công Nghệ AI</h3>
+                            <p class="event-time"><i class="far fa-clock"></i> 09:00 - 16:00</p>
+                            <p class="event-location"><i class="fas fa-map-marker-alt"></i> Hội trường A</p>
+                            <p class="event-desc">Tìm hiểu về ứng dụng AI trong giáo dục và nghiên cứu</p>
+                            <button class="event-register">Đăng ký tham gia</button>
+                        </div>
+                    </div>
+                    <!-- More event cards -->
+                </div>
+            </div>
+
+            <div class="home-achievements">
+                <div class="achievement-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">15,000+</span>
+                        <span class="stat-label">Sinh viên</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">500+</span>
+                        <span class="stat-label">Giảng viên</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">50+</span>
+                        <span class="stat-label">Đối tác doanh nghiệp</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">95%</span>
+                        <span class="stat-label">Tỷ lệ việc làm</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="home-news">
+                <div class="news-header">
+                    <div></div>
+                    <h2>Tin Tức & Thông Báo</h2>
+                    <a href="#" class="view-all">Xem tất cả</a>
+                </div>
+                <div class="news-grid">
+                    <div class="news-card">
+                        <img src="{{ Vite::asset('resources/image/thuan/news1.jpg') }}" alt="News">
+                        <div class="news-content">
+                            <span class="news-date">12 Tháng 8, 2023</span>
+                            <h3>Lễ tốt nghiệp khóa 2023</h3>
+                            <p>Hơn 3000 sinh viên đã tốt nghiệp trong năm học 2022-2023...</p>
+                            <a href="#" class="read-more">Đọc thêm</a>
+                        </div>
+                    </div>
+                    <!-- More news cards -->
+                </div>
+            </div>
+
+            <div class="home-partners">
+                <h2 >Đối Tác Của Chúng Tôi</h2>
+                <div class="partner-slider">
+                    <div class="partner-logo">
+                        <img src="{{ Vite::asset('resources/image/thuan/partner1.png') }}" alt="Partner 1">
+                    </div>
+                    <div class="partner-logo">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/2560px-Google_2015_logo.svg.png" alt="Google">
+                    </div>
+                    <div class="partner-logo">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/IBM_logo.svg/2560px-IBM_logo.svg.png" alt="IBM">
+                    </div>
+                    <div class="partner-logo">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/2560px-Netflix_2015_logo.svg.png" alt="Netflix">
+                    </div>
+                    <div class="partner-logo">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Amazon_logo.svg/2560px-Amazon_logo.svg.png" alt="Amazon">
+                    </div>
+
+                </div>
             </div>
         </div>
-    </div>
+    @endauth
 
 @endsection
 @section('scripts')
@@ -865,12 +1329,12 @@
         window.slideInterval = null;
 
         // Make functions global
-        window.nextVideo = function() {
+        window.nextVideo = function () {
             window.currentVideoIndex = (window.currentVideoIndex + 1) % window.videos.length;
             updateVideo();
         };
 
-        window.prevVideo = function() {
+        window.prevVideo = function () {
             window.currentVideoIndex = (window.currentVideoIndex - 1 + window.videos.length) % window.videos.length;
             updateVideo();
         };
@@ -921,7 +1385,7 @@
         }
 
         // Initialize when document is ready
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const videoElement = document.getElementById('mainVideo');
             const sliderContainer = document.querySelector('.video-slider');
 
@@ -949,7 +1413,7 @@
         window.currentCategoryIndex = 0;
         window.categoryInterval;
 
-        window.changeCategory = function(direction) {
+        window.changeCategory = function (direction) {
             const track = document.querySelector('.home222-track');
             if (!track) return;
 
@@ -985,7 +1449,7 @@
             });
         }
 
-        window.goToCategory = function(index) {
+        window.goToCategory = function (index) {
             window.currentCategoryIndex = index;
             updateCategorySlider();
             resetCategoryInterval();
@@ -1006,7 +1470,7 @@
         }
 
         // Initialize category slider when document is ready
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Initialize both video and category sliders
             const categoryTrack = document.querySelector('.home222-track');
             if (categoryTrack) {
@@ -1026,7 +1490,7 @@
     </script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const subjectList = document.getElementById('subjectList');
             const expandButton = document.getElementById('expandButton');
             const expandIcon = expandButton.querySelector('.expand-icon');
@@ -1034,12 +1498,18 @@
 
             let isExpanded = false;
 
-            expandButton.addEventListener('click', function() {
+            expandButton.addEventListener('click', function () {
                 isExpanded = !isExpanded;
                 subjectList.classList.toggle('expanded');
                 expandIcon.classList.toggle('rotated');
                 expandText.textContent = isExpanded ? 'Thu gọn' : 'Xem thêm môn học';
             });
+        });
+    </script>
+    <script>
+        // Add animation delay for each logo
+        document.querySelectorAll('.partner-logo').forEach((logo, index) => {
+            logo.style.setProperty('--i', index);
         });
     </script>
 @endsection

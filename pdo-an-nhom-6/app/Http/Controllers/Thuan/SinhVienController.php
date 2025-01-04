@@ -4,17 +4,21 @@ namespace App\Http\Controllers\Thuan;
 
 use App\Http\Controllers\Controller;
 use App\Services\Thuan\KhoaService;
+use App\Services\Thuan\SinhVienService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class SinhVienController extends Controller
 {
     protected $khoaService;
+    protected $sinhVienService;
 
-    public function __construct(KhoaService $khoaService)
+    public function __construct(KhoaService $khoaService, SinhVienService $sinhVienService)
     {
         $this->khoaService = $khoaService;
+        $this->sinhVienService = $sinhVienService;
     }
 
     public function show($id)
@@ -245,45 +249,6 @@ class SinhVienController extends Controller
     }
 
 
-    public function getLopList()
-    {
-        try {
-            \Log::info('Getting lop list');
-
-            $lops = DB::table('lop as l')
-                ->join('chuyennganh as cn', 'l.id_chuyennganh', '=', 'cn.id_chuyennganh')
-                ->select(
-                    'l.id_lop',
-                    'l.ten_lop',
-                    'l.nam_vao_hoc',
-                    'cn.id_chuyennganh',
-                    'cn.ten_chuyennganh'
-                )
-                ->orderBy('l.nam_vao_hoc', 'desc')
-                ->orderBy('l.ten_lop')
-                ->get();
-
-            \Log::info('Found lops:', ['count' => $lops->count()]);
-
-            return response()->json([
-                'success' => true,
-                'data' => $lops,
-                'count' => $lops->count()
-            ]);
-
-        } catch (\Exception $e) {
-            \Log::error('Error in getLopList:', [
-                'message' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-
-            return response()->json([
-                'success' => false,
-                'message' => 'Có lỗi xảy ra khi lấy danh sách lớp',
-                'error' => $e->getMessage()
-            ], 500);
-        }
-    }
 
     public function store(Request $request)
     {
@@ -391,6 +356,99 @@ class SinhVienController extends Controller
                 'success' => false,
                 'message' => 'Có lỗi xảy ra khi thêm sinh viên',
                 'errors' => ['general' => [$e->getMessage()]]
+            ], 500);
+        }
+    }
+
+    public function dangKyLop()
+    {
+        try {
+            // Get students lists
+            $result = $this->sinhVienService->getStudentsLists();
+
+            // Get khoa list
+            $khoaResult = $this->khoaService->getKhoasWithChuyenNganh();
+
+            // Get lop list
+            $lopResult = $this->sinhVienService->getLopList();
+
+            if (!$result['success']) {
+                return back()->with('error', $result['message']);
+            }
+
+            return view('thuan.dang-ky-lop', [
+                'unassignedStudents' => $result['data']['unassigned'],
+                'assignedStudents' => $result['data']['assigned'],
+                'khoas' => $khoaResult['success'] ? $khoaResult['data'] : collect([]),
+                'lops' => $lopResult['success'] ? $lopResult['data'] : collect([]) ,
+                'allStudents' => $result['data']
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error in dangKyLop: ' . $e->getMessage());
+            return back()->with('error', 'Có lỗi xảy ra');
+        }
+    }
+
+    public function getLopList()
+    {
+        try {
+            $result = $this->sinhVienService->getLopList();
+
+            return response()->json($result, 200, [
+                'Content-Type' => 'application/json'
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Controller: Error in getLopList', [
+                'error' => $e->getMessage()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Có lỗi xảy ra khi lấy danh sách lớp'
+            ], 500);
+        }
+    }
+
+    public function assignStudent(Request $request)
+    {
+        try {
+            Log::info('Controller: Starting assignStudent', [
+                'request_data' => $request->except(['ten_sinhvien'])
+            ]);
+
+            $validated = $request->validate([
+                'id_nguoidung' => 'required|exists:nguoidung,id_nguoidung',
+                'id_lop' => 'required|exists:lop,id_lop'
+            ]);
+
+            Log::info('Controller: Validation passed');
+
+            $result = $this->sinhVienService->assignStudent($validated);
+
+            Log::info('Controller: Got assignment result', [
+                'success' => $result['success']
+            ]);
+
+            if (!$result['success']) {
+                Log::warning('Controller: Assignment failed', [
+                    'message' => $result['message']
+                ]);
+                return response()->json($result, 400);
+            }
+
+            return redirect()->route('sinhvien.dangky')
+                ->with('success', 'Phân lớp thành công');
+
+        } catch (\Exception $e) {
+            Log::error('Controller: Error in assignStudent', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Có lỗi xảy ra khi phân lớp'
             ], 500);
         }
     }

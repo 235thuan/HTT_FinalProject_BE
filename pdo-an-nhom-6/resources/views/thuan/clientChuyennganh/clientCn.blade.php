@@ -235,15 +235,6 @@
             height: 202px;
         }
 
-        .subject-image {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            border-radius: 12px;
-            background-position: center center;
-            background-size: cover;
-            background-repeat: no-repeat;
-        }
 
         .subject-button {
             position: absolute;
@@ -381,6 +372,7 @@
             font-size: 16px;
             line-height: 24px;
             margin-bottom: 5px;
+            font-weight: bold;
         }
 
         .course-subtitle {
@@ -393,7 +385,6 @@
         .course-price {
             color: #030303;
             font-size: 16px;
-            font-weight: bold;
             line-height: 24px;
         }
 
@@ -572,6 +563,200 @@
             }
         }
     </style>
+    <style>
+        /* Base styles */
+        .subjects-section {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        /* Grid layout */
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Subject items */
+        .subject-item {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .subject-image {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: all 0.3s ease;
+            background-position: center;
+            background-repeat: no-repeat;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .subject-img {
+
+            width: 70%;
+            height: 100%;
+            object-fit: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .subject-button {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #0b83ff;
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border: 1px solid #0b83ff;
+            text-align: center;
+            /* Handle text overflow */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 90%; /* Limit width to show ellipsis */
+
+        }
+
+        .subject-button:hover {
+            background-color: #0969d7;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Show full text on hover */
+        .subject-button:hover::after {
+            content: attr(title); /* Uses the title attribute as content */
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 5px 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            border-radius: 4px;
+            font-size: 14px;
+            white-space: normal; /* Allow text wrapping in tooltip */
+            max-width: 200px; /* Maximum tooltip width */
+            z-index: 1000;
+            margin-bottom: 5px;
+        }
+
+        /* Expand section */
+        .expand-section {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .expand-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            background-color: #0b83ff;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .expand-toggle:hover {
+            background-color: #0969d7;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .expand-icon {
+            width: 20px;
+            height: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        /* States */
+        .hidden {
+            display: none;
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+
+        .expand-toggle.expanded {
+            background-color: #0969d7;
+        }
+
+        .expand-toggle.expanded .expand-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Responsive breakpoints */
+        @media (max-width: 1200px) {
+            .subjects-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .subjects-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .img-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (max-width: 576px) {
+            .subjects-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+
+    </style>
+    @php
+        $defaultImageUrl = 'https://images.unsplash.com/photo-1484335629320-0e089b87a106?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wyMDUzMDJ8MHwxfHNlYXJjaHw1fHxNYXRoJTJDJTIwTnVtYmVycyUyQyUyMEVxdWF0aW9uc3xlbnwxfHx8fDE3MjkxOTkxMzJ8MA&ixlib=rb-4.0.3&q=80&w=1080';
+    @endphp
     <main>
         <div class="container ">
             <div class="cards-container">
@@ -616,88 +801,122 @@
             <!-- Subjects Section -->
             <div class="subjects-section">
                 <div class="section-title">Các môn học</div>
-                <div class="subjects-grid">
-                    <!-- Math -->
-                    <div class="subject-item">
-                        <div class="subject-image"
-                             style="background-image: url('https://images.unsplash.com/photo-1484335629320-0e089b87a106?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wyMDUzMDJ8MHwxfHNlYXJjaHw1fHxNYXRoJTJDJTIwTnVtYmVycyUyQyUyMEVxdWF0aW9uc3xlbnwxfHx8fDE3MjkxOTkxMzJ8MA&ixlib=rb-4.0.3&q=80&w=1080');">
-                            <button class="subject-button">Toán Học</button>
-                        </div>
+                @if(!$isLoggedIn)
+                    <div class="alert alert-info">Vui lòng đăng nhập để xem danh sách môn học</div>
+                @elseif(!$userRole)
+                    <div class="alert alert-info">Tài khoản của bạn không phải là sinh viên hoặc giáo viên</div>
+                @elseif($monHocs->isEmpty())
+                    <div class="alert alert-info">
+                        @if($userRole === 'student')
+                            Không có môn học nào cho lớp của bạn
+                        @else
+                            Không có môn học nào cho khoa của bạn
+                        @endif
                     </div>
-                    <!-- History -->
-                    <div class="subject-item">
-                        <div class="subject-image"
-                             style="background-image: url('https://images.unsplash.com/photo-1484335629320-0e089b87a106?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wyMDUzMDJ8MHwxfHNlYXJjaHw1fHxNYXRoJTJDJTIwTnVtYmVycyUyQyUyMEVxdWF0aW9uc3xlbnwxfHx8fDE3MjkxOTkxMzJ8MA&ixlib=rb-4.0.3&q=80&w=1080');">
-                            <button class="subject-button">Lịch Sử</button>
-                        </div>
+                @else
+                    {{-- First row (always visible) --}}
+                    <div class="subjects-grid">
+                        @foreach($monHocs->take(4) as $monHoc)
+                            <div class="subject-item">
+                                <div class="subject-image " style="padding: 5px;
+    border-radius: 12px;">
+                                    <div class="img-container">
+                                        <img src="{{ $monHoc->image_url ?? $defaultImageUrl }}"
+                                             alt="{{ $monHoc->ten_monhoc }}"
+                                             class="subject-img">
+                                    </div>
+
+
+                                    <a href="{{ route('client.lophoc', ['id' => $monHoc->id_monhoc]) }}"
+                                       class="subject-button" title="{{ $monHoc->ten_monhoc }}">
+                                        {{ $monHoc->ten_monhoc }}
+                                    </a>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
-                    <!-- Art -->
-                    <div class="subject-item">
-                        <div class="subject-image"
-                             style="background-image: url('https://assets.api.uizard.io/api/cdn/stream/1c46998d-b8ec-4b44-822c-14df2f5d7577.png');">
-                            <button class="subject-button">Mỹ Thuật</button>
+
+                    {{-- Additional rows (initially hidden) --}}
+                    @if($monHocs->count() > 4)
+                        <div id="expandedItems" class="hidden">
+                            @foreach($monHocs->skip(4)->chunk(4) as $rowMonHocs)
+                                <div class="subjects-grid">
+                                    @foreach($rowMonHocs as $monHoc)
+                                        <div class="subject-item">
+                                            <div class="subject-image ">
+                                                <div class="img-container">
+                                                    <img src="{{ $monHoc->image_url ?? $defaultImageUrl }}"
+                                                         alt="{{ $monHoc->ten_monhoc }}"
+                                                         class="subject-img">
+                                                </div>
+                                                <a href="{{ route('client.lophoc', ['id' => $monHoc->id_monhoc]) }}"
+                                                   class="subject-button" title="{{ $monHoc->ten_monhoc }}">
+                                                    {{ $monHoc->ten_monhoc }}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endforeach
                         </div>
-                    </div>
-                    <!-- Languages -->
-                    <div class="subject-item">
-                        <div class="subject-image"
-                             style="background-image: url('https://assets.api.uizard.io/api/cdn/stream/cfb4d084-9533-4dab-a75a-525d518f48f9.png');">
-                            <button class="subject-button">Ngoại Ngữ</button>
+
+                        <div class="expand-section">
+                            <button id="expandButton" class="expand-toggle">
+                                <span class="expand-text">Xem thêm môn học</span>
+                                <img src="{{ asset('storage/thuan/expand-arrow.png') }}"
+                                     alt="expand"
+                                     class="expand-icon">
+                            </button>
                         </div>
-                    </div>
-                </div>
+                    @endif
+                @endif
             </div>
 
             <!-- Featured Courses Section -->
             <div class="courses-section">
-                <div class="section-title">Lớp học tiêu biểu</div>
-                <div class="courses-grid">
-                    <!-- Math Course -->
-                    <div class="course-item">
-                        <div class="course-image"
-                             style="background-image: url('https://images.unsplash.com/photo-1578593139939-cccb1e98698c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wyMDUzMDJ8MHwxfHNlYXJjaHwzfHxDbGFzc3Jvb218ZW58MXx8fHwxNzI5MjM3ODM1fDA&ixlib=rb-4.0.3&q=80&w=1080');">
-                            <button class="rating-button" title="Đánh giá khóa học">9.6</button>
-                            <button class="heart-button" title="Thêm vào yêu thích">
-                                <svg class="heart-icon" viewBox="0 0 512 512">
-                                    <path
-                                        d="M0 190.9V185.1C0 115.2 50.52 55.58 119.4 44.1C164.1 36.51 211.4 51.37 244 84.02L256 96L267.1 84.02C300.6 51.37 347 36.51 392.6 44.1C461.5 55.58 512 115.2 512 185.1V190.9C512 232.4 494.8 272.1 464.4 300.4L283.7 469.1C276.2 476.1 266.3 480 256 480C245.7 480 235.8 476.1 228.3 469.1L47.59 300.4C17.23 272.1 .0003 232.4 .0003 190.9L0 190.9z"></path>
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="course-info">
-                            <div class="course-title">Khóa học Toán nâng cao</div>
-                            <div class="course-subtitle">Đại số</div>
-                            <div class="course-price">từ 1.200.000đ/khóa</div>
-                            <svg class="arrow-icon" viewBox="0 0 320 512">
-                                <path
-                                    d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"></path>
-                            </svg>
-                        </div>
-                    </div>
+                <div class="section-title">Lớp học</div>
 
-                    <!-- Biology Course -->
-                    <div class="course-item">
-                        <div class="course-image"
-                             style="background-image: url('https://images.unsplash.com/photo-1515187029135-18ee286d815b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wyMDUzMDJ8MHwxfHNlYXJjaHwxfHxDbGFzc3Jvb20lMkMlMjBMZWFybmluZyUyQyUyMFN0dWR5fGVufDF8fHx8MTcyOTIzNzgzNXww&ixlib=rb-4.0.3&q=80&w=1080');">
-                            <button class="rating-button" title="Đánh giá khóa học">9.6</button>
-                            <button class="heart-button" title="Thêm vào yêu thích">
-                                <svg class="heart-icon" viewBox="0 0 512 512">
-                                    <path
-                                        d="M0 190.9V185.1C0 115.2 50.52 55.58 119.4 44.1C164.1 36.51 211.4 51.37 244 84.02L256 96L267.1 84.02C300.6 51.37 347 36.51 392.6 44.1C461.5 55.58 512 115.2 512 185.1V190.9C512 232.4 494.8 272.1 464.4 300.4L283.7 469.1C276.2 476.1 266.3 480 256 480C245.7 480 235.8 476.1 228.3 469.1L47.59 300.4C17.23 272.1 .0003 232.4 .0003 190.9L0 190.9z"></path>
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="course-info">
-                            <div class="course-title">Khám phá Khoa học</div>
-                            <div class="course-subtitle">Sinh học</div>
-                            <div class="course-price">từ 1.600.000đ/khóa</div>
-                            <svg class="arrow-icon" viewBox="0 0 320 512">
-                                <path
-                                    d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"></path>
-                            </svg>
-                        </div>
+                @if(!$isLoggedIn)
+                    <div class="alert alert-info">
+                        Vui lòng đăng nhập để xem danh sách lớp học
                     </div>
-                </div>
+                @elseif(!$userRole)
+                    <div class="alert alert-info">
+                        Tài khoản của bạn không phải là sinh viên hoặc giáo viên
+                    </div>
+                @elseif($lops->isEmpty())
+                    <div class="alert alert-info">
+                        @if($userRole === 'student')
+                            Không có lớp học nào cho chuyên ngành của bạn
+                        @else
+                            Không có lớp học nào cho khoa của bạn
+                        @endif
+                    </div>
+                @else
+                    <div class="courses-grid">
+                        @foreach($lops as $lop)
+                            <div class="course-item">
+                                <div class="course-image"
+                                     style="background-image: url('https://images.unsplash.com/photo-1578593139939-cccb1e98698c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wyMDUzMDJ8MHwxfHNlYXJjaHwzfHxDbGFzc3Jvb218ZW58MXx8fHwxNzI5MjM3ODM1fDA&ixlib=rb-4.0.3&q=80&w=1080');">
+                                    <button class="rating-button" title="Niên khóa ">{{ $lop->nam_vao_hoc }}</button>
+{{--                                    <button class="heart-button" title="Thêm vào yêu thích">--}}
+{{--                                        <svg class="heart-icon" viewBox="0 0 512 512">--}}
+{{--                                            <path d="M0 190.9V185.1C0 115.2 50.52 55.58 119.4 44.1C164.1 36.51 211.4 51.37 244 84.02L256 96L267.1 84.02C300.6 51.37 347 36.51 392.6 44.1C461.5 55.58 512 115.2 512 185.1V190.9C512 232.4 494.8 272.1 464.4 300.4L283.7 469.1C276.2 476.1 266.3 480 256 480C245.7 480 235.8 476.1 228.3 469.1L47.59 300.4C17.23 272.1 .0003 232.4 .0003 190.9L0 190.9z"/>--}}
+{{--                                        </svg>--}}
+{{--                                    </button>--}}
+                                </div>
+                                <div class="course-info">
+                                    <div class="course-title">{{ $lop->ten_lop }}</div>
+                                    <div class="course-subtitle">{{ $lop->ten_chuyennganh }}</div>
+                                    <div class="course-price" title="Số lượng sinh viên "> Sĩ số lớp : {{ $lop->so_luong_sv }} sinh viên </div>
+                                    <svg class="arrow-icon" viewBox="0 0 320 512">
+                                        <path d="M285.476 272.971L91.132 467.314c-9.373 9.373-24.569 9.373-33.941 0l-22.667-22.667c-9.357-9.357-9.375-24.522-.04-33.901L188.505 256 34.484 101.255c-9.335-9.379-9.317-24.544.04-33.901l22.667-22.667c9.373-9.373 24.569-9.373 33.941 0L285.475 239.03c9.373 9.372 9.373 24.568.001 33.941z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
             </div>
 
             <!-- Discover Card -->
@@ -730,7 +949,9 @@
         </div>
     </div>
 @endsection
-@section('script')
+
+@section('scripts')
+
     <script>
         // Dữ liệu mô phỏng từ cơ sở dữ liệu
         const scheduleData = {
@@ -951,5 +1172,33 @@
         });
 
 
+    </script>
+
+
+    <script>
+        console.log('check script');
+        document.addEventListener('DOMContentLoaded', function () {
+            const expandButton = document.getElementById('expandButton');
+            const expandedItems = document.getElementById('expandedItems');
+            const expandText = document.querySelector('.expand-text');
+            const expandIcon = document.querySelector('.expand-icon');
+
+            if (expandButton && expandedItems) {
+                expandButton.addEventListener('click', function () {
+                    // Toggle the 'hidden' class instead of using style.display
+                    expandedItems.classList.toggle('hidden');
+
+                    // Update button text and icon
+                    const isExpanded = !expandedItems.classList.contains('hidden');
+                    expandText.textContent = isExpanded ? 'Thu gọn' : 'Xem thêm môn học';
+                    expandIcon.style.transform = isExpanded ? 'rotate(180deg)' : 'rotate(0deg)';
+
+                    // Smooth scroll if expanding
+                    if (isExpanded) {
+                        expandedItems.scrollIntoView({behavior: 'smooth', block: 'start'});
+                    }
+                });
+            }
+        });
     </script>
 @endsection

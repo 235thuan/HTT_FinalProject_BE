@@ -50,27 +50,46 @@ class HomeController extends Controller
     public function index()
     {
         try {
-            $chuyenNganhResult = $this->chuyenNganhService->getChuyenNganhForHomePage();
             $monHocResult = $this->monHocService->getMonHocForHomePage();
+            $chuyenNganhResult = $this->chuyenNganhService->getChuyenNganhForHomePage();
             $thongkeresult = $this->thongKeService->getTopChuyenNganh();
 
-            if (!$chuyenNganhResult['success'] || !$monHocResult['success']) {
-                return view('thuan.home')->with('error', 'Có lỗi xảy ra khi tải dữ liệu');
-            }
-            if (!$thongkeresult['success']) {
-                return back()->with('error', $thongkeresult['message']);
+            // Debug the result
+            \Log::info('ThongKe Result:', ['data' => $thongkeresult]);
+
+            if (!$chuyenNganhResult['success']) {
+                return view('thuan.home')->with('error', 'Lỗi khi tải dữ liệu chuyên ngành');
             }
 
-            return view('thuan.home', [
+            if (!$monHocResult['success']) {
+                return view('thuan.home')->with('error', $monHocResult['message'] ?? 'Lỗi khi tải dữ liệu môn học');
+            }
+
+            if (!$thongkeresult['success']) {
+                return view('thuan.home')->with('error', $thongkeresult['message']);
+            }
+
+            $viewData = [
+                'topChuyenNganhs' => $thongkeresult['data'] ?? collect([]),
                 'chuyenNganhs' => $chuyenNganhResult['chuyenNganhs'],
                 'soNhom' => $chuyenNganhResult['soNhom'],
-                'monHocs' => $monHocResult['monHocs'],
-                'topChuyenNganhs' => $thongkeresult['data']
-            ]);
+                'monHocs' => $monHocResult['monHocs']
+            ];
+
+            // Debug the view data
+            \Log::info('View Data:', $viewData);
+
+            return view('thuan.home', $viewData);
 
         } catch (\Exception $e) {
             Log::error('Lỗi không mong muốn trong HomeController: ' . $e->getMessage());
-            return view('thuan.home')->with('error', 'Có lỗi xảy ra, vui lòng thử lại sau');
+            return view('thuan.home', [
+                'error' => 'Có lỗi xảy ra, vui lòng thử lại sau',
+                'topChuyenNganhs' => collect([]),
+                'chuyenNganhs' => collect([]),
+                'soNhom' => 0,
+                'monHocs' => collect([])
+            ]);
         }
     }
 

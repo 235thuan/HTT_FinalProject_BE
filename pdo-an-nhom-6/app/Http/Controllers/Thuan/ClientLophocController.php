@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\MonHoc;
 use App\Models\SinhVien;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ClientLophocController extends Controller
 {
@@ -14,43 +15,74 @@ class ClientLophocController extends Controller
     {
         try {
             if (!Auth::check()) {
-                return redirect()->route('login');
+                return redirect()->route('home');
             }
 
             $userId = Auth::user()->id_nguoidung;
-            
-            // Get current student with class info
-            $currentStudent = SinhVien::with(['lop', 'avatar'])
+            // Check user role
+            $vaiTro = DB::table('phanquyen')
                 ->where('id_nguoidung', $userId)
-                ->first();
+                ->value('id_vaitro');
 
-            if (!$currentStudent) {
-                return back()->with('error', 'Người dùng không phải là sinh viên');
+            Log::info('User role check:', ['id_vaitro' => $vaiTro]);
+
+            // For Sinh Viên (id_vaitro = 3)
+            if ($vaiTro == 3) {
+                // Existing logic for students
+                $currentStudent = SinhVien::with(['lop', 'avatar'])
+                    ->where('id_nguoidung', $userId)
+                    ->first();
+
+                if (!$currentStudent) {
+                    return back()->with('error', 'Không tìm thấy thông tin sinh viên');
+                }
+
+                return $this->showClassDetails($currentStudent->id_lop);
+            }
+            elseif ($vaiTro == 4) {
+                // If id_lop is selected, show that class's details
+                if (request()->has('id_lop')) {
+                    return $this->showClassDetails(request()->id_lop);
+                }
+
+                // Otherwise, show class selection view
+                $teacherClasses = $this->getTeacherClasses($userId);
+                return view('thuan.clientLophoc.selectClass', compact('teacherClasses'));
             }
 
-            // Get all classmates including current student
-            $allStudents = SinhVien::with(['avatar'])
-                ->where('id_lop', $currentStudent->id_lop)
-                ->orderByRaw('CASE WHEN id_nguoidung = ? THEN 0 ELSE 1 END', [$userId]) // Current user first
-                ->get();
+            return back()->with('error', 'Không có quyền truy cập');
 
-            // Get subjects (your existing code)
-            $subjects = MonHoc::select([
-                'monhoc.*',
-                'file_upload.duong_dan as image_url'
-            ])
-            ->leftJoin('file_upload', 'monhoc.id_monhoc', '=', 'file_upload.id_monhoc')
-            ->join('chuyennganh', 'monhoc.id_chuyennganh', '=', 'chuyennganh.id_chuyennganh')
-            ->join('lop', 'chuyennganh.id_chuyennganh', '=', 'lop.id_chuyennganh')
-            ->where('lop.id_lop', $currentStudent->id_lop)
-            ->where('file_upload.loai_file', 'image')
-            ->get();
 
-            return view('vuong.lophoc', compact(
-                'subjects',
-                'allStudents',
-                'currentStudent'
-            ));
+
+
+
+//            if (!$currentStudent) {
+//                return back()->with('error', 'Người dùng không phải là sinh viên');
+//            }
+//
+//            // Get all classmates including current student
+//            $allStudents = SinhVien::with(['avatar'])
+//                ->where('id_lop', $currentStudent->id_lop)
+//                ->orderByRaw('CASE WHEN id_nguoidung = ? THEN 0 ELSE 1 END', [$userId]) // Current user first
+//                ->get();
+//
+//            // Get subjects (your existing code)
+//            $subjects = MonHoc::select([
+//                'monhoc.*',
+//                'file_upload.duong_dan as image_url'
+//            ])
+//            ->leftJoin('file_upload', 'monhoc.id_monhoc', '=', 'file_upload.id_monhoc')
+//            ->join('chuyennganh', 'monhoc.id_chuyennganh', '=', 'chuyennganh.id_chuyennganh')
+//            ->join('lop', 'chuyennganh.id_chuyennganh', '=', 'lop.id_chuyennganh')
+//            ->where('lop.id_lop', $currentStudent->id_lop)
+//            ->where('file_upload.loai_file', 'image')
+//            ->get();
+//
+//            return view('vuong.lophoc', compact(
+//                'subjects',
+//                'allStudents',
+//                'currentStudent'
+//            ));
 
         } catch (\Exception $e) {
             \Log::error('Error in ClientLophocController@index: ' . $e->getMessage());
@@ -122,5 +154,50 @@ class ClientLophocController extends Controller
                 'message' => 'Có lỗi xảy ra khi tải bài học'
             ], 500);
         }
+    }
+
+
+
+    private function getTeacherClasses($userId)
+    {
+        // Get teacher's classes through khoa and chuyennganh
+        return DB::table('lop')
+            ->select([
+                'lop.*',
+                'chuyennganh.ten_chuyennganh',
+                DB::raw('(SELECT COUNT(*) FROM sinhvien WHERE sinhvien.id_lop = lop.id_lop) as so_luong_sv')
+            ])
+            ->join('chuyennganh', 'lop.id_chuyennganh', '=', 'chuyennganh.id_chuyennganh')
+            ->join('giaovien', 'chuyennganh.id_khoa', '=', 'giaovien.id_khoa')
+            ->where('giaovien.id_nguoidung', $userId)
+            ->get();
+    }
+
+    private function showClassDetails($id_lop)
+    {
+        // Get all students in the class
+        $allStudents = SinhVien::with(['avatar'])
+            ->where('id_lop', $id_lop)
+            ->get();
+
+        // Get subjects for the class
+        $subjects = MonHoc::select([
+            'monhoc.*',
+            'file_upload.duong_dan as image_url'
+        ])
+            ->leftJoin('file_upload', function($join) {
+                $join->on('monhoc.id_monhoc', '=', 'file_upload.id_monhoc')
+                    ->where('file_upload.loai_file', 'image');
+            })
+            ->join('chuyennganh', 'monhoc.id_chuyennganh', '=', 'chuyennganh.id_chuyennganh')
+            ->join('lop', 'chuyennganh.id_chuyennganh', '=', 'lop.id_chuyennganh')
+            ->where('lop.id_lop', $id_lop)
+            ->get();
+
+        return view('vuong.lophoc', compact(
+            'subjects',
+            'allStudents',
+            'id_lop'
+        ));
     }
 }

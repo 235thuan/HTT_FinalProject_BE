@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 02, 2025 at 01:08 AM
+-- Generation Time: Jan 04, 2025 at 05:28 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -1947,7 +1947,17 @@ INSERT INTO `chitiethocphi` (`id_chitiethocphi`, `id_hocphi`, `id_monhoc`, `ten_
 (4132, 249, 17, 'Kinh Tế Học', 1200000.00, NULL, '2024-12-31 10:37:42'),
 (4133, 249, 18, 'Lý Thuyết Tài Chính', 900000.00, NULL, '2024-12-31 10:37:42'),
 (4134, 249, 19, 'Đầu Tư Tài Chính', 900000.00, NULL, '2024-12-31 10:37:42'),
-(4135, 249, 20, 'Pháp Luật Kinh Tế', 900000.00, NULL, '2024-12-31 10:37:42');
+(4135, 249, 20, 'Pháp Luật Kinh Tế', 900000.00, NULL, '2024-12-31 10:37:42'),
+(4136, 250, 1, 'Lập Trình C', 900000.00, NULL, '2025-01-04 01:33:25'),
+(4137, 250, 2, 'Cấu Trúc Dữ Liệu', 1200000.00, NULL, '2025-01-04 01:33:25'),
+(4138, 250, 3, 'Hệ Điều Hành', 900000.00, NULL, '2025-01-04 01:33:25'),
+(4139, 250, 4, 'Mạng Máy Tính', 1200000.00, NULL, '2025-01-04 01:33:25'),
+(4140, 250, 5, 'Kỹ Thuật Phần Mềm', 900000.00, NULL, '2025-01-04 01:33:25'),
+(4141, 250, 6, 'An Toàn Thông Tin', 600000.00, NULL, '2025-01-04 01:33:25'),
+(4142, 250, 7, 'Giải Thuật', 1200000.00, NULL, '2025-01-04 01:33:25'),
+(4143, 250, 8, 'Khoa Học Dữ Liệu', 1200000.00, NULL, '2025-01-04 01:33:25'),
+(4144, 250, 9, 'Lập Trình Java', 900000.00, NULL, '2025-01-04 01:33:25'),
+(4145, 250, 10, 'Mạng Viễn Thông', 900000.00, NULL, '2025-01-04 01:33:25');
 
 -- --------------------------------------------------------
 
@@ -2405,7 +2415,8 @@ INSERT INTO `hocphi` (`id_hocphi`, `id_sinhvien`, `so_tien`, `trang_thai`) VALUE
 (244, 115, 9900000.00, 'Chưa thanh toán'),
 (245, 115, 9900000.00, 'Chưa thanh toán'),
 (248, 115, 9900000.00, 'Đã thanh toán'),
-(249, 115, 9900000.00, 'Đã thanh toán');
+(249, 115, 9900000.00, 'Đã thanh toán'),
+(250, 114, 9900000.00, 'Đã thanh toán');
 
 -- --------------------------------------------------------
 
@@ -2748,6 +2759,11 @@ CREATE TABLE `nguoidung` (
   `mat_khau` varchar(255) NOT NULL,
   `email` varchar(255) DEFAULT NULL,
   `so_dien_thoai` varchar(15) DEFAULT NULL,
+  `kinh_nghiem` text DEFAULT NULL,
+  `ky_nang_noi_bat` varchar(500) DEFAULT NULL,
+  `thanh_tich` text DEFAULT NULL,
+  `phuong_cham_song` varchar(255) DEFAULT NULL,
+  `so_thich` varchar(500) DEFAULT NULL,
   `trang_thai` enum('hoạt động','không hoạt động') DEFAULT 'hoạt động'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -2755,121 +2771,122 @@ CREATE TABLE `nguoidung` (
 -- Dumping data for table `nguoidung`
 --
 
-INSERT INTO `nguoidung` (`id_nguoidung`, `ten_dang_nhap`, `mat_khau`, `email`, `so_dien_thoai`, `trang_thai`) VALUES
-(1, 'user01', '$2y$12$3m67OSSCeJvZP6PTxm569OLJrSK7i8y5Ik0zso5m7b96AYPhl8StW', 'user01@example.com', '0901234567', 'hoạt động'),
-(2, 'user02', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user02@example.com', '0901234568', 'hoạt động'),
-(3, 'user03', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user03@example.com', '0901234569', 'hoạt động'),
-(4, 'user04', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user04@example.com', '0901234570', 'hoạt động'),
-(5, 'user05', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user05@example.com', '0901234571', 'hoạt động'),
-(6, 'user06', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user06@example.com', '0901234572', 'hoạt động'),
-(7, 'user07', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user07@example.com', '0901234573', 'hoạt động'),
-(8, 'user08', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user08@example.com', '0901234574', 'hoạt động'),
-(9, 'user09', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user09@example.com', '0901234575', 'hoạt động'),
-(10, 'user10', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user10@example.com', '0901234576', 'hoạt động'),
-(11, 'user11', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user11@example.com', '0901234577', 'hoạt động'),
-(12, 'user12', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user12@example.com', '0901234578', 'hoạt động'),
-(13, 'user13', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user13@example.com', '0901234579', 'hoạt động'),
-(14, 'user14', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user14@example.com', '0901234580', 'hoạt động'),
-(15, 'user15', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user15@example.com', '0901234581', 'hoạt động'),
-(16, 'user16', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user16@example.com', '0901234582', 'hoạt động'),
-(17, 'user17', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user17@example.com', '0901234583', 'hoạt động'),
-(18, 'user18', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user18@example.com', '0901234584', 'hoạt động'),
-(19, 'user19', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user19@example.com', '0901234585', 'hoạt động'),
-(20, 'user20', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user20@example.com', '0901234586', 'hoạt động'),
-(21, 'user21', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user21@example.com', '0901234587', 'hoạt động'),
-(22, 'user22', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user22@example.com', '0901234588', 'hoạt động'),
-(23, 'user23', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user23@example.com', '0901234589', 'hoạt động'),
-(24, 'user24', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user24@example.com', '0901234590', 'hoạt động'),
-(25, 'user25', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user25@example.com', '0901234591', 'hoạt động'),
-(26, 'user26', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user26@example.com', '0901234592', 'hoạt động'),
-(27, 'user27', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user27@example.com', '0901234593', 'hoạt động'),
-(28, 'user28', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user28@example.com', '0901234594', 'hoạt động'),
-(29, 'user29', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user29@example.com', '0901234595', 'hoạt động'),
-(30, 'user30', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user30@example.com', '0901234596', 'hoạt động'),
-(31, 'user31', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user31@example.com', '0901234597', 'hoạt động'),
-(32, 'user32', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user32@example.com', '0901234598', 'hoạt động'),
-(33, 'user33', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user33@example.com', '0901234599', 'hoạt động'),
-(34, 'user34', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user34@example.com', '0901234600', 'hoạt động'),
-(35, 'user35', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user35@example.com', '0901234601', 'hoạt động'),
-(36, 'user36', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user36@example.com', '0901234602', 'hoạt động'),
-(37, 'user37', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user37@example.com', '0901234603', 'hoạt động'),
-(38, 'user38', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user38@example.com', '0901234604', 'hoạt động'),
-(39, 'user39', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user39@example.com', '0901234605', 'hoạt động'),
-(40, 'user40', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user40@example.com', '0901234606', 'hoạt động'),
-(41, 'user41', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user41@example.com', '0901234607', 'hoạt động'),
-(42, 'user42', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user42@example.com', '0901234608', 'hoạt động'),
-(43, 'user43', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user43@example.com', '0901234609', 'hoạt động'),
-(44, 'user44', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user44@example.com', '0901234610', 'hoạt động'),
-(45, 'user45', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user45@example.com', '0901234611', 'hoạt động'),
-(46, 'user46', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user46@example.com', '0901234612', 'hoạt động'),
-(47, 'user47', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user47@example.com', '0901234613', 'hoạt động'),
-(48, 'user48', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user48@example.com', '0901234614', 'hoạt động'),
-(49, 'user49', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user49@example.com', '0901234615', 'hoạt động'),
-(50, 'user50', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user50@example.com', '0901234616', 'hoạt động'),
-(51, 'user51', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user51@example.com', '0901234617', 'hoạt động'),
-(52, 'user52', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user52@example.com', '0901234618', 'hoạt động'),
-(53, 'user53', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user53@example.com', '0901234619', 'hoạt động'),
-(54, 'user54', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user54@example.com', '0901234620', 'hoạt động'),
-(55, 'user55', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user55@example.com', '0901234621', 'hoạt động'),
-(56, 'user56', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user56@example.com', '0901234622', 'hoạt động'),
-(57, 'user57', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user57@example.com', '0901234623', 'hoạt động'),
-(58, 'user58', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user58@example.com', '0901234624', 'hoạt động'),
-(59, 'user59', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user59@example.com', '0901234625', 'hoạt động'),
-(60, 'user60', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user60@example.com', '0901234626', 'hoạt động'),
-(61, 'user61', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user61@example.com', '0901234627', 'hoạt động'),
-(62, 'user62', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user62@example.com', '0901234628', 'hoạt động'),
-(63, 'user63', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user63@example.com', '0901234629', 'hoạt động'),
-(64, 'user64', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user64@example.com', '0901234630', 'hoạt động'),
-(65, 'user65', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user65@example.com', '0901234631', 'hoạt động'),
-(66, 'user66', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user66@example.com', '0901234632', 'hoạt động'),
-(67, 'user67', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user67@example.com', '0901234633', 'hoạt động'),
-(68, 'user68', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user68@example.com', '0901234634', 'hoạt động'),
-(69, 'user69', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user69@example.com', '0901234635', 'hoạt động'),
-(70, 'user70', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user70@example.com', '0901234636', 'hoạt động'),
-(71, 'user71', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user71@example.com', '0901234637', 'hoạt động'),
-(72, 'user72', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user72@example.com', '0901234638', 'hoạt động'),
-(73, 'user73', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user73@example.com', '0901234639', 'hoạt động'),
-(74, 'user74', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user74@example.com', '0901234640', 'hoạt động'),
-(75, 'user75', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user75@example.com', '0901234641', 'hoạt động'),
-(76, 'user76', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user76@example.com', '0901234642', 'hoạt động'),
-(77, 'user77', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user77@example.com', '0901234643', 'hoạt động'),
-(78, 'user78', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user78@example.com', '0901234644', 'hoạt động'),
-(79, 'user79', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user79@example.com', '0901234645', 'hoạt động'),
-(80, 'user80', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user80@example.com', '0901234646', 'hoạt động'),
-(81, 'user81', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user81@example.com', '0901234647', 'hoạt động'),
-(82, 'user82', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user82@example.com', '0901234648', 'hoạt động'),
-(83, 'user83', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user83@example.com', '0901234649', 'hoạt động'),
-(84, 'user84', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user84@example.com', '0901234650', 'hoạt động'),
-(85, 'user85', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user85@example.com', '0901234651', 'hoạt động'),
-(86, 'user86', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user86@example.com', '0901234652', 'hoạt động'),
-(87, 'user87', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user87@example.com', '0901234653', 'hoạt động'),
-(88, 'user88', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user88@example.com', '0901234654', 'hoạt động'),
-(89, 'user89', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user89@example.com', '0901234655', 'hoạt động'),
-(90, 'user90', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user90@example.com', '0901234656', 'hoạt động'),
-(91, 'user91', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user91@example.com', '0901234657', 'hoạt động'),
-(92, 'user92', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user92@example.com', '0901234658', 'hoạt động'),
-(93, 'user93', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user93@example.com', '0901234659', 'hoạt động'),
-(94, 'user94', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user94@example.com', '0901234660', 'hoạt động'),
-(95, 'user95', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user95@example.com', '0901234661', 'hoạt động'),
-(96, 'user96', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user96@example.com', '0901234662', 'hoạt động'),
-(97, 'user97', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user97@example.com', '0901234663', 'hoạt động'),
-(98, 'user98', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user98@example.com', '0901234664', 'hoạt động'),
-(99, 'user99', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user99@example.com', '0901234665', 'hoạt động'),
-(100, 'user100', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user100@example.com', '0901234666', 'hoạt động'),
-(101, 'user150@example.com', '$2y$12$O0y5xl5SWkw8x3B7deTDD.p8R3xEUEsp8HsRHckB8ydwFzwwIETFi', 'user150@example.com', NULL, 'hoạt động'),
-(102, 'user151@example.com', '$2y$12$Yrn2/n9V3Cxi1Cf.ulz6COnnFQeCZt3e8hrlNAVwYs7AEHH0cOcWq', 'user151@example.com', NULL, 'hoạt động'),
-(103, 'user152@example.com', '$2y$12$gVPG7qIhLXwDRLCica7TbOlJeJK77kEnqMqb61BS0sgoauD2KECci', 'user152@example.com', NULL, 'hoạt động'),
-(104, 'user153@example.com', '$2y$12$gy6T3uvsyin/AJ60GhzLUeqXSMY8sGO2kpD5C1gVIbtb3jJf837t.', 'user153@example.com', NULL, 'hoạt động'),
-(105, 'user154@example.com', '$2y$12$4.Sy20IdcyYYZbP1C5R4beqogzFbCBjye5ITL1dfLEVpy0u9HEZFW', 'user154@example.com', NULL, 'hoạt động'),
-(106, 'user155@example.com', '$2y$12$4cL4y1nqqmWMWsl5AuDEDO56NMYYdbV0/n0Pu2BqOVviI3ZR7f7s6', 'user155@example.com', NULL, 'hoạt động'),
-(107, 'user156@example.com', '$2y$12$MywTjZ6U4InvHxaeJbG4MOidT7pmmVOI..ZGR4OE21uuTmwDZEI8O', 'user156@example.com', NULL, 'hoạt động'),
-(108, 'user157@example.com', '$2y$12$d4wPZWTGn7TxAhWb1WEmc.7D1ttPDtaiqO2AGLFAOWpHfHNI6W.3G', 'user157@example.com', '09012345821', 'hoạt động'),
-(109, 'user158@example.com', '$2y$12$ydBLfvojlGfUU7W6gW2UeOPVs4wM2.tyWfZ1o9WgshvGfPQxaNHO2', 'user158@example.com', NULL, 'hoạt động'),
-(110, 'user159@example.com', '$2y$12$lQ7xoawS1zpznNrwEQ2lzO/G87dkaBkAKTWPMi/gcCnp04uWwE/Jy', 'user159@example.com', NULL, 'hoạt động'),
-(111, 'user200@example.com', '$2y$12$HmZl30BApA44CQ.KUh44HucIzpkS2MPCwINj/C./04fxyeK03ysAi', 'user200@example.com', NULL, 'hoạt động'),
-(114, 'abcd598', '$2y$12$hptNtTQYuU4PGtA3RvvUbuOCn8FESlk8Bd7And9ocHa8xESUxUrie', 'abc@example.com', '09012346281', 'hoạt động'),
-(115, 'abcdefgh275', '$2y$12$YB3LDWZoaJUvFSBNcpjvtOYkfwSbAWW763o3sRggvICC5tvyicWga', 'abcdefgh@example.com', '09012346291', 'hoạt động'),
-(116, 'user999@example.com', '$2y$12$O3PgvuZ.DJ3Nt9hmC9RZUOhWrjtoQZVdFEyArYDtyxjb4Khoj2W/y', 'user999@example.com', '09012346572', 'hoạt động');
+INSERT INTO `nguoidung` (`id_nguoidung`, `ten_dang_nhap`, `mat_khau`, `email`, `so_dien_thoai`, `kinh_nghiem`, `ky_nang_noi_bat`, `thanh_tich`, `phuong_cham_song`, `so_thich`, `trang_thai`) VALUES
+(1, 'user01', '$2y$12$3m67OSSCeJvZP6PTxm569OLJrSK7i8y5Ik0zso5m7b96AYPhl8StW', 'user01@example.com', '0901234567', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(2, 'user02', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user02@example.com', '0901234568', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(3, 'user03', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user03@example.com', '0901234569', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(4, 'user04', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user04@example.com', '0901234570', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(5, 'user05', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user05@example.com', '0901234571', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(6, 'user06', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user06@example.com', '0901234572', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(7, 'user07', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user07@example.com', '0901234573', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(8, 'user08', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user08@example.com', '0901234574', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(9, 'user09', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user09@example.com', '0901234575', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(10, 'user10', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user10@example.com', '0901234576', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(11, 'user11', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user11@example.com', '0901234577', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(12, 'user12', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user12@example.com', '0901234578', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(13, 'user13', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user13@example.com', '0901234579', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(14, 'user14', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user14@example.com', '0901234580', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(15, 'user15', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user15@example.com', '0901234581', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(16, 'user16', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user16@example.com', '0901234582', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(17, 'user17', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user17@example.com', '0901234583', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(18, 'user18', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user18@example.com', '0901234584', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(19, 'user19', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user19@example.com', '0901234585', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(20, 'user20', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user20@example.com', '0901234586', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(21, 'user21', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user21@example.com', '0901234587', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(22, 'user22', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user22@example.com', '0901234588', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(23, 'user23', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user23@example.com', '0901234589', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(24, 'user24', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user24@example.com', '0901234590', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(25, 'user25', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user25@example.com', '0901234591', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(26, 'user26', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user26@example.com', '0901234592', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(27, 'user27', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user27@example.com', '0901234593', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(28, 'user28', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user28@example.com', '0901234594', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(29, 'user29', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user29@example.com', '0901234595', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(30, 'user30', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user30@example.com', '0901234596', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(31, 'user31', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user31@example.com', '0901234597', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(32, 'user32', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user32@example.com', '0901234598', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(33, 'user33', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user33@example.com', '0901234599', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(34, 'user34', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user34@example.com', '0901234600', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(35, 'user35', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user35@example.com', '0901234601', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(36, 'user36', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user36@example.com', '0901234602', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(37, 'user37', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user37@example.com', '0901234603', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(38, 'user38', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user38@example.com', '0901234604', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(39, 'user39', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user39@example.com', '0901234605', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(40, 'user40', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user40@example.com', '0901234606', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(41, 'user41', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user41@example.com', '0901234607', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(42, 'user42', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user42@example.com', '0901234608', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(43, 'user43', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user43@example.com', '0901234609', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(44, 'user44', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user44@example.com', '0901234610', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(45, 'user45', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user45@example.com', '0901234611', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(46, 'user46', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user46@example.com', '0901234612', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(47, 'user47', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user47@example.com', '0901234613', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(48, 'user48', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user48@example.com', '0901234614', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(49, 'user49', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user49@example.com', '0901234615', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(50, 'user50', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user50@example.com', '0901234616', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(51, 'user51', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user51@example.com', '0901234617', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(52, 'user52', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user52@example.com', '0901234618', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(53, 'user53', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user53@example.com', '0901234619', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(54, 'user54', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user54@example.com', '0901234620', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(55, 'user55', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user55@example.com', '0901234621', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(56, 'user56', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user56@example.com', '0901234622', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(57, 'user57', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user57@example.com', '0901234623', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(58, 'user58', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user58@example.com', '0901234624', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(59, 'user59', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user59@example.com', '0901234625', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(60, 'user60', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user60@example.com', '0901234626', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(61, 'user61', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user61@example.com', '0901234627', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(62, 'user62', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user62@example.com', '0901234628', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(63, 'user63', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user63@example.com', '0901234629', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(64, 'user64', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user64@example.com', '0901234630', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(65, 'user65', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user65@example.com', '0901234631', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(66, 'user66', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user66@example.com', '0901234632', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(67, 'user67', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user67@example.com', '0901234633', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(68, 'user68', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user68@example.com', '0901234634', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(69, 'user69', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user69@example.com', '0901234635', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(70, 'user70', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user70@example.com', '0901234636', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(71, 'user71', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user71@example.com', '0901234637', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(72, 'user72', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user72@example.com', '0901234638', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(73, 'user73', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user73@example.com', '0901234639', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(74, 'user74', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user74@example.com', '0901234640', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(75, 'user75', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user75@example.com', '0901234641', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(76, 'user76', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user76@example.com', '0901234642', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(77, 'user77', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user77@example.com', '0901234643', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(78, 'user78', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user78@example.com', '0901234644', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(79, 'user79', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user79@example.com', '0901234645', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(80, 'user80', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user80@example.com', '0901234646', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(81, 'user81', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user81@example.com', '0901234647', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(82, 'user82', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user82@example.com', '0901234648', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(83, 'user83', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user83@example.com', '0901234649', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(84, 'user84', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user84@example.com', '0901234650', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(85, 'user85', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user85@example.com', '0901234651', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(86, 'user86', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user86@example.com', '0901234652', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(87, 'user87', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user87@example.com', '0901234653', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(88, 'user88', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user88@example.com', '0901234654', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(89, 'user89', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user89@example.com', '0901234655', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(90, 'user90', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user90@example.com', '0901234656', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(91, 'user91', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user91@example.com', '0901234657', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(92, 'user92', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user92@example.com', '0901234658', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(93, 'user93', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user93@example.com', '0901234659', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(94, 'user94', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user94@example.com', '0901234660', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(95, 'user95', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user95@example.com', '0901234661', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(96, 'user96', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user96@example.com', '0901234662', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(97, 'user97', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user97@example.com', '0901234663', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(98, 'user98', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user98@example.com', '0901234664', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(99, 'user99', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user99@example.com', '0901234665', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(100, 'user100', '$2y$10$L2m5gFqA.QWUV6aZCUFxyeFojg6tU6yTk3ehXQyYSsPtvFQwzMYcW', 'user100@example.com', '0901234666', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(101, 'user150@example.com', '$2y$12$O0y5xl5SWkw8x3B7deTDD.p8R3xEUEsp8HsRHckB8ydwFzwwIETFi', 'user150@example.com', NULL, NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(102, 'user151@example.com', '$2y$12$Yrn2/n9V3Cxi1Cf.ulz6COnnFQeCZt3e8hrlNAVwYs7AEHH0cOcWq', 'user151@example.com', NULL, NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(103, 'user152@example.com', '$2y$12$gVPG7qIhLXwDRLCica7TbOlJeJK77kEnqMqb61BS0sgoauD2KECci', 'user152@example.com', NULL, NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(104, 'user153@example.com', '$2y$12$gy6T3uvsyin/AJ60GhzLUeqXSMY8sGO2kpD5C1gVIbtb3jJf837t.', 'user153@example.com', NULL, NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(105, 'user154@example.com', '$2y$12$4.Sy20IdcyYYZbP1C5R4beqogzFbCBjye5ITL1dfLEVpy0u9HEZFW', 'user154@example.com', NULL, NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(106, 'user155@example.com', '$2y$12$4cL4y1nqqmWMWsl5AuDEDO56NMYYdbV0/n0Pu2BqOVviI3ZR7f7s6', 'user155@example.com', NULL, NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(107, 'user156@example.com', '$2y$12$MywTjZ6U4InvHxaeJbG4MOidT7pmmVOI..ZGR4OE21uuTmwDZEI8O', 'user156@example.com', NULL, NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(108, 'user157@example.com', '$2y$12$d4wPZWTGn7TxAhWb1WEmc.7D1ttPDtaiqO2AGLFAOWpHfHNI6W.3G', 'user157@example.com', '09012345821', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(109, 'user158@example.com', '$2y$12$ydBLfvojlGfUU7W6gW2UeOPVs4wM2.tyWfZ1o9WgshvGfPQxaNHO2', 'user158@example.com', NULL, NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(110, 'user159@example.com', '$2y$12$lQ7xoawS1zpznNrwEQ2lzO/G87dkaBkAKTWPMi/gcCnp04uWwE/Jy', 'user159@example.com', NULL, NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(111, 'user200@example.com', '$2y$12$HmZl30BApA44CQ.KUh44HucIzpkS2MPCwINj/C./04fxyeK03ysAi', 'user200@example.com', NULL, NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(114, 'abc', '$2y$12$QMKZDRu3wdPuj1QUtDJF4OpHvhY3BYa3UqJsPksss4DsRZen2xvna', 'abc@example.com', '09012346281', 'a', 'b', 'c', 'd', 'a', 'hoạt động'),
+(115, 'abcdefgh275', '$2y$12$YB3LDWZoaJUvFSBNcpjvtOYkfwSbAWW763o3sRggvICC5tvyicWga', 'abcdefgh@example.com', '09012346291', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(116, 'user999@example.com', '$2y$12$O3PgvuZ.DJ3Nt9hmC9RZUOhWrjtoQZVdFEyArYDtyxjb4Khoj2W/y', 'user999@example.com', '09012346572', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(117, 'sinhvien100', '$2y$12$PTyUQ7fHJciD.cHuo7Fuo.BZw24Z8Xo4kVtPzaCOvgZnWuPzaH/eK', 'sinhvien100@example.com', NULL, NULL, NULL, NULL, NULL, NULL, 'hoạt động');
 
 -- --------------------------------------------------------
 
@@ -3052,7 +3069,8 @@ INSERT INTO `phanquyen` (`id_phanquyen`, `id_nguoidung`, `id_vaitro`) VALUES
 (111, 111, 3),
 (114, 114, 4),
 (115, 115, 4),
-(116, 116, 3);
+(116, 116, 3),
+(117, 117, 3);
 
 -- --------------------------------------------------------
 
@@ -3309,7 +3327,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('JwOtUNxmjQDxSRmUnmva0zIB14rm6MtXAoKnain2', 114, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoidllCdnJuQWlEZHdyYXFHaVhSWld0Z0xCY0RvVmdkYzdjRFQwaHZSdCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMCI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjExNDt9', 1735776445);
+('R3Q3ewzkG6KXIBaxjFrAMwmtUEMmoGympUS1DLga', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiRHBHVGxKcTBkOHp1RGh4eXpIZzlCckhDVm1iYnFrRmowdjRKYzNZbiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDU6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9hZG1pbi9xbG5kL2xpc3RTaW5odmllbiI7fXM6MzoidXJsIjthOjE6e3M6ODoiaW50ZW5kZWQiO3M6Mjc6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9hZG1pbiI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7fQ==', 1735964839);
 
 -- --------------------------------------------------------
 
@@ -3381,7 +3399,8 @@ INSERT INTO `sinhvien` (`id_sinhvien`, `id_nguoidung`, `ten_sinhvien`, `id_lop`)
 (111, 111, 'Nguyễn Chí Cường', 12),
 (112, 116, 'Xavier', 12),
 (114, 114, 'abc', 5),
-(115, 1, 'user01', NULL);
+(115, 1, 'user01', NULL),
+(116, 117, 'sinhvien100', 12);
 
 -- --------------------------------------------------------
 
@@ -3405,7 +3424,7 @@ CREATE TABLE `sodutaikhoan` (
 --
 
 INSERT INTO `sodutaikhoan` (`id_sodutaikhoan`, `amount`, `id_cardnumber`, `id_cvv`, `id_billingaddress`, `id_expirydate`, `created_at`, `updated_at`) VALUES
-(1, 999980199999.00, '4111111111111111', '123', '123 Main St, City', '12/25', '2024-12-31 10:12:29', '2024-12-31 03:37:42');
+(1, 999970299999.00, '4111111111111111', '123', '123 Main St, City', '12/25', '2024-12-31 10:12:29', '2025-01-03 18:33:25');
 
 -- --------------------------------------------------------
 
@@ -3460,7 +3479,8 @@ INSERT INTO `thanhtoan` (`id_thanhtoan`, `id_hocphi`, `so_tien_da_tra`, `phuong_
 (16, 230, 13500000.00, 'Thẻ tín dụng', '2025-01-01 19:12:20', 'Thành công'),
 (17, 233, 13500000.00, 'Thẻ tín dụng', '2025-01-01 19:12:20', 'Thành công'),
 (18, 236, 13500000.00, 'Thẻ tín dụng', '2025-01-01 19:12:20', 'Thành công'),
-(19, 239, 13500000.00, 'Thẻ tín dụng', '2025-01-01 19:12:20', 'Thành công');
+(19, 239, 13500000.00, 'Thẻ tín dụng', '2025-01-01 19:12:20', 'Thành công'),
+(20, 250, 9900000.00, 'Thẻ tín dụng', '2025-01-04 01:33:25', 'Thành công');
 
 -- --------------------------------------------------------
 
@@ -3552,7 +3572,52 @@ INSERT INTO `thoikhoabieu` (`id_thoikhoabieu`, `id_monhoc`, `id_giaovien`, `id_l
 (353, 6, 50, 11, 1, '2024-12-26', '08:10:00', '09:11:00'),
 (354, 6, 51, 11, 3, '2024-12-26', '07:15:00', '07:16:00'),
 (355, 6, 50, 11, 1, '2024-12-26', '07:22:00', '07:23:00'),
-(356, 6, 50, 11, 11, '2024-12-30', '08:24:00', '09:24:00');
+(356, 6, 50, 11, 11, '2024-12-30', '08:24:00', '09:24:00'),
+(401, 11, 1, 5, 17, '2024-12-30', '07:30:00', '09:00:00'),
+(402, 21, 2, 3, 9, '2024-12-30', '07:30:00', '09:00:00'),
+(403, 31, 3, 23, 83, '2024-12-30', '07:30:00', '09:00:00'),
+(404, 12, 4, 5, 18, '2024-12-31', '07:30:00', '09:00:00'),
+(405, 22, 5, 3, 10, '2024-12-31', '07:30:00', '09:00:00'),
+(406, 32, 6, 23, 84, '2024-12-31', '07:30:00', '09:00:00'),
+(407, 13, 7, 5, 19, '2025-01-02', '07:30:00', '09:00:00'),
+(408, 23, 8, 3, 11, '2025-01-02', '07:30:00', '09:00:00'),
+(409, 33, 9, 23, 85, '2025-01-02', '07:30:00', '09:00:00'),
+(410, 14, 10, 5, 20, '2025-01-03', '07:30:00', '09:00:00'),
+(411, 24, 11, 3, 12, '2025-01-03', '07:30:00', '09:00:00'),
+(412, 34, 12, 23, 86, '2025-01-03', '07:30:00', '09:00:00'),
+(413, 15, 13, 5, 21, '2024-12-30', '13:00:00', '15:00:00'),
+(414, 25, 14, 13, 67, '2024-12-30', '13:00:00', '15:00:00'),
+(415, 16, 15, 5, 22, '2024-12-31', '13:00:00', '15:00:00'),
+(416, 26, 16, 13, 68, '2024-12-31', '13:00:00', '15:00:00'),
+(417, 17, 17, 5, 23, '2025-01-02', '13:00:00', '15:00:00'),
+(418, 27, 18, 13, 69, '2025-01-02', '13:00:00', '15:00:00'),
+(419, 18, 19, 5, 24, '2025-01-03', '13:00:00', '15:00:00'),
+(420, 28, 20, 13, 70, '2025-01-03', '13:00:00', '15:00:00'),
+(421, 19, 21, 5, 17, '2025-01-06', '07:30:00', '09:00:00'),
+(422, 29, 22, 3, 9, '2025-01-06', '07:30:00', '09:00:00'),
+(423, 35, 23, 23, 83, '2025-01-06', '07:30:00', '09:00:00'),
+(424, 20, 24, 5, 18, '2025-01-07', '07:30:00', '09:00:00'),
+(425, 30, 25, 3, 10, '2025-01-07', '07:30:00', '09:00:00'),
+(426, 36, 26, 23, 84, '2025-01-07', '07:30:00', '09:00:00'),
+(427, 11, 27, 5, 19, '2025-01-08', '07:30:00', '09:00:00'),
+(428, 31, 28, 3, 11, '2025-01-08', '07:30:00', '09:00:00'),
+(429, 37, 29, 23, 85, '2025-01-08', '07:30:00', '09:00:00'),
+(430, 12, 30, 5, 20, '2025-01-09', '07:30:00', '09:00:00'),
+(431, 32, 31, 3, 12, '2025-01-09', '07:30:00', '09:00:00'),
+(432, 38, 32, 23, 86, '2025-01-09', '07:30:00', '09:00:00'),
+(433, 13, 33, 5, 21, '2025-01-10', '07:30:00', '09:00:00'),
+(434, 33, 34, 3, 9, '2025-01-10', '07:30:00', '09:00:00'),
+(435, 39, 35, 23, 83, '2025-01-10', '07:30:00', '09:00:00'),
+(436, 14, 36, 5, 22, '2025-01-06', '13:00:00', '15:00:00'),
+(437, 34, 37, 13, 67, '2025-01-06', '13:00:00', '15:00:00'),
+(438, 15, 38, 5, 23, '2025-01-07', '13:00:00', '15:00:00'),
+(439, 35, 39, 13, 68, '2025-01-07', '13:00:00', '15:00:00'),
+(440, 16, 40, 5, 24, '2025-01-08', '13:00:00', '15:00:00'),
+(441, 36, 41, 13, 69, '2025-01-08', '13:00:00', '15:00:00'),
+(442, 17, 42, 5, 25, '2025-01-09', '13:00:00', '15:00:00'),
+(443, 37, 43, 13, 70, '2025-01-09', '13:00:00', '15:00:00'),
+(444, 18, 44, 5, 26, '2025-01-10', '13:00:00', '15:00:00'),
+(445, 38, 45, 13, 71, '2025-01-10', '13:00:00', '15:00:00');
 
 -- --------------------------------------------------------
 
@@ -3956,7 +4021,7 @@ ALTER TABLE `chitietchuyennganh`
 -- AUTO_INCREMENT for table `chitiethocphi`
 --
 ALTER TABLE `chitiethocphi`
-  MODIFY `id_chitiethocphi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4136;
+  MODIFY `id_chitiethocphi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4146;
 
 --
 -- AUTO_INCREMENT for table `chitietmonhoc`
@@ -4028,7 +4093,7 @@ ALTER TABLE `hieutruong`
 -- AUTO_INCREMENT for table `hocphi`
 --
 ALTER TABLE `hocphi`
-  MODIFY `id_hocphi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=250;
+  MODIFY `id_hocphi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=251;
 
 --
 -- AUTO_INCREMENT for table `hoctap`
@@ -4088,7 +4153,7 @@ ALTER TABLE `monhoc`
 -- AUTO_INCREMENT for table `nguoidung`
 --
 ALTER TABLE `nguoidung`
-  MODIFY `id_nguoidung` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=117;
+  MODIFY `id_nguoidung` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=118;
 
 --
 -- AUTO_INCREMENT for table `noidungmonhoc`
@@ -4100,7 +4165,7 @@ ALTER TABLE `noidungmonhoc`
 -- AUTO_INCREMENT for table `phanquyen`
 --
 ALTER TABLE `phanquyen`
-  MODIFY `id_phanquyen` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=117;
+  MODIFY `id_phanquyen` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=118;
 
 --
 -- AUTO_INCREMENT for table `phonghoc`
@@ -4112,7 +4177,7 @@ ALTER TABLE `phonghoc`
 -- AUTO_INCREMENT for table `sinhvien`
 --
 ALTER TABLE `sinhvien`
-  MODIFY `id_sinhvien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=116;
+  MODIFY `id_sinhvien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=117;
 
 --
 -- AUTO_INCREMENT for table `sodutaikhoan`
@@ -4130,13 +4195,13 @@ ALTER TABLE `thanhtich`
 -- AUTO_INCREMENT for table `thanhtoan`
 --
 ALTER TABLE `thanhtoan`
-  MODIFY `id_thanhtoan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id_thanhtoan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `thoikhoabieu`
 --
 ALTER TABLE `thoikhoabieu`
-  MODIFY `id_thoikhoabieu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=357;
+  MODIFY `id_thoikhoabieu` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=446;
 
 --
 -- AUTO_INCREMENT for table `thong_bao`

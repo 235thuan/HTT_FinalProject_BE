@@ -69,6 +69,13 @@
                                     <span>Danh sách giáo viên</span>
                                 </a>
                             </li>
+                            <li>
+                                <a href="{{ route('sinhvien.dangky') }}"
+                                   class="tp-link {{ request()->routeIs('sinhvien.dangky') ? 'active' : '' }}">
+                                    <i class="mdi mdi-account-multiple" style="color: #000;"></i>
+                                    <span>Đăng ký lớp</span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </li>

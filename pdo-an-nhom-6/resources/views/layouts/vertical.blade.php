@@ -118,6 +118,7 @@
         };
     </script>
 
+    @yield('scripts')
     <!-- Custom scripts -->
     @stack('scripts')
 </body>

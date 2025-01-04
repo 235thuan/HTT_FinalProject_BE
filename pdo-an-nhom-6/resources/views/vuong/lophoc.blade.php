@@ -329,15 +329,15 @@
                             <div class="content-container">
                                 <h2>Video, bài tập, nội dung môn học ...</h2>
                                 <p>
-                                    In this lesson, we will dive deeper into the topic of risk
-                                    management, exploring the various strategies and techniques used
-                                    to identify, analyze, and mitigate risks in different scenarios.
+                                    Trong bài học này, chúng ta sẽ tìm hiểu sâu hơn về chủ đề quản lý rủi ro,
+                                    khám phá các chiến lược và kỹ thuật khác nhau được sử dụng để nhận diện,
+                                    phân tích và giảm thiểu rủi ro trong các tình huống khác nhau.
                                 </p>
-                                <h3>Tài liệu</h2>
-                                    <ul>
-                                        <li>Lesson Focus: Identifying Constraints and Assumptions</li>
-                                        <li>Lesson Focus: Scope Verification and Validation</li>
-                                    </ul>
+                                <h3>Tài liệu</h3>
+                                <ul>
+                                    <li>Trọng tâm bài học: Xác định các ràng buộc và giả định</li>
+                                    <li>Trọng tâm bài học: Xác minh và kiểm chứng phạm vi</li>
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -370,7 +370,7 @@
                                     <li>Không có sinh viên nào trong lớp</li>
                                 @endif
                             </ul>
-                            
+
                             @if($allStudents->count() > 3)
                                 <ul class="student-list-expanded" style="display: none;">
                                     @foreach($allStudents->slice(3) as $student)
@@ -532,7 +532,7 @@
         function toggleStudentList() {
             const expandedList = document.querySelector('.student-list-expanded');
             const viewAllBtn = document.querySelector('.view-all-btn');
-            
+
             if (expandedList.style.display === 'none') {
                 expandedList.style.display = 'block';
                 viewAllBtn.textContent = 'Thu gọn';

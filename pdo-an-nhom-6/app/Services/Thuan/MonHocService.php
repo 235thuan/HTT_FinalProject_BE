@@ -3,6 +3,7 @@
 namespace App\Services\Thuan;
 
 use App\Repositories\MonHocRepository;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class MonHocService
@@ -14,17 +15,29 @@ class MonHocService
         $this->monHocRepository = $monHocRepository;
     }
 
-    public function getMonHocForHomePage(): array
+
+    public function getMonHocForHomePage()
     {
         try {
-            $monHocs = $this->monHocRepository->getAllMonHoc();
-
-            if ($monHocs->isEmpty()) {
+            if (!Auth::check()) {
                 return [
                     'success' => true,
-                    'monHocs' => collect(),
+                    'monHocs' => collect([])
                 ];
             }
+
+            $userId = Auth::user()->id_nguoidung;
+            $currentStudent = $this->monHocRepository->getCurrentStudent($userId);
+
+            if (!$currentStudent) {
+                return [
+                    'success' => true,
+                    'monHocs' => collect([]),
+                    'message' => 'Người dùng không phải là sinh viên'
+                ];
+            }
+
+            $monHocs = $this->monHocRepository->getMonHocByLop($currentStudent->id_lop);
 
             return [
                 'success' => true,
@@ -32,30 +45,10 @@ class MonHocService
             ];
 
         } catch (\Exception $e) {
-            Log::error('Lỗi trong MonHocService: ' . $e->getMessage());
+            Log::error('Error in MonHocService@getMonHocForHomePage: ' . $e->getMessage());
             return [
                 'success' => false,
-                'message' => 'Có lỗi xảy ra khi lấy dữ liệu môn học',
-                'error' => $e->getMessage()
-            ];
-        }
-    }
-
-    public function getAllMonHoc()
-    {
-        try {
-            $monhocs = $this->monHocRepository->getAll();
-
-            return [
-                'success' => true,
-                'data' => $monhocs
-            ];
-        } catch (\Exception $e) {
-            \Log::error('Lỗi trong MonHocService::getAllMonHoc: ' . $e->getMessage());
-            return [
-                'success' => false,
-                'message' => 'Có lỗi xảy ra khi tải danh sách môn học',
-                'data' => []
+                'message' => 'Có lỗi xảy ra khi lấy danh sách môn học'
             ];
         }
     }

@@ -132,7 +132,7 @@ Route::prefix('admin')->group(function () {
 Route::prefix('thuan')->group(function () {
     Route::get('/chuyennganh', [HomeController::class, 'chuyenNganh'])->name('chuyennganh.index');
     Route::get('/chuyennganh/{id}', [HomeController::class, 'showChuyenNganh'])->name('chuyennganh.show');
-
+    Route::get('/about-us', [HomeController::class, 'aboutUs'])->name('aboutUs.index');
 
     Route::prefix('miengiam')->group(function () {
         Route::get('/',  [MienGiamController::class, 'index'])->name('miengiam.index');
@@ -167,11 +167,14 @@ Route::prefix('client')->group(function () {
     Route::post('/logout', [ClientAuthController::class, 'logout'])->name('client.logout');
 
     Route::get('/chuyennganh',[ClientChuyenNganhController::class, 'index'])->name('client.chuyennganh');
-
+    Route::get('/chuyennganh/so-sinh-vien/{id_chuyennganh}',
+        [ClientChuyennganhController::class, 'getSoSinhVien'])
+        ->name('client.chuyennganh.so-sinh-vien');
 
     Route::get('/lophoc', [ClientLophocController::class, 'index'])->name('client.lophoc');
     Route::get('/monhoc', [ClientMonhocController::class, 'index'])->name('client.monhoc');
     Route::get('/monhoc/{id}', [ClientLophocController::class, 'detail'])->name('client.chitietmonhoc');
+    Route::get('/monhoc-by-chuyennganh/{id}', [ClientMonhocController::class, 'getMonHocByChuyenNganh']);
 
     // Add these new routes for AJAX calls
     Route::get('/lessons/{id_monhoc}', [ClientLophocController::class, 'getLessons'])->name('client.lessons');

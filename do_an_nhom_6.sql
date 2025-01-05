@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 04, 2025 at 05:28 AM
+-- Generation Time: Jan 05, 2025 at 11:32 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -3327,7 +3327,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('R3Q3ewzkG6KXIBaxjFrAMwmtUEMmoGympUS1DLga', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiRHBHVGxKcTBkOHp1RGh4eXpIZzlCckhDVm1iYnFrRmowdjRKYzNZbiI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDU6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9hZG1pbi9xbG5kL2xpc3RTaW5odmllbiI7fXM6MzoidXJsIjthOjE6e3M6ODoiaW50ZW5kZWQiO3M6Mjc6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9hZG1pbiI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7fQ==', 1735964839);
+('5j0OyoFcEOsYMBWpL22oSSF3hH8act9L8oA3vcdw', 117, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoidTh5Q00zVUUwdlhIektCQTAwSEJyRUdTU1NPS0JCTGo0eGN3Sk9lTyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NTI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9jbGllbnQvbW9uaG9jLWJ5LWNodXllbm5nYW5oLzEiO31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxMTc7fQ==', 1736072607);
 
 -- --------------------------------------------------------
 
@@ -3400,7 +3400,7 @@ INSERT INTO `sinhvien` (`id_sinhvien`, `id_nguoidung`, `ten_sinhvien`, `id_lop`)
 (112, 116, 'Xavier', 12),
 (114, 114, 'abc', 5),
 (115, 1, 'user01', NULL),
-(116, 117, 'sinhvien100', 12);
+(116, 117, 'sinhvien100', 5);
 
 -- --------------------------------------------------------
 
@@ -3681,7 +3681,8 @@ INSERT INTO `vaitro` (`id_vaitro`, `ten_vaitro`, `mo_ta_vaitro`) VALUES
 (3, 'Sinh Viên', 'Học sinh viên tham gia học tập, đăng ký môn học, xem lịch học và điểm thi.'),
 (4, 'Giáo Viên', 'Giảng dạy, chấm điểm, theo dõi tiến độ học tập của sinh viên và hỗ trợ giáo dục.'),
 (5, 'Hiệu Trưởng', 'Quản lý chung trường học, quyết định các chính sách và giám sát các hoạt động giáo dục.'),
-(6, 'Giáo Vụ', 'Quản lý lịch học, sắp xếp phòng học, giảng viên và các vấn đề hành chính liên quan đến công tác giảng dạy.');
+(6, 'Giáo Vụ', 'Quản lý lịch học, sắp xếp phòng học, giảng viên và các vấn đề hành chính liên quan đến công tác giảng dạy.'),
+(7, 'Khách', NULL);
 
 --
 -- Indexes for dumped tables
@@ -4219,7 +4220,7 @@ ALTER TABLE `thuoctinhchung`
 -- AUTO_INCREMENT for table `vaitro`
 --
 ALTER TABLE `vaitro`
-  MODIFY `id_vaitro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_vaitro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Constraints for dumped tables

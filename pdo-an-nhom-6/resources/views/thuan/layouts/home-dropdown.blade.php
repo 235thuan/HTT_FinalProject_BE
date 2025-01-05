@@ -28,12 +28,12 @@
                 <span>Hồ sơ cá nhân</span>
             </a>
         </div>
-        <div class="dropdown-item">
-            <a href="#settings">
-                <img src="{{ Vite::asset('resources/image/thuan/homeIcon2.png') }}" alt="">
-                <span>Cài đặt</span>
-            </a>
-        </div>
+{{--        <div class="dropdown-item">--}}
+{{--            <a href="#settings">--}}
+{{--                <img src="{{ Vite::asset('resources/image/thuan/homeIcon2.png') }}" alt="">--}}
+{{--                <span>Cài đặt</span>--}}
+{{--            </a>--}}
+{{--        </div>--}}
         <div class="dropdown-item">
             <a href="javascript:void(0)" onclick="handleLogout()">
                 <img src="{{ Vite::asset('resources/image/thuan/homeIcon3.png') }}" alt="">

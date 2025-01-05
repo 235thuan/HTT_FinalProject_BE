@@ -255,7 +255,7 @@
 
         /* Add hover effect */
         .subject-button:hover {
-            background-color: #0b83ff; /* Change background color on hover */
+            background-color: #dc9421;
             color: #ffffff; /* Change text color on hover */
             transform: scale(1.05); /* Slightly increase size on hover */
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add shadow on hover */
@@ -263,7 +263,7 @@
 
         /* Optional: Add hover effect for the entire subject item */
         .subject-item:hover .subject-button {
-            background-color: #0b83ff;
+            background-color: #dc9421;
             color: #ffffff;
             transform: scale(1.05);
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -627,7 +627,7 @@
         .subject-button {
             display: inline-block;
             padding: 8px 16px;
-            background-color: #0b83ff;
+            background-color: #dc9421;
             color: white;
             border-radius: 8px;
             text-decoration: none;
@@ -635,7 +635,7 @@
             transition: all 0.3s ease;
             margin-top: 10px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            border: 1px solid #0b83ff;
+            border: 1px solid #dc9421;
             text-align: center;
             /* Handle text overflow */
             white-space: nowrap;
@@ -646,9 +646,9 @@
         }
 
         .subject-button:hover {
-            background-color: #0969d7;
+            background: linear-gradient(to right, #bc7f1d, #975905);
+            box-shadow: 0 2px 4px rgba(249, 168, 37, 0.3);
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
 
         /* Show full text on hover */
@@ -659,7 +659,7 @@
             left: 50%;
             transform: translateX(-50%);
             padding: 5px 10px;
-            background: rgba(0, 0, 0, 0.8);
+            background-color: #dc9421;
             color: white;
             border-radius: 4px;
             font-size: 14px;
@@ -680,7 +680,7 @@
             align-items: center;
             gap: 8px;
             padding: 10px 20px;
-            background-color: #0b83ff;
+            background-color: #dc9421;
             color: white;
             border: none;
             border-radius: 20px;
@@ -689,9 +689,10 @@
         }
 
         .expand-toggle:hover {
-            background-color: #0969d7;
+            background: linear-gradient(to right, #bc7f1d, #975905);
+            box-shadow: 0 2px 4px rgba(249, 168, 37, 0.3);
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
         }
 
         .expand-icon {
@@ -754,6 +755,112 @@
 
 
     </style>
+
+    <style>
+        .form-select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        #so_sinh_vien {
+            padding: 8px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+        }
+    </style>
+  <style>
+      .card2 {
+          background: #f8f9fa;
+          padding: 20px;
+          border-radius: 8px;
+          display: grid;
+          grid-template-columns: repeat(4, 1fr) auto;
+          gap: 15px;
+          align-items: center;
+      }
+
+      .text-container {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+      }
+
+      .Category-text {
+          font-size: 14px;
+          font-weight: 500;
+          color: #495057;
+      }
+
+      .Browsebytopic-text {
+          font-size: 14px;
+          color: #212529;
+      }
+
+      /* Select dropdown */
+      .form-select {
+          padding: 8px;
+          border: 1px solid #dee2e6;
+          border-radius: 4px;
+          width: 100%;
+          background: white;
+      }
+
+      /* Date inputs */
+      .form-control {
+          padding: 8px;
+          border: 1px solid #dee2e6;
+          border-radius: 4px;
+          width: 100%;
+          background: white;
+      }
+
+      /* Search button */
+      .button {
+
+          background: #dc9421;
+          border: none;
+          border-radius: 4px;
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+      }
+
+      .button:hover {
+          background: linear-gradient(to right, #b57a1c, #c67507);
+          box-shadow: 0 2px 4px rgba(249, 168, 37, 0.3);
+      }
+
+      .icon5 {
+          width: 16px;
+          height: 16px;
+          fill: white;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+          .card2 {
+              grid-template-columns: 1fr;
+          }
+
+          .button {
+              width: 100%;
+          }
+      }
+  </style>
+
     @php
         $defaultImageUrl = 'https://images.unsplash.com/photo-1484335629320-0e089b87a106?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wyMDUzMDJ8MHwxfHNlYXJjaHw1fHxNYXRoJTJDJTIwTnVtYmVycyUyQyUyMEVxdWF0aW9uc3xlbnwxfHx8fDE3MjkxOTkxMzJ8MA&ixlib=rb-4.0.3&q=80&w=1080';
     @endphp
@@ -773,26 +880,47 @@
                 <!-- Card 2 -->
                 <div class="card2">
                     <div class="text-container">
-                        <div class="Category-text">Danh mục</div>
-                        <div class="Browsebytopic-text">Duyệt theo chủ đề</div>
+                        <div class="Category-text">Học Kỳ</div>
+                        <select class="form-select Browsebytopic-text" id="hocky">
+                            <option value="">Chọn học kỳ</option>
+                            <option value="1">Học kỳ 1</option>
+                            <option value="2">Học kỳ 2</option>
+                            <option value="3">Học kỳ 3</option>
+                            <option value="4">Học kỳ 4</option>
+                        </select>
                     </div>
                     <div class="text-container">
                         <div class="Category-text">Ngày bắt đầu</div>
-                        <div class="Browsebytopic-text">Chọn ngày</div>
-                    </div>
-                    <div class="text-container">
-                        <div class="Category-text">Ngày kết thúc</div>
-                        <div class="Browsebytopic-text">Chọn ngày</div>
-                    </div>
-                    <div class="text-container">
-                        <div class="Category-text">Số học viên</div>
-                        <div class="Browsebytopic-text">Số lượng học viên</div>
+                        <input type="date"
+                               class="form-control"
+                               id="ngay_bat_dau"
+                               name="ngay_bat_dau"
+                               min="{{ date('Y-m-d') }}"
+                        >
                     </div>
 
-                    <button class="button" title="Tìm kiếm khóa học">
+                    <!-- Ngày kết thúc -->
+                    <div class="text-container">
+                        <div class="Category-text">Ngày kết thúc</div>
+                        <input type="date"
+                               class="form-control"
+                               id="ngay_ket_thuc"
+                               name="ngay_ket_thuc"
+                               min="{{ date('Y-m-d') }}"
+                        >
+                    </div>
+
+                    <!-- Số học viên -->
+                    <div class="text-container">
+                        <div class="Category-text">Số học viên</div>
+                        <div class="Browsebytopic-text" id="so_sinh_vien">
+                            {{ $soSinhVien ?? 'Đang tải...' }}
+                        </div>
+                    </div>
+
+                    <button class="button" title="Tìm kiếm">
                         <svg class="icon5" viewBox="0 0 448 512" aria-hidden="true">
-                            <path
-                                d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"></path>
+                            <path d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"></path>
                         </svg>
                     </button>
                 </div>
@@ -930,7 +1058,7 @@
                 <div class="Doyouwant-text">
                     Bạn muốn cập nhật nội dung giáo dục và tài nguyên mới nhất? Đăng ký nhận bản tin của chúng tôi!
                 </div>
-                <button class="dangkyhoc-button">Thời khóa biểu</button>
+                <button class="dangkyhoc-button"> Khám phá sự kiện </button>
             </div>
         </div>
 
@@ -938,7 +1066,7 @@
     <div id="scheduleModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Lịch Học</h2>
+                <h2>Lịch Sự Kiện Trong Tuần</h2>
                 <span class="close">&times;</span>
             </div>
             <div class="modal-body">
@@ -963,21 +1091,21 @@
                     schedule: [
                         {
                             time: 'Buổi Sáng',
-                            courseName: 'Toán Học A',
+                            courseName: 'Lễ Khai giảng Năm học mới',
                             courseTime: '8:00 - 10:00',
-                            className: 'Lớp 12A1'
+                            className: 'Hội trường A1'
                         },
                         {
                             time: 'Buổi Chiều',
-                            courseName: 'Vật Lý B',
+                            courseName: 'Hội thảo Kỹ năng mềm',
                             courseTime: '13:00 - 15:00',
-                            className: 'Lớp 11A2'
+                            className: 'Phòng hội thảo B2'
                         },
                         {
                             time: 'Buổi Tối',
-                            courseName: 'Hóa Học C',
+                            courseName: 'Giao lưu Sinh viên Quốc tế',
                             courseTime: '18:00 - 20:00',
-                            className: 'Lớp 10A3'
+                            className: 'Hội trường C3'
                         }
                     ]
                 },
@@ -987,21 +1115,21 @@
                     schedule: [
                         {
                             time: 'Buổi Sáng',
-                            courseName: 'Tiếng Anh D',
+                            courseName: 'Triển lãm Đồ án Sinh viên',
                             courseTime: '8:00 - 10:00',
-                            className: 'Lớp 12B1'
+                            className: 'Sảnh D1'
                         },
                         {
                             time: 'Buổi Chiều',
-                            courseName: 'Văn Học E',
+                            courseName: 'Tọa đàm Hướng nghiệp',
                             courseTime: '13:00 - 15:00',
-                            className: 'Lớp 11B2'
+                            className: 'Hội trường B5'
                         },
                         {
                             time: 'Buổi Tối',
-                            courseName: 'Lịch Sử F',
+                            courseName: 'Gặp gỡ Doanh nghiệp',
                             courseTime: '18:00 - 20:00',
-                            className: 'Lớp 10B3'
+                            className: 'Phòng họp E2'
                         }
                     ]
                 },
@@ -1011,21 +1139,21 @@
                     schedule: [
                         {
                             time: 'Buổi Sáng',
-                            courseName: 'Sinh Học A',
+                            courseName: 'Hội thi Sáng tạo Kỹ thuật',
                             courseTime: '8:00 - 10:00',
-                            className: 'Lớp 12C1'
+                            className: 'Hội trường A2'
                         },
                         {
                             time: 'Buổi Chiều',
-                            courseName: 'Hóa Học B',
+                            courseName: 'Cuộc thi Lập trình',
                             courseTime: '13:00 - 15:00',
-                            className: 'Lớp 11C2'
+                            className: 'Phòng Lab C4'
                         },
                         {
                             time: 'Buổi Tối',
-                            courseName: 'Vật Lý C',
+                            courseName: 'Đêm Nhạc Sinh viên',
                             courseTime: '18:00 - 20:00',
-                            className: 'Lớp 10C3'
+                            className: 'Sân khấu D3'
                         }
                     ]
                 },
@@ -1035,21 +1163,21 @@
                     schedule: [
                         {
                             time: 'Buổi Sáng',
-                            courseName: 'Toán Học D',
+                            courseName: 'Diễn đàn Sinh viên',
                             courseTime: '8:00 - 10:00',
-                            className: 'Lớp 12D1'
+                            className: 'Trung tâm A3'
                         },
                         {
                             time: 'Buổi Chiều',
-                            courseName: 'Tiếng Anh E',
+                            courseName: 'Hội thao Thể thao',
                             courseTime: '13:00 - 15:00',
-                            className: 'Lớp 11D2'
+                            className: 'Sân vận động B4'
                         },
                         {
                             time: 'Buổi Tối',
-                            courseName: 'Văn Học F',
+                            courseName: 'Đêm Giao lưu Văn nghệ',
                             courseTime: '18:00 - 20:00',
-                            className: 'Lớp 10D3'
+                            className: 'Sảnh C5'
                         }
                     ]
                 },
@@ -1059,21 +1187,21 @@
                     schedule: [
                         {
                             time: 'Buổi Sáng',
-                            courseName: 'Vật Lý A',
+                            courseName: 'Hội nghị Khoa học',
                             courseTime: '8:00 - 10:00',
-                            className: 'Lớp 12E1'
+                            className: 'Hội trường D2'
                         },
                         {
                             time: 'Buổi Chiều',
-                            courseName: 'Sinh Học B',
+                            courseName: 'Triển lãm Công nghệ',
                             courseTime: '13:00 - 15:00',
-                            className: 'Lớp 11E2'
+                            className: 'Khu trưng bày E1'
                         },
                         {
                             time: 'Buổi Tối',
-                            courseName: 'Toán Học C',
+                            courseName: 'Đêm hội Sáng tạo',
                             courseTime: '18:00 - 20:00',
-                            className: 'Lớp 10E3'
+                            className: 'Sân khấu F3'
                         }
                     ]
                 },
@@ -1083,21 +1211,21 @@
                     schedule: [
                         {
                             time: 'Buổi Sáng',
-                            courseName: 'Hóa Học D',
+                            courseName: 'Ngày hội Việc làm',
                             courseTime: '8:00 - 10:00',
-                            className: 'Lớp 12F1'
+                            className: 'Trung tâm A4'
                         },
                         {
                             time: 'Buổi Chiều',
-                            courseName: 'Toán Học E',
+                            courseName: 'Hội thảo Khởi nghiệp',
                             courseTime: '13:00 - 15:00',
-                            className: 'Lớp 11F2'
+                            className: 'Hội trường B1'
                         },
                         {
                             time: 'Buổi Tối',
-                            courseName: 'Tiếng Anh F',
+                            courseName: 'Lễ Tổng kết Sự kiện',
                             courseTime: '18:00 - 20:00',
-                            className: 'Lớp 10F3'
+                            className: 'Sảnh C1'
                         }
                     ]
                 }
@@ -1109,9 +1237,9 @@
             // Generate time column
             const timeColumn = `
         <div class="time-column">
-            <div class="time-header">Thời Gian</div>
+            <div class="time-header" style="height: 70px">Thời Gian</div>
             ${data.timeSlots.map(slot => `
-                <div class="time-slot">${slot}</div>
+                <div class="time-slot" style="height: 110px" ">${slot}</div>
             `).join('')}
         </div>
     `;
@@ -1126,7 +1254,7 @@
             ${data.timeSlots.map(timeSlot => {
                 const scheduleItem = day.schedule.find(item => item.time === timeSlot);
                 return scheduleItem ? `
-                    <div class="schedule-slot">
+                    <div class="schedule-slot" style="height: 110px;">
                         <div class="course-name">${scheduleItem.courseName}</div>
                         <div class="course-time">${scheduleItem.courseTime}</div>
                         <div class="course-class">${scheduleItem.className}</div>
@@ -1200,5 +1328,41 @@
                 });
             }
         });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Date validation
+            const ngayBatDau = document.getElementById('ngay_bat_dau');
+            const ngayKetThuc = document.getElementById('ngay_ket_thuc');
+
+            if (ngayBatDau && ngayKetThuc) {
+                ngayBatDau.addEventListener('change', function() {
+                    ngayKetThuc.min = this.value;
+                });
+            }
+
+            // Search function
+            const searchButton = document.querySelector('.button');
+            if (searchButton) {
+                searchButton.addEventListener('click', function() {
+                    const searchData = {
+                        hocky: document.getElementById('hocky').value,
+                        ngay_bat_dau: ngayBatDau.value,
+                        ngay_ket_thuc: ngayKetThuc.value,
+                        so_sinh_vien: '{{ $soSinhVien }}' // Using the value from controller
+                    };
+
+                    console.log('Search Data:', searchData);
+                    // Add your search logic here
+                });
+            }
+        });
+
+        // Optional: Format số sinh viên display
+        const soSinhVienElement = document.getElementById('so_sinh_vien');
+        if (soSinhVienElement) {
+            soSinhVienElement.textContent = `{{ $soSinhVien }} sinh viên`;
+        }
     </script>
 @endsection

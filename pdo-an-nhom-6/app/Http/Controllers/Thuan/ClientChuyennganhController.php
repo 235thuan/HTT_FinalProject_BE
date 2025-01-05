@@ -18,6 +18,7 @@ class ClientChuyennganhController extends Controller
     {
         try {
             $monHocs = collect([]);
+            $soSinhVien=collect([]);
             $lops = collect([]);
             $userRole = null;
 
@@ -46,6 +47,17 @@ class ClientChuyennganhController extends Controller
                         $chuyenNganh = DB::table('lop')
                             ->where('id_lop', $studentLop)
                             ->value('id_chuyennganh');
+
+                        $lopList = DB::table('lop')
+                            ->where('id_chuyennganh', $chuyenNganh)
+                            ->pluck('id_lop');
+
+
+                        $soSinhVien = DB::table('sinhvien')
+                            ->whereIn('id_lop', $lopList)
+                            ->count();
+
+
 
                         // 3. Get monhoc list for student
                         $monHocs = MonHoc::select([
@@ -95,7 +107,16 @@ class ClientChuyennganhController extends Controller
                             ->join('chuyennganh', 'monhoc.id_chuyennganh', '=', 'chuyennganh.id_chuyennganh')
                             ->where('chuyennganh.id_khoa', $teacherKhoa)
                             ->get();
+                        // 2. Lấy danh sách lớp thuộc khoa
+                        $lopList = DB::table('lop')
+                            ->join('chuyennganh', 'lop.id_chuyennganh', '=', 'chuyennganh.id_chuyennganh')
+                            ->where('chuyennganh.id_khoa', $teacherKhoa)
+                            ->pluck('lop.id_lop');
 
+                        // 3. Đếm số sinh viên trong các lớp này
+                        $soSinhVien = DB::table('sinhvien')
+                            ->whereIn('id_lop', $lopList)
+                            ->count();
                         // 3. Get lop list for all chuyennganh in teacher's khoa
                         $lops = DB::table('lop')
                             ->select([
@@ -120,7 +141,8 @@ class ClientChuyennganhController extends Controller
                 'monHocs' => $monHocs,
                 'lops' => $lops,
                 'isLoggedIn' => Auth::check(),
-                'userRole' => $userRole
+                'userRole' => $userRole,
+                'soSinhVien'=>$soSinhVien
             ]);
 
         } catch (\Exception $e) {
@@ -130,6 +152,28 @@ class ClientChuyennganhController extends Controller
                 'monHocs' => collect([]),
                 'lops' => collect([])
             ]);
+        }
+    }
+
+    public function getSoSinhVien($id_chuyennganh)
+    {
+        try {
+            // Get số sinh viên through lớp
+            $soSinhVien = DB::table('sinhvien')
+                ->join('lop', 'sinhvien.id_lop', '=', 'lop.id_lop')
+                ->where('lop.id_chuyennganh', $id_chuyennganh)
+                ->count();
+
+            return response()->json([
+                'status' => true,
+                'so_sinh_vien' => $soSinhVien
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Error getting so sinh vien: ' . $e->getMessage());
+            return response()->json([
+                'status' => false,
+                'message' => 'Có lỗi xảy ra'
+            ], 500);
         }
     }
 }

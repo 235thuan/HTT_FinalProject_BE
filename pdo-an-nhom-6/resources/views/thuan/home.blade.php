@@ -833,6 +833,30 @@
             }
         }
     </style>
+    <style>
+        .hover-effect {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #f9a825;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .hover-effect:hover {
+            /*background-color: #1557b0;*/
+            transform: translateY(-2px);
+            /*color: white;*/
+            text-decoration: none;
+            color: #fff;
+            background: linear-gradient(to right, #dc9421, #c67507);
+            box-shadow: 0 2px 4px rgba(249, 168, 37, 0.3);
+        }
+    </style>
+
     @auth
         <div class="home1-2">
             <div class="video-slider">
@@ -1055,9 +1079,9 @@
                     <div class="news-card">
                         <img src="{{ Vite::asset('resources/image/thuan/news1.jpg') }}" alt="News">
                         <div class="news-content">
-                            <span class="news-date">12 Tháng 8, 2023</span>
-                            <h3>Lễ tốt nghiệp khóa 2023</h3>
-                            <p>Hơn 3000 sinh viên đã tốt nghiệp trong năm học 2022-2023...</p>
+                            <span class="news-date">26 Tháng 3, 2025</span>
+                            <h3>Lễ tốt nghiệp khóa 2025</h3>
+                            <p>Hơn 3000 sinh viên đã tốt nghiệp trong năm học 2022-2025...</p>
                             <a href="#" class="read-more">Đọc thêm</a>
                         </div>
                     </div>
@@ -1104,7 +1128,7 @@
                         <h2>Nền tảng vững chắc</h2>
                         <p class="subtitle">Hội nhập quốc tế - Vươn tới tương lai</p>
                         <div class="action-button">
-                            <button class="hover-effect">Tìm hiểu thêm</button>
+                            <a href="{{ route('aboutUs.index') }}" class="hover-effect btn">Tìm hiểu thêm</a>
                         </div>
                     </div>
                 </div>
@@ -1281,9 +1305,9 @@
                     <div class="news-card">
                         <img src="{{ Vite::asset('resources/image/thuan/news1.jpg') }}" alt="News">
                         <div class="news-content">
-                            <span class="news-date">12 Tháng 8, 2023</span>
-                            <h3>Lễ tốt nghiệp khóa 2023</h3>
-                            <p>Hơn 3000 sinh viên đã tốt nghiệp trong năm học 2022-2023...</p>
+                            <span class="news-date">26 Tháng 03, 2025</span>
+                            <h3>Lễ tốt nghiệp khóa 2025</h3>
+                            <p>Hơn 3000 sinh viên đã tốt nghiệp trong năm học 2022-2025...</p>
                             <a href="#" class="read-more">Đọc thêm</a>
                         </div>
                     </div>

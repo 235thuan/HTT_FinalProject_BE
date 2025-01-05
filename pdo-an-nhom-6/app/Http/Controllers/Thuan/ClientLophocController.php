@@ -52,38 +52,6 @@ class ClientLophocController extends Controller
 
             return back()->with('error', 'Không có quyền truy cập');
 
-
-
-
-
-//            if (!$currentStudent) {
-//                return back()->with('error', 'Người dùng không phải là sinh viên');
-//            }
-//
-//            // Get all classmates including current student
-//            $allStudents = SinhVien::with(['avatar'])
-//                ->where('id_lop', $currentStudent->id_lop)
-//                ->orderByRaw('CASE WHEN id_nguoidung = ? THEN 0 ELSE 1 END', [$userId]) // Current user first
-//                ->get();
-//
-//            // Get subjects (your existing code)
-//            $subjects = MonHoc::select([
-//                'monhoc.*',
-//                'file_upload.duong_dan as image_url'
-//            ])
-//            ->leftJoin('file_upload', 'monhoc.id_monhoc', '=', 'file_upload.id_monhoc')
-//            ->join('chuyennganh', 'monhoc.id_chuyennganh', '=', 'chuyennganh.id_chuyennganh')
-//            ->join('lop', 'chuyennganh.id_chuyennganh', '=', 'lop.id_chuyennganh')
-//            ->where('lop.id_lop', $currentStudent->id_lop)
-//            ->where('file_upload.loai_file', 'image')
-//            ->get();
-//
-//            return view('vuong.lophoc', compact(
-//                'subjects',
-//                'allStudents',
-//                'currentStudent'
-//            ));
-
         } catch (\Exception $e) {
             \Log::error('Error in ClientLophocController@index: ' . $e->getMessage());
             return back()->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());

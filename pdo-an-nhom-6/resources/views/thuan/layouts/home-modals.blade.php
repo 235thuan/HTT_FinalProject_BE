@@ -7,14 +7,19 @@
             <div class="modal-content11">
                 <img src="{{ Vite::asset('resources/image/thuan/homeLogo.png') }}" alt="">
             </div>
-            <div class="modal-content12">Đăng nhập</div>
+            <div class="modal-content12" style="margin-left: 60px">Đăng nhập</div>
         </div>
         <form id="loginForm">
             <div class="modal-content2">
-                <input type="email" id="login_email" placeholder="Email">
+                <div style="text-align: left; margin-left: 22px;font-size: large">
+                    Email :
+                </div>
+
+                <input type="email" id="login_email" placeholder="Email" >
             </div>
             <div class="modal-content2">
-                <input type="password" id="login_password" placeholder="Mật khẩu">
+                <div style="text-align: left; margin-left: 22px;font-size: large">Mật khẩu: </div>
+                <input type="password" id="login_password" placeholder="Mật khẩu" >
             </div>
             <div class="modal-content4">
                 <button type="submit">Đăng nhập</button>
@@ -32,19 +37,31 @@
             <div class="modal-content11">
                 <img src="{{ Vite::asset('resources/image/thuan/homeLogo.png') }}" alt="">
             </div>
-            <div class="modal-content12">Đăng Ký</div>
+            <div class="modal-content12" style="margin-left: 60px">Đăng Ký</div>
         </div>
         <form id="registerForm">
             <div class="modal-content2">
+                <div style="text-align: left; margin-left: 22px;font-size: large">
+                    Họ và tên
+                </div>
                 <input type="text" id="register_name" placeholder="Họ và tên">
             </div>
             <div class="modal-content2">
+                <div style="text-align: left; margin-left: 22px;font-size: large">
+                    Email :
+                </div>
                 <input type="email" id="register_email" placeholder="Email">
             </div>
             <div class="modal-content2">
+                <div style="text-align: left; margin-left: 22px;font-size: large">
+                    Mật khẩu :
+                </div>
                 <input type="password" id="register_password" placeholder="Mật khẩu">
             </div>
             <div class="modal-content2">
+                <div style="text-align: left; margin-left: 22px;font-size: large">
+                    Xác nhận mật khẩu :
+                </div>
                 <input type="password" id="register_password_confirmation" placeholder="Xác nhận mật khẩu">
             </div>
             <div class="modal-content3">
@@ -70,4 +87,4 @@
             </div>
         </form>
     </div>
-</div> 
+</div>

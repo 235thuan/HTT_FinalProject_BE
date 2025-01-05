@@ -133,4 +133,8 @@ class HomeController extends Controller
             return back()->with('error', 'Có lỗi xảy ra, vui lòng thử lại sau.');
         }
     }
+
+    public function aboutUs(){
+        return view('thuan.about-us');
+    }
 }

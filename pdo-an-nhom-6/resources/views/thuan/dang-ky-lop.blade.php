@@ -202,7 +202,7 @@
                                                 <button class="btn btn-primary"
                                                         onclick="showAssignForm(
                                     '{{ $student->id_nguoidung }}',
-                                    '{{ $student->ten_sinhvien }}'
+                                    '{{ $student->ten_dang_nhap }}'
                                 )">
                                                     <i class="fas fa-user-plus"></i> Phân lớp
                                                 </button>

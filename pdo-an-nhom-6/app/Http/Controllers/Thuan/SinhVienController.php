@@ -399,6 +399,29 @@ class SinhVienController extends Controller
                 'Content-Type' => 'application/json'
             ]);
 
+
+        } catch (\Exception $e) {
+            Log::error('Controller: Error in getLopList', [
+                'error' => $e->getMessage()
+            ]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Có lỗi xảy ra khi lấy danh sách lớp'
+            ], 500);
+        }
+    }
+    public function getLopLists()
+    {
+        try {
+            $result = $this->sinhVienService->getLopLists();
+
+
+            return response()->json([
+                'success' => true,  // Add this
+                'data' => $result   // Wrap result in data property
+            ], 200);
+
         } catch (\Exception $e) {
             Log::error('Controller: Error in getLopList', [
                 'error' => $e->getMessage()
@@ -452,4 +475,5 @@ class SinhVienController extends Controller
             ], 500);
         }
     }
+
 }

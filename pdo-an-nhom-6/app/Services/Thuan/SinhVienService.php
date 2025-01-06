@@ -41,6 +41,31 @@ class SinhVienService
             ];
         }
     }
+    public function getLopLists()
+    {
+        try {
+            Log::info('SinhVienService: Getting lop list');
+            $lops = $this->sinhVienRepository->getLopLists();
+
+            Log::info('SinhVienService: Successfully retrieved lop list', [
+                'count' => $lops->count()
+            ]);
+
+            return [
+                'success' => true,
+                'data' => $lops
+            ];
+        } catch (\Exception $e) {
+            Log::error('SinhVienService: Error in getLopList', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return [
+                'success' => false,
+                'message' => 'Có lỗi xảy ra khi lấy danh sách lớp s'
+            ];
+        }
+    }
 
     public function assignStudent($data)
     {

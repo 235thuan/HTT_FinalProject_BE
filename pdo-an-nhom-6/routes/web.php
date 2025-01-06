@@ -66,7 +66,7 @@ Route::prefix('admin')->group(function () {
 
         // Sinhvien routes
         Route::prefix('sinhvien')->name('sinhvien.')->group(function () {
-//            Route::get('/getLopList', [SinhVienController::class, 'getLopList'])->name('getLopList');
+            Route::get('/getLopList', [SinhVienController::class, 'getLopLists'])->name('getLopLists');
             Route::get('/dangkylop', [SinhVienController::class, 'dangKyLop'])
                 ->name('dangky');
             Route::put('/{id}', [SinhVienController::class, 'update'])->name('update');
@@ -74,7 +74,7 @@ Route::prefix('admin')->group(function () {
             Route::get('/{id}', [SinhVienController::class, 'show'])->name('show');
             Route::post('/', [SinhVienController::class, 'store'])->name('store');
 
-            Route::get('get-lop-list', [SinhVienController::class, 'getLopList'])
+            Route::get('/get-lop-list', [SinhVienController::class, 'getLopList'])
                 ->name('getLopList')
                 ->middleware('web');
             Route::post('/assign', [SinhVienController::class, 'assignStudent'])

@@ -126,14 +126,14 @@ $(document).ready(function() {
     function loadLopList() {
         console.log('run load lop');
         $.ajax({
-            url: '{{ route("sinhvien.getLopList") }}',
+            url: '{{ route("sinhvien.getLopLists") }}',
             type: 'GET',
             success: function(response) {
                 if (response.success) {
                     let selectLop = $('#select_lop');
                     selectLop.empty().append('<option value="">Chọn lớp</option>');
 
-                    response.data.forEach(function(lop) {
+                    response.data.data.forEach(function(lop) {
                         selectLop.append(`<option value="${lop.id_lop}"
                         data-chuyennganh="${lop.ten_chuyennganh}"
                         data-namvaohoc="${lop.nam_vao_hoc}">

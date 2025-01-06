@@ -314,7 +314,7 @@ class ClientHocphiController extends Controller
 
             // Create hocphi record
             $hocphiId = DB::table('hocphi')->insertGetId([
-                'id_sinhvien' => $sinhvienId,
+                'id_sinhvien' => $userId,
                 'so_tien' => $totalAmount,
                 'trang_thai' => 'Đang xử lý',
             ]);

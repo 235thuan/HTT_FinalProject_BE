@@ -176,12 +176,13 @@
             function loadLopListForEdit(selectedLopId, currentLopInfo) {
                 try {
                     $.ajax({
-                        url: '{{ route("sinhvien.getLopList") }}',
+                        url: '{{ route("sinhvien.getLopLists") }}',
                         type: 'GET',
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         success: function(response) {
+                            console.log('Raw response:', response);
                             if (!response || !response.success) {
                                 toastr.error('Không thể tải danh sách lớp');
                                 return;
@@ -189,7 +190,7 @@
 
                             $selectLop.empty().append('<option value="">Chọn lớp</option>');
 
-                            response.data.forEach(function(lop) {
+                            response.data.data.forEach(function(lop) {
                                 const option = new Option(lop.ten_lop, lop.id_lop);
                                 $(option).data({
                                     'chuyennganh': lop.ten_chuyennganh,

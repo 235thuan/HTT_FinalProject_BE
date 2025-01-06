@@ -30,6 +30,32 @@ class SinhVienRepository
         }
     }
 
+    public function getLopLists()
+    {
+        try {
+            $lops = DB::table('lop')
+                ->select([
+                    'lop.id_lop',
+                    'lop.ten_lop',
+                    'chuyennganh.ten_chuyennganh',
+                    'lop.nam_vao_hoc'
+                ])
+                ->join('chuyennganh', 'lop.id_chuyennganh', '=', 'chuyennganh.id_chuyennganh')
+                ->get();
+
+            // Debug the result
+            \Log::info('Lop list query result:', ['count' => $lops->count(), 'data' => $lops]);
+
+            return $lops;
+
+        } catch (\Exception $e) {
+            \Log::error('Service: Error in getLopList', [
+                'error' => $e->getMessage()
+            ]);
+            throw $e;
+        }
+    }
+
     public function assignStudent($data)
     {
         try {

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 05, 2025 at 11:32 AM
+-- Generation Time: Jan 06, 2025 at 01:28 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -1957,7 +1957,57 @@ INSERT INTO `chitiethocphi` (`id_chitiethocphi`, `id_hocphi`, `id_monhoc`, `ten_
 (4142, 250, 7, 'Giải Thuật', 1200000.00, NULL, '2025-01-04 01:33:25'),
 (4143, 250, 8, 'Khoa Học Dữ Liệu', 1200000.00, NULL, '2025-01-04 01:33:25'),
 (4144, 250, 9, 'Lập Trình Java', 900000.00, NULL, '2025-01-04 01:33:25'),
-(4145, 250, 10, 'Mạng Viễn Thông', 900000.00, NULL, '2025-01-04 01:33:25');
+(4145, 250, 10, 'Mạng Viễn Thông', 900000.00, NULL, '2025-01-04 01:33:25'),
+(4146, 251, 1, 'Lập Trình C', 900000.00, NULL, '2025-01-05 23:22:32'),
+(4147, 251, 2, 'Cấu Trúc Dữ Liệu', 1200000.00, NULL, '2025-01-05 23:22:32'),
+(4148, 251, 3, 'Hệ Điều Hành', 900000.00, NULL, '2025-01-05 23:22:32'),
+(4149, 251, 4, 'Mạng Máy Tính', 1200000.00, NULL, '2025-01-05 23:22:32'),
+(4150, 251, 5, 'Kỹ Thuật Phần Mềm', 900000.00, NULL, '2025-01-05 23:22:32'),
+(4151, 251, 6, 'An Toàn Thông Tin', 600000.00, NULL, '2025-01-05 23:22:32'),
+(4152, 251, 7, 'Giải Thuật', 1200000.00, NULL, '2025-01-05 23:22:32'),
+(4153, 251, 8, 'Khoa Học Dữ Liệu', 1200000.00, NULL, '2025-01-05 23:22:32'),
+(4154, 251, 9, 'Lập Trình Java', 900000.00, NULL, '2025-01-05 23:22:32'),
+(4155, 251, 10, 'Mạng Viễn Thông', 900000.00, NULL, '2025-01-05 23:22:32'),
+(4156, 252, 1, 'Lập Trình C', 900000.00, NULL, '2025-01-05 23:57:04'),
+(4157, 252, 2, 'Cấu Trúc Dữ Liệu', 1200000.00, NULL, '2025-01-05 23:57:04'),
+(4158, 252, 3, 'Hệ Điều Hành', 900000.00, NULL, '2025-01-05 23:57:04'),
+(4159, 252, 4, 'Mạng Máy Tính', 1200000.00, NULL, '2025-01-05 23:57:04'),
+(4160, 252, 5, 'Kỹ Thuật Phần Mềm', 900000.00, NULL, '2025-01-05 23:57:04'),
+(4161, 252, 6, 'An Toàn Thông Tin', 600000.00, NULL, '2025-01-05 23:57:04'),
+(4162, 252, 7, 'Giải Thuật', 1200000.00, NULL, '2025-01-05 23:57:04'),
+(4163, 252, 8, 'Khoa Học Dữ Liệu', 1200000.00, NULL, '2025-01-05 23:57:04'),
+(4164, 252, 9, 'Lập Trình Java', 900000.00, NULL, '2025-01-05 23:57:04'),
+(4165, 252, 10, 'Mạng Viễn Thông', 900000.00, NULL, '2025-01-05 23:57:04'),
+(4166, 254, 1, 'Lập Trình C', 900000.00, NULL, '2025-01-06 00:09:30'),
+(4167, 254, 2, 'Cấu Trúc Dữ Liệu', 1200000.00, NULL, '2025-01-06 00:09:30'),
+(4168, 254, 3, 'Hệ Điều Hành', 900000.00, NULL, '2025-01-06 00:09:30'),
+(4169, 254, 4, 'Mạng Máy Tính', 1200000.00, NULL, '2025-01-06 00:09:30'),
+(4170, 254, 5, 'Kỹ Thuật Phần Mềm', 900000.00, NULL, '2025-01-06 00:09:30'),
+(4171, 254, 6, 'An Toàn Thông Tin', 600000.00, NULL, '2025-01-06 00:09:30'),
+(4172, 254, 7, 'Giải Thuật', 1200000.00, NULL, '2025-01-06 00:09:30'),
+(4173, 254, 8, 'Khoa Học Dữ Liệu', 1200000.00, NULL, '2025-01-06 00:09:30'),
+(4174, 254, 9, 'Lập Trình Java', 900000.00, NULL, '2025-01-06 00:09:30'),
+(4175, 254, 10, 'Mạng Viễn Thông', 900000.00, NULL, '2025-01-06 00:09:30'),
+(4176, 255, 1, 'Lập Trình C', 900000.00, NULL, '2025-01-06 00:12:30'),
+(4177, 255, 2, 'Cấu Trúc Dữ Liệu', 1200000.00, NULL, '2025-01-06 00:12:30'),
+(4178, 255, 3, 'Hệ Điều Hành', 900000.00, NULL, '2025-01-06 00:12:30'),
+(4179, 255, 4, 'Mạng Máy Tính', 1200000.00, NULL, '2025-01-06 00:12:30'),
+(4180, 255, 5, 'Kỹ Thuật Phần Mềm', 900000.00, NULL, '2025-01-06 00:12:30'),
+(4181, 255, 6, 'An Toàn Thông Tin', 600000.00, NULL, '2025-01-06 00:12:30'),
+(4182, 255, 7, 'Giải Thuật', 1200000.00, NULL, '2025-01-06 00:12:30'),
+(4183, 255, 8, 'Khoa Học Dữ Liệu', 1200000.00, NULL, '2025-01-06 00:12:30'),
+(4184, 255, 9, 'Lập Trình Java', 900000.00, NULL, '2025-01-06 00:12:30'),
+(4185, 255, 10, 'Mạng Viễn Thông', 900000.00, NULL, '2025-01-06 00:12:30'),
+(4186, 256, 11, 'Kinh Tế Vi Mô', 900000.00, NULL, '2025-01-06 00:13:34'),
+(4187, 256, 12, 'Quản Trị Kinh Doanh', 900000.00, NULL, '2025-01-06 00:13:34'),
+(4188, 256, 13, 'Kế Toán Quản Trị', 900000.00, NULL, '2025-01-06 00:13:34'),
+(4189, 256, 14, 'Marketing', 1200000.00, NULL, '2025-01-06 00:13:34'),
+(4190, 256, 15, 'Tài Chính Ngân Hàng', 1200000.00, NULL, '2025-01-06 00:13:34'),
+(4191, 256, 16, 'Kinh Tế Lượng', 900000.00, NULL, '2025-01-06 00:13:34'),
+(4192, 256, 17, 'Kinh Tế Học', 1200000.00, NULL, '2025-01-06 00:13:34'),
+(4193, 256, 18, 'Lý Thuyết Tài Chính', 900000.00, NULL, '2025-01-06 00:13:34'),
+(4194, 256, 19, 'Đầu Tư Tài Chính', 900000.00, NULL, '2025-01-06 00:13:34'),
+(4195, 256, 20, 'Pháp Luật Kinh Tế', 900000.00, NULL, '2025-01-06 00:13:34');
 
 -- --------------------------------------------------------
 
@@ -2416,7 +2466,12 @@ INSERT INTO `hocphi` (`id_hocphi`, `id_sinhvien`, `so_tien`, `trang_thai`) VALUE
 (245, 115, 9900000.00, 'Chưa thanh toán'),
 (248, 115, 9900000.00, 'Đã thanh toán'),
 (249, 115, 9900000.00, 'Đã thanh toán'),
-(250, 114, 9900000.00, 'Đã thanh toán');
+(250, 114, 9900000.00, 'Đã thanh toán'),
+(251, 116, 9900000.00, 'Đã thanh toán'),
+(252, 116, 9900000.00, 'Đã thanh toán'),
+(254, 117, 9900000.00, 'Đã thanh toán'),
+(255, 117, 9900000.00, 'Đã thanh toán'),
+(256, 117, 9900000.00, 'Đã thanh toán');
 
 -- --------------------------------------------------------
 
@@ -2886,7 +2941,11 @@ INSERT INTO `nguoidung` (`id_nguoidung`, `ten_dang_nhap`, `mat_khau`, `email`, `
 (114, 'abc', '$2y$12$QMKZDRu3wdPuj1QUtDJF4OpHvhY3BYa3UqJsPksss4DsRZen2xvna', 'abc@example.com', '09012346281', 'a', 'b', 'c', 'd', 'a', 'hoạt động'),
 (115, 'abcdefgh275', '$2y$12$YB3LDWZoaJUvFSBNcpjvtOYkfwSbAWW763o3sRggvICC5tvyicWga', 'abcdefgh@example.com', '09012346291', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
 (116, 'user999@example.com', '$2y$12$O3PgvuZ.DJ3Nt9hmC9RZUOhWrjtoQZVdFEyArYDtyxjb4Khoj2W/y', 'user999@example.com', '09012346572', NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
-(117, 'sinhvien100', '$2y$12$PTyUQ7fHJciD.cHuo7Fuo.BZw24Z8Xo4kVtPzaCOvgZnWuPzaH/eK', 'sinhvien100@example.com', NULL, NULL, NULL, NULL, NULL, NULL, 'hoạt động');
+(117, 'sinhvien100', '$2y$12$txtdNDe/JTEUKfjoFvTpRusslpz1i4oGdR..vGYba8vjgkjIRkBJ6', 'sinhvien1000@example.com', '012345678912', 'Cao đẳng công nghệ thương mại  Hà Nội', 'Lập trình web', 'GPA: 8.0', 'Không ngừng cố gắng', 'Đọc sách', 'hoạt động'),
+(118, 'sinhvien101', '$2y$12$FhV0uG/2bZ7INwmI/5FMhOUc0RccEIV/z/n8bHPE4D8EEO0XFENXm', 'sinhvien101@example.com', NULL, NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(119, 'sinhvien102', '$2y$12$DAGyj/WwOsr.MMxAWg2NP..RIIjk7MisA96FFan6yqRGFKnjxjxU6', 'sinhvien102@example.com', NULL, NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(120, 'sinhvien103', '$2y$12$xM3HV0v3Etzo.lBpDC6Zse5BePcWG3aCKlawI4xTEqtabbYi.cho6', 'sinhvien103@example.com', NULL, NULL, NULL, NULL, NULL, NULL, 'hoạt động'),
+(121, 'sinhvien105@example.com', '$2y$12$ceoFZlvHcPJkW.Wr8tUQ.OTvj3nUDhDigIu532XTA1BDfz8HUTheq', 'sinhvien105@example.com', '0323456789', NULL, NULL, NULL, NULL, NULL, 'hoạt động');
 
 -- --------------------------------------------------------
 
@@ -3070,7 +3129,11 @@ INSERT INTO `phanquyen` (`id_phanquyen`, `id_nguoidung`, `id_vaitro`) VALUES
 (114, 114, 4),
 (115, 115, 4),
 (116, 116, 3),
-(117, 117, 3);
+(117, 117, 3),
+(118, 118, 3),
+(119, 119, 3),
+(120, 120, 3),
+(121, 121, 3);
 
 -- --------------------------------------------------------
 
@@ -3327,7 +3390,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('5j0OyoFcEOsYMBWpL22oSSF3hH8act9L8oA3vcdw', 117, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoidTh5Q00zVUUwdlhIektCQTAwSEJyRUdTU1NPS0JCTGo0eGN3Sk9lTyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NTI6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9jbGllbnQvbW9uaG9jLWJ5LWNodXllbm5nYW5oLzEiO31zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToxMTc7fQ==', 1736072607);
+('dERNKQxUf6wALRRqZnBQ3x1aw7ystt3ex5V4spfd', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiRXVGam1DdThydVUxVVFFbEZyQmxhTE5jNTZ3ZHVMeHowT0hIZmRZVyI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MzM6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9hZG1pbi9pbmRleCI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7fQ==', 1736123282);
 
 -- --------------------------------------------------------
 
@@ -3367,7 +3430,7 @@ INSERT INTO `sinhvien` (`id_sinhvien`, `id_nguoidung`, `ten_sinhvien`, `id_lop`)
 (79, 79, 'Sinh viên user79', 10),
 (80, 80, 'Sinh viên user80', 7),
 (81, 81, 'Sinh viên user81', 2),
-(82, 82, 'Sinh viên user82', 11),
+(82, 82, 'Sinh viên user84', 4),
 (83, 83, 'Sinh viên user83', 10),
 (84, 84, 'Sinh viên user84', 12),
 (85, 85, 'Sinh viên user85', 2),
@@ -3400,7 +3463,11 @@ INSERT INTO `sinhvien` (`id_sinhvien`, `id_nguoidung`, `ten_sinhvien`, `id_lop`)
 (112, 116, 'Xavier', 12),
 (114, 114, 'abc', 5),
 (115, 1, 'user01', NULL),
-(116, 117, 'sinhvien100', 5);
+(116, 117, 'sinhvien100', 5),
+(117, 121, 'Sinhvien105', 1),
+(118, 118, 'sinhvien101', 11),
+(119, 119, 'sinhvien102', 12),
+(120, 120, 'sinhvien103', 14);
 
 -- --------------------------------------------------------
 
@@ -3424,7 +3491,7 @@ CREATE TABLE `sodutaikhoan` (
 --
 
 INSERT INTO `sodutaikhoan` (`id_sodutaikhoan`, `amount`, `id_cardnumber`, `id_cvv`, `id_billingaddress`, `id_expirydate`, `created_at`, `updated_at`) VALUES
-(1, 999970299999.00, '4111111111111111', '123', '123 Main St, City', '12/25', '2024-12-31 10:12:29', '2025-01-03 18:33:25');
+(1, 999920799999.00, '4111111111111111', '123', '123 Main St, City', '12/25', '2024-12-31 10:12:29', '2025-01-05 17:13:34');
 
 -- --------------------------------------------------------
 
@@ -3480,7 +3547,12 @@ INSERT INTO `thanhtoan` (`id_thanhtoan`, `id_hocphi`, `so_tien_da_tra`, `phuong_
 (17, 233, 13500000.00, 'Thẻ tín dụng', '2025-01-01 19:12:20', 'Thành công'),
 (18, 236, 13500000.00, 'Thẻ tín dụng', '2025-01-01 19:12:20', 'Thành công'),
 (19, 239, 13500000.00, 'Thẻ tín dụng', '2025-01-01 19:12:20', 'Thành công'),
-(20, 250, 9900000.00, 'Thẻ tín dụng', '2025-01-04 01:33:25', 'Thành công');
+(20, 250, 9900000.00, 'Thẻ tín dụng', '2025-01-04 01:33:25', 'Thành công'),
+(21, 251, 9900000.00, 'Thẻ tín dụng', '2025-01-05 23:22:32', 'Thành công'),
+(22, 252, 9900000.00, 'Thẻ tín dụng', '2025-01-05 23:57:04', 'Thành công'),
+(23, 254, 9900000.00, 'Thẻ tín dụng', '2025-01-06 00:09:30', 'Thành công'),
+(24, 255, 9900000.00, 'Thẻ tín dụng', '2025-01-06 00:12:30', 'Thành công'),
+(25, 256, 9900000.00, 'Thẻ tín dụng', '2025-01-06 00:13:34', 'Thành công');
 
 -- --------------------------------------------------------
 
@@ -4022,7 +4094,7 @@ ALTER TABLE `chitietchuyennganh`
 -- AUTO_INCREMENT for table `chitiethocphi`
 --
 ALTER TABLE `chitiethocphi`
-  MODIFY `id_chitiethocphi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4146;
+  MODIFY `id_chitiethocphi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4196;
 
 --
 -- AUTO_INCREMENT for table `chitietmonhoc`
@@ -4094,7 +4166,7 @@ ALTER TABLE `hieutruong`
 -- AUTO_INCREMENT for table `hocphi`
 --
 ALTER TABLE `hocphi`
-  MODIFY `id_hocphi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=251;
+  MODIFY `id_hocphi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=257;
 
 --
 -- AUTO_INCREMENT for table `hoctap`
@@ -4154,7 +4226,7 @@ ALTER TABLE `monhoc`
 -- AUTO_INCREMENT for table `nguoidung`
 --
 ALTER TABLE `nguoidung`
-  MODIFY `id_nguoidung` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=118;
+  MODIFY `id_nguoidung` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122;
 
 --
 -- AUTO_INCREMENT for table `noidungmonhoc`
@@ -4166,7 +4238,7 @@ ALTER TABLE `noidungmonhoc`
 -- AUTO_INCREMENT for table `phanquyen`
 --
 ALTER TABLE `phanquyen`
-  MODIFY `id_phanquyen` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=118;
+  MODIFY `id_phanquyen` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122;
 
 --
 -- AUTO_INCREMENT for table `phonghoc`
@@ -4178,7 +4250,7 @@ ALTER TABLE `phonghoc`
 -- AUTO_INCREMENT for table `sinhvien`
 --
 ALTER TABLE `sinhvien`
-  MODIFY `id_sinhvien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=117;
+  MODIFY `id_sinhvien` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
 
 --
 -- AUTO_INCREMENT for table `sodutaikhoan`
@@ -4196,7 +4268,7 @@ ALTER TABLE `thanhtich`
 -- AUTO_INCREMENT for table `thanhtoan`
 --
 ALTER TABLE `thanhtoan`
-  MODIFY `id_thanhtoan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id_thanhtoan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `thoikhoabieu`
@@ -4331,7 +4403,7 @@ ALTER TABLE `hieutruong`
 -- Constraints for table `hocphi`
 --
 ALTER TABLE `hocphi`
-  ADD CONSTRAINT `hocphi_ibfk_1` FOREIGN KEY (`id_sinhvien`) REFERENCES `sinhvien` (`id_sinhvien`) ON DELETE CASCADE;
+  ADD CONSTRAINT `hocphi_ibfk_1` FOREIGN KEY (`id_sinhvien`) REFERENCES `nguoidung` (`id_nguoidung`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `hoctap`
